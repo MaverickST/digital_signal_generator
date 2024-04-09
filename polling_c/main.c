@@ -12,8 +12,12 @@
  * Finally, to enter the frequency, the user must press the C key followed by the frequency 
  * value in Hertz and the D key to finalize. The current values of Amplitude, DC Level, and 
  * Frequency along with the current waveform will be printed every second via the serial or USB 
- * interface to a terminal tool. The Amplitude should be adjustable between 100mV and 2500mV, 
- * the DC Level between 50mV and 1250mV. The frequency should be adjustable between 1 Hz and 12000000 Hz. 
+ * interface to a terminal tool. 
+ * 
+ * The Amplitude should be adjustable between 100mV and 2500mV, the DC Level between 50mV and 1250mV. 
+ * The frequency should be adjustable between 1 Hz and 12000000 Hz. 
+ * Therefore, the max range for the value of the signal is: -2450mV to 3750mV.
+ * 
  * By default, the DSG device starts generating a sinusoidal signal with an amplitude of 1000 mV, 
  * DC Level of 500mV, and frequency of 10Hz. The generated signal and its characteristics 
  * should be able to be verified by a measuring instrument, multimeter, or oscilloscope.
@@ -46,7 +50,7 @@ int main() {
     sleep_ms(5000);
     printf("Hola!!!");
 
-    uint8_t in_param_state = 0x0; // 0: Nothing, 1: Entering amplitud, 2: Entering offset, 3: Entering freq
+    uint8_t in_param_state = 0x0; // 0: Nothing, 1: Entering amp (A), 2: Entering offset (B), 3: Entering freq (D)
     uint8_t in_signal_state = 0x0; // 0: Sinusoidal, 1: Triangular, 2: Saw tooth, 3: Square
     signal_t signal;
 
@@ -105,7 +109,7 @@ int main() {
             if(button_is_2nd_zero(&my_button)){
                 if(!button){
                     // printf("Button pressed\n");
-                    input_state = (input_state + 1) % 4;
+                    in_signal_state = (in_signal_state + 1) % 4;
                     tb_disable(&my_button.tb_dbnce);
                     my_button.KEY.dbnc = 0;
                 }
