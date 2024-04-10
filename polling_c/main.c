@@ -43,6 +43,26 @@
 #include "signal_generator.h"
 #include "functions.h"
 
+static inline bool checkNumber(uint8_t number){
+    return (number >= 0 && number <= 9);
+}
+
+static inline bool checkLetter(uint8_t letter){
+    return (letter >= 0x0A && letter <= 0x0C);
+}
+
+static inline bool checkFreq(uint32_t freq){
+    return (freq >= 1 && freq <= 12000000);
+}
+
+static inline bool checkAmp(uint32_t amp){
+    return (amp >= 100 && amp <= 2500);
+}
+
+static inline bool checkOffset(uint32_t offset){
+    return (offset >= 50 && offset <= 1250);
+}
+
 
 int main() {
     
@@ -50,15 +70,25 @@ int main() {
     sleep_ms(5000);
     printf("Hola!!!");
 
-    uint8_t in_param_state = 0x0; // 0: Nothing, 1: Entering amp (A), 2: Entering offset (B), 3: Entering freq (D)
+    // Initialize signal generator
+    uint8_t in_param_state = 0x0; // 0: Nothing, 1: Entering amp (A), 2: Entering offset (B), 3: Entering freq (C)
     uint8_t in_signal_state = 0x0; // 0: Sinusoidal, 1: Triangular, 2: Saw tooth, 3: Square
-    signal_t signal;
+    uint32_t param = 0; // This variable will store the value of any parameter that is being entered
+    uint8_t key_cont = 0;
+    signal_t my_signal;
+    signal_gen_init(&my_signal,10,1000,500,true);
 
+    // Initialize keypad and button
     key_pad_t my_keypad;
     kp_init(&my_keypad,2,6,100000,true);
 
     gpio_button_t my_button;
     button_init(&my_button, 0, 100000, true);
+
+    // Initialize Printing
+    time_base_t tb_print;
+    tb_init(&tb_print,1000000,true);
+    
 
     while(1){
         // Process keypad
@@ -110,6 +140,7 @@ int main() {
                 if(!button){
                     // printf("Button pressed\n");
                     in_signal_state = (in_signal_state + 1) % 4;
+                    signal_set_state(&my_signal, in_signal_state);
                     tb_disable(&my_button.tb_dbnce);
                     my_button.KEY.dbnc = 0;
                 }
@@ -120,6 +151,87 @@ int main() {
                 if(!button)
                     button_set_zflag(&my_button);
             }
+        }
+        // Process signal
+        if (tb_check(&my_signal.tb_gen)){
+            tb_next(&my_signal.tb_gen);
+            signal_calculate_next_signal(&my_signal);
+            //printf("%d\n",my_signal.value);
+        }
+
+        // Process printing
+        if(tb_check(&tb_print)){
+            tb_next(&tb_print);
+            switch (my_signal.STATE.signal_state){
+                case 0:
+                    printf("Sinusoidal: ");
+                    break;
+                case 1:
+                    printf("Triangular: ");
+                    break;
+                case 2:
+                    printf("Saw tooth: ");
+                    break;
+                case 3:
+                    printf("Square: ");
+                    break;
+            }
+            printf("Value: %d, Amp: %d, Offset: %d, Freq: %d\n",
+                    my_signal.value,my_signal.amp,my_signal.offset,my_signal.freq);
+        }
+
+        // Process entering parameters
+        if(my_keypad.KEY.nkey && !my_keypad.KEY.dbnc){
+            
+            // To accept a number, in_param_state must be different of 0
+            if(checkNumber(my_keypad.KEY.dkey) && in_param_state){
+                param = (!key_cont)? param : param + my_keypad.KEY.dkey*pow(10,key_cont);
+            }
+            // To accept a letter different of 0x0D, in_param_state must be 0
+            else if(checkLetter(my_keypad.KEY.dkey) && !in_param_state){
+                switch (param)
+                {
+                case 0x0A:
+                    in_param_state = 1;
+                    break;
+                case 0x0B:
+                    in_param_state = 2;
+                    break;
+                case 0x0C:
+                    in_param_state = 3;
+                    break;
+                default:
+                    break;
+                }
+            }
+            // To accept a 0x0D, in_param_state must be different of 0
+            else if(my_keypad.KEY.dkey == 0x0D && in_param_state){
+                switch (in_param_state)
+                {
+                case 1:
+                    if(checkAmp(param)){
+                        signal_set_amp(&my_signal,param);
+                    }
+                    break;
+                case 2:
+                    if(checkOffset(param)){
+                        signal_set_offset(&my_signal,param);
+                    }
+                    break;
+                case 3:
+                    if(checkFreq(param)){
+                        signal_set_freq(&my_signal,param);
+                    }
+                    break;
+                default:
+                    break;
+                }
+                in_param_state = 0;
+                param = 0;
+                key_cont = 0;
+            }
+            my_keypad.KEY.nkey = 0;
+            key_cont++;
         }
     }
 

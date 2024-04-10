@@ -25,15 +25,32 @@ typedef struct{
         uint8_t signal_state    : 2; // 0: Sinusoidal, 1: Triangular, 2: Saw tooth, 3: Square
         uint8_t en              : 1; // Enable signal generation
     }STATE;
-    uint32_t freq;      // Signal frequency
-    uint16_t amp;       // Signal amplitude
-    uint16_t offset;    // Signal offset
-    int16_t value;     // Signal value
-    time_base_t tb_gen; // Time base for signal generation
+    uint32_t freq;          // Signal frequency
+    uint16_t amp;           // Signal amplitude
+    uint16_t offset;        // Signal offset
+    int16_t value;          // Signal value
+    time_base_t tb_gen;     // Time base for signal generation
 
 }signal_t;
 
-void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t offset, uint64_t gen_time, bool en);
+/**
+ * @brief 
+ * 
+ * @param signal 
+ * @param freq 
+ * @param amp 
+ * @param offset 
+ * @param en 
+ */
+static inline void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t offset, bool en) {
+    signal->freq = freq;
+    signal->amp = amp;
+    signal->offset = offset;
+    signal->value = 0;
+    signal->STATE.en = en;
+    signal->STATE.signal_state = 0;
+    tb_init(&signal->tb_gen,MAX_TIME/(2*freq),true);
+}
 
 static inline void signal_gen_sin(signal_t *signal){
     signal->value = (int16_t)(signal->offset + signal->amp*sin(2*M_PI*signal->freq*time_us_64()*MIN_TIME));
@@ -62,6 +79,9 @@ static inline void signal_gen_sqr(signal_t *signal){
 }
 
 static inline void signal_calculate_next_signal(signal_t *signal){
+
+    if(!signal->STATE.en) return; // Actually, it is not necessary to check this condition.
+
     switch(signal->STATE.signal_state){ // Calculate next signal value
         case 0: // Sinusoidal
             signal_gen_sin(signal);
@@ -76,11 +96,11 @@ static inline void signal_calculate_next_signal(signal_t *signal){
             signal_gen_sqr(signal);
             break;
     }
-    signal->value = (signal->value/(signal->amp + signal->offset))*RESOLUTION; // Normalize to 8 bits
-    tb_next(&signal->tb_gen);
+    // signal->value = (signal->value/(signal->amp + signal->offset))*RESOLUTION; // Normalize to 8 bits
+    // tb_next(&signal->tb_gen);
 }
 
-static inline uint16_t signal_get_value(signal_t *signal){
+static inline int16_t signal_get_value(signal_t *signal){
     return signal->value;
 }
 
@@ -108,7 +128,8 @@ static inline void signal_set_offset(signal_t *signal, uint16_t offset){
 
 static inline void signal_set_freq(signal_t *signal, uint32_t freq){
     signal->freq = freq;
-    tb_set_delta(&signal->tb_gen,1000000/(2*freq)); // Nyquist theorem
+    tb_set_delta(&signal->tb_gen,MAX_TIME/(2*freq)); // Nyquist theorem
 }
+
 
 #endif // __SIGNAL_GENERATOR_

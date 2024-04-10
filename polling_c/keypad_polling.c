@@ -29,6 +29,7 @@ void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, uint64_t dbnc_time, bo
     kpad->KEY.seq = 0x8;
     kpad->KEY.nkey = 0;
     kpad->KEY.dbnc = 0;
+    kpad->KEY.dzero = 0;
     if(en)
         kpad->KEY.en = 1;
     // Initialize keypad time bases
