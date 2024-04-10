@@ -12,7 +12,7 @@ project(AccessSys)
 pico_sdk_init()
 
 add_executable(access
-	access_sys.c
+	main.c
 )
 
 target_include_directories(access PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
