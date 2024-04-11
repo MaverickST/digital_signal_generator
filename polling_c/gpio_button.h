@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 #include "hardware/timer.h"
+#include "hardware/gpio.h"
 
 /**
  * @typedef gpio_button_t 
@@ -49,7 +50,7 @@ static inline void button_init(gpio_button_t *button, uint8_t pin, uint64_t dbnc
 
     gpio_init(button->KEY.pin);
     gpio_set_dir(button->KEY.pin, GPIO_IN);
-    gpio_pull_up(button->KEY.pin);
+    gpio_pull_down(button->KEY.pin);
 }
 
 /** 

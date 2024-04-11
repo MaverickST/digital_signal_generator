@@ -17,9 +17,16 @@
 #define RESOLUTION  255         // 8 bits
 
 #include <stdint.h>
+#include <math.h>
 #include "hardware/timer.h"
 #include "time_base.h"
 
+/**
+ * @typedef signal_t 
+ * 
+ * @brief Structure to manage a signal generator
+ * 
+ */
 typedef struct{
     struct{
         uint8_t signal_state    : 2; // 0: Sinusoidal, 1: Triangular, 2: Saw tooth, 3: Square
@@ -33,24 +40,8 @@ typedef struct{
 
 }signal_t;
 
-/**
- * @brief 
- * 
- * @param signal 
- * @param freq 
- * @param amp 
- * @param offset 
- * @param en 
- */
-static inline void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t offset, bool en) {
-    signal->freq = freq;
-    signal->amp = amp;
-    signal->offset = offset;
-    signal->value = 0;
-    signal->STATE.en = en;
-    signal->STATE.signal_state = 0;
-    tb_init(&signal->tb_gen,MAX_TIME/(2*freq),true);
-}
+
+void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t offset, bool en);
 
 static inline void signal_gen_sin(signal_t *signal){
     signal->value = (int16_t)(signal->offset + signal->amp*sin(2*M_PI*signal->freq*time_us_64()*MIN_TIME));
