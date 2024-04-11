@@ -29,6 +29,7 @@ void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, uint64_t dbnc_time, bo
     kpad->KEY.seq = 0x8;
     kpad->KEY.nkey = 0;
     kpad->KEY.dbnc = 0;
+    kpad->KEY.dzero = 0;
     if(en)
         kpad->KEY.en = 1;
     // Initialize keypad time bases
@@ -40,10 +41,10 @@ void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, uint64_t dbnc_time, bo
     gpio_init_mask(0x0000000F << kpad->KEY.clsb); // gpios for key cols 6,7,8,9
     gpio_set_dir_masked(0x0000000F << kpad->KEY.rlsb,0x0000000F << kpad->KEY.rlsb); // rows as outputs and cols as inputs
     gpio_set_dir_masked(0x0000000F << kpad->KEY.clsb,0x00000000); // rows as outputs and cols as inputs
-    gpio_set_pulls(kpad->KEY.clsb,false,true);
-    gpio_set_pulls(kpad->KEY.clsb + 1,false,true);
-    gpio_set_pulls(kpad->KEY.clsb + 2,false,true);
-    gpio_set_pulls(kpad->KEY.clsb + 3,false,true);
+    gpio_pull_down(kpad->KEY.clsb);
+    gpio_pull_down(kpad->KEY.clsb + 1);
+    gpio_pull_down(kpad->KEY.clsb + 2);
+    gpio_pull_down(kpad->KEY.clsb + 3);
 }
 
 void kp_decode(key_pad_t *kpad){

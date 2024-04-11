@@ -59,4 +59,8 @@ static inline void tb_disable(time_base_t *t){
     t->en = false;
 }
 
+static inline void tb_set_delta(time_base_t *t, uint64_t delta){
+    t->delta = delta;
+}
+
 #endif

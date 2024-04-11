@@ -15,12 +15,14 @@ add_executable(access
 	main.c
 	keypad_polling.c
 	time_base.c
+	dac.c
+	signal_generator.c
 )
 
 target_include_directories(access PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add pico_stdlib library which aggregates commonly used features
-target_link_libraries(access pico_stdlib hardware_timer hardware_gpio)
+target_link_libraries(access pico_stdlib pico_cyw43_arch_none hardware_timer hardware_gpio)
 
 pico_enable_stdio_uart(access 0)
 pico_enable_stdio_usb(access 1)
