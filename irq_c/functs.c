@@ -31,6 +31,16 @@ volatile uint8_t gKeyCnt = 0;
 volatile uint8_t gSeqCnt = 0;
 volatile bool gDZero = false;
 
+/**
+ * @brief This function initializes a PWM signal using a periodic interrupt timer (PIT).
+ * Each slice will generate interruptions at a period of milis miliseconds.
+ * Due to each slice share clock counter (period), events with diferents periods 
+ * must not be generated in the same slice, i.e, they must not share channel.
+ * 
+ * @param slice 
+ * @param milis Period of the PWM interruption in miliseconds
+ * @param enable 
+ */
 void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
 {
     assert(milis<=262);                  ///< PWM can manage interrupt periods greater than 262 milis
@@ -82,6 +92,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
         pwm_clear_irq(1);                                               ///< Acknowledge slice 1 PWM IRQ
         break;
     case 0x04UL: ///< PWM slice 2 ISR used as a PIT to implement the button debouncer
+
     default:
         printf("Paso lo que no debería pasar en PWM IRQ\n");
         break;

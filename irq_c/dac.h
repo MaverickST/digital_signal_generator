@@ -14,7 +14,8 @@
 #include <stdint.h>
 #include "hardware/timer.h"
 
-#define RESOLUTION  256         // 8 bits
+#define RESOLUTION  255         // 8 bits
+#define DAC_RANGE   9400        // 0 to 9.3V
 
 /**
  * @typedef dac_t 

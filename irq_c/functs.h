@@ -26,6 +26,10 @@
  */
 void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable);
 
+/**
+ * @brief This function is the handler for the PWM interruptions.
+ * 
+ */
 void pwmIRQ(void);
 
 #endif // FUNTCS

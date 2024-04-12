@@ -39,6 +39,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "hardware/timer.h"
 #include "hardware/pwm.h"

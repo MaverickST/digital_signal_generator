@@ -42,7 +42,7 @@ typedef struct{
  * \param dbnc_time     Time base period for keypad debouncer
  * \param en            True if keypad start enabled
  */ 
-void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, uint64_t dbnc_time, bool en);
+void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, bool en);
 
 /** 
  * \brief This method decodes the postional coding of the key to its actual value in decimal

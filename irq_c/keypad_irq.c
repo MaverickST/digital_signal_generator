@@ -10,10 +10,10 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "keypad_polling_irq.h"
+#include "keypad_irq.h"
 #include "hardware/gpio.h"
 
-void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, uint64_t dbnc_time, bool en){
+void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, bool en){
     // Initialize history buffer
     for(int i=0; i<10;i++){
         kpad->history[i] = 0xFF;
@@ -99,6 +99,9 @@ void kp_decode(key_pad_t *kpad){
 }
 
 void kp_capture(key_pad_t *kpad, uint32_t cols){
+
+    if (!kpad->KEY.en) return;
+
     kpad->KEY.ckey = (cols >> 2) | kpad->KEY.seq;
     kp_decode(kpad);
     for(int i=0;i<9;i++){
