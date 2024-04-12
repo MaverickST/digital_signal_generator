@@ -58,6 +58,7 @@ int main() {
     initPWMasPIT(1,100,false);  // 100ms for the keypad debouncer
     initPWMasPIT(2,100, false); // 100ms for the button debouncer
 
+    // Initialize two timers: one for the value calculation and the other for the printing.
     initTimer();
 
     // For the PWM interruption, it specifies the handler.

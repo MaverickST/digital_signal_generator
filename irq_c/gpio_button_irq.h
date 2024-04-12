@@ -25,10 +25,10 @@
  */
 typedef struct{
     struct {
-        uint8_t gpio_num    : 6;        ///< GPIO gpio_num number
-        uint8_t dzero       : 1;        ///< Flag for double zero
-        uint8_t nkey        : 1;        ///< Flag that indicates that a key was pressed
-        uint8_t dbnc        : 1;        ///< Flag that indicates that debouncer is active
+        uint8_t gpio_num    : 6;        // GPIO gpio_num number
+        uint8_t dzero       : 1;        // Flag for double zero
+        uint8_t nkey        : 1;        // Flag that indicates that a key was pressed
+        uint8_t dbnc        : 1;        // Flag that indicates that debouncer is active
     }KEY;
 }gpio_button_t;
 
@@ -51,6 +51,12 @@ static inline void button_init(gpio_button_t *button, uint8_t gpio_num){
     gpio_set_irq_enabled_with_callback(button->KEY.gpio_num, GPIO_IRQ_EDGE_RISE, true, buttonCallback);
 }
 
+/**
+ * @brief Enable/disable the interruptions for the button.
+ * 
+ * @param button 
+ * @param enable true to enable the button interruption, false to disable.
+ */
 static inline void button_set_irq_enabled(gpio_button_t *button, bool enable){
     gpio_set_irq_enabled(button->KEY.gpio_num, GPIO_IRQ_EDGE_RISE, enable);
 }
