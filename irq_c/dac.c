@@ -14,7 +14,7 @@
 #include "dac.h"
 
 
-void dac_init(dac_t *dac, uint8_t gpio_lsb, uint64_t period, bool en)
+void dac_init(dac_t *dac, uint8_t gpio_lsb, bool en)
 {
     dac->gpio_lsb = gpio_lsb;
     dac->digit_v = 0;
@@ -24,7 +24,7 @@ void dac_init(dac_t *dac, uint8_t gpio_lsb, uint64_t period, bool en)
     gpio_set_dir_masked(0x000000FF << dac->gpio_lsb, 0x000000FF << dac->gpio_lsb); // Set all gpios as outputs
 }
 
-void dac_calculate(dac_t *dac, uint16_t decim_v)
+void dac_calculate(dac_t *dac, int16_t decim_v)
 {
     dac->digit_v = (decim_v + 5000)*RESOLUTION/DAC_RANGE ; // normalize to 8 bits
     dac->BITS.bit0 = (dac->digit_v & 0x01) >> 0;

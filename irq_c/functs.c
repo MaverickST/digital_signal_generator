@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "hardware/timer.h"
 #include "hardware/pwm.h"
@@ -31,16 +32,20 @@ volatile uint8_t gKeyCnt = 0;
 volatile uint8_t gSeqCnt = 0;
 volatile bool gDZero = false;
 
-/**
- * @brief This function initializes a PWM signal using a periodic interrupt timer (PIT).
- * Each slice will generate interruptions at a period of milis miliseconds.
- * Due to each slice share clock counter (period), events with diferents periods 
- * must not be generated in the same slice, i.e, they must not share channel.
- * 
- * @param slice 
- * @param milis Period of the PWM interruption in miliseconds
- * @param enable 
- */
+key_pad_t gKeyPad;
+signal_t gSignal;
+gpio_button_t gButton;
+dac_t gDac;
+
+
+void initGlobalVariables(void)
+{
+    kp_init(&gKeyPad,2,6,true);
+    signal_gen_init(&gSignal, 10, 1000, 500, true);
+    button_init(&gButton, 0);
+    dac_init(&gDac, 10, true);
+}
+
 void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
 {
     assert(milis<=262);                  ///< PWM can manage interrupt periods greater than 262 milis
@@ -51,50 +56,101 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     assert(wrap<((1UL<<17)-1));
     // Configuring the PWM
     pwm_config cfg =  pwm_get_default_config();
-    pwm_config_set_phase_correct(&cfg,true);
-    pwm_config_set_clkdiv(&cfg,prescaler);
-    pwm_config_set_clkdiv_mode(&cfg,PWM_DIV_FREE_RUNNING);
-    pwm_config_set_wrap(&cfg,wrap);
-    pwm_set_irq_enabled(slice,true);
-    irq_set_enabled(PWM_IRQ_WRAP,true);
-    pwm_init(slice,&cfg,enable);
+    pwm_config_set_phase_correct(&cfg, true);
+    pwm_config_set_clkdiv(&cfg, prescaler);
+    pwm_config_set_clkdiv_mode(&cfg, PWM_DIV_FREE_RUNNING);
+    pwm_config_set_wrap(&cfg, wrap);
+    pwm_set_irq_enabled(slice, true);
+    irq_set_enabled(PWM_IRQ_WRAP, true);
+    pwm_init(slice, &cfg, enable);
  }
 
  void pwmIRQ(void)
  {
-    uint32_t gpioValue;
-    uint32_t keyc;
+    uint32_t cols;
+    bool button;
     switch (pwm_get_irq_status_mask())
     {
     case 0x01UL: ///< PWM slice 0 ISR used as a PIT to generate row sequence
-        gSeqCnt = (gSeqCnt + 1) % 4;
-        gpio_put_masked(0x0000003C,0x00000001 << (gSeqCnt+2));
+        kp_gen_seq(&gKeyPad);
         pwm_clear_irq(0);         ///< Acknowledge slice 0 PWM IRQ
         break;
+
     case 0x02UL: ///< PWM slice 1 ISR used as a PIT to implement the keypad debouncer
-        keyc = gpio_get_all() & 0x000003C0; ///< Get columns gpio values
-        if(gDZero){
-            if(!keyc){
-                pwm_set_enabled(0,true); ///< Froze the row sequence
-                pwm_set_enabled(1,false);
-                gpio_set_irq_enabled(6,GPIO_IRQ_EDGE_RISE,true);  
-                gpio_set_irq_enabled(7,GPIO_IRQ_EDGE_RISE,true);  
-                gpio_set_irq_enabled(8,GPIO_IRQ_EDGE_RISE,true);  
-                gpio_set_irq_enabled(9,GPIO_IRQ_EDGE_RISE,true);
+        cols = gpio_get_all() & 0x000003C0; ///< Get columns gpio values
+        if(kp_is_2nd_zero(&gKeyPad)){
+            if(!cols){
+                kp_set_irq_enabled(&gKeyPad, true); ///< Enable the GPIO IRQs
+                pwm_set_enabled(0, true);    ///< Enable the row sequence
+                pwm_set_enabled(1, false);   ///< Disable the keypad debouncer
+                gKeyPad.KEY.dbnc = 0;
             }
-            gDZero = false;
+            else
+                kp_clr_zflag(&gKeyPad);
         }
         else{
-            if(!keyc)
-                gDZero = true;
+            if(!cols)
+                kp_set_zflag(&gKeyPad);
         }
 
-        pwm_clear_irq(1);                                               ///< Acknowledge slice 1 PWM IRQ
+        pwm_clear_irq(1); ///< Acknowledge slice 1 PWM IRQ
         break;
+
     case 0x04UL: ///< PWM slice 2 ISR used as a PIT to implement the button debouncer
+        button = gpio_get(gButton.KEY.gpio_num);
+        if(button_is_2nd_zero(&gButton)){
+            if(!button){
+                signal_set_state(&gSignal, (gSignal.STATE.ss + 1)%4);
+                button_set_irq_enabled(&gButton, true); ///< Disable the GPIO IRQs
+                pwm_set_enabled(2, false);    ///< Disable the button debouncer
+                gButton.KEY.dbnc = 0;
+            }
+            else
+                button_clr_zflag(&gButton);
+        }
+        else{
+            if(!button)
+                button_set_zflag(&gButton);
+        }
+        pwm_clear_irq(2); ///< Acknowledge slice 2 PWM IRQ
+        break;
 
     default:
-        printf("Paso lo que no debería pasar en PWM IRQ\n");
+        printf("Happend what should not happens on PWM IRQ\n");
         break;
     }
+ }
+
+ void initTimer(void)
+ {
+    /// claim alarm0 for signal value calculation
+    if(!hardware_alarm_is_claimed (0))
+        hardware_alarm_claim(0);
+    else
+        printf("Tenemos un problemaj alarm 0\n");
+
+    /// Set callback for each alarm. TODO: replace with an exclusive handler
+    hardware_alarm_set_callback(0,timerCallback);
+
+    timer_hw->intr = 0x00000001; // Clear/enable alarm0 interrupt
+    timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
+ }
+
+ void keypadCallback(uint num, uint32_t mask)
+ {
+ }
+
+ void buttonCallback(uint num, uint32_t mask)
+ {
+ }
+
+
+ void timerCallback(uint num)
+ {
+    // Perform the signal value calculation and output to the DAC
+    signal_calculate_next_value(&gSignal);
+    dac_calculate(&gDac,gSignal.value);
+
+    timer_hw->intr = 0x00000001; // Clear/enable alarm0 interruption
+    timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
  }

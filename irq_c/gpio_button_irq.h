@@ -15,6 +15,8 @@
 #include "hardware/timer.h"
 #include "hardware/gpio.h"
 
+#include "functs.h"
+
 /**
  * @typedef gpio_button_t 
  *
@@ -24,7 +26,6 @@
 typedef struct{
     struct {
         uint8_t gpio_num    : 6;        ///< GPIO gpio_num number
-        uint8_t en          : 1;        ///< Enable keypad processing
         uint8_t dzero       : 1;        ///< Flag for double zero
         uint8_t nkey        : 1;        ///< Flag that indicates that a key was pressed
         uint8_t dbnc        : 1;        ///< Flag that indicates that debouncer is active
@@ -36,10 +37,8 @@ typedef struct{
  * 
  * @param button 
  * @param gpio_num 
- * @param en 
  */
-static inline void button_init(gpio_button_t *button, uint8_t gpio_num, bool en){
-    button->KEY.en = en;
+static inline void button_init(gpio_button_t *button, uint8_t gpio_num){
     button->KEY.dzero = 0;
     button->KEY.nkey = 0;
     button->KEY.dbnc = 0;
@@ -48,6 +47,12 @@ static inline void button_init(gpio_button_t *button, uint8_t gpio_num, bool en)
     gpio_init(button->KEY.gpio_num);
     gpio_set_dir(button->KEY.gpio_num, GPIO_IN);
     gpio_pull_down(button->KEY.gpio_num);
+
+    gpio_set_irq_enabled_with_callback(button->KEY.gpio_num, GPIO_IRQ_EDGE_RISE, true, buttonCallback);
+}
+
+static inline void button_set_irq_enabled(gpio_button_t *button, bool enable){
+    gpio_set_irq_enabled(button->KEY.gpio_num, GPIO_IRQ_EDGE_RISE, enable);
 }
 
 /** 

@@ -12,7 +12,8 @@
 #define __FUNTCS_
 
 #include <stdint.h>
-#include "hardware/gpio.h"
+
+void initGlobalVariables(void);
 
 /**
  * @brief This function initializes a PWM signal using a periodic interrupt timer (PIT).
@@ -31,6 +32,35 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable);
  * 
  */
 void pwmIRQ(void);
+
+/**
+ * @brief This function initializes the timer 0 to generate interruptions every 1ms.
+ * 
+ */
+void initTimer(void);
+
+/**
+ * @brief Definition of the keypad callback function, which will be called by the handler of the GPIO interruptions.
+ * 
+ * @param num 
+ * @param mask 
+ */
+void keypadCallback(uint num, uint32_t mask);
+
+/**
+ * @brief Definition of the button callback function, which will be called by the handler of the GPIO interruptions.
+ * 
+ * @param num 
+ * @param mask 
+ */
+void buttonCallback(uint num, uint32_t mask);
+
+/**
+ * @brief Definition of the timer callback function, which will be called by the handler of the timer interruptions.
+ * 
+ * @param num Alarm number that triggered the interruption
+ */
+void timerCallback(uint num);
 
 #endif // FUNTCS
 

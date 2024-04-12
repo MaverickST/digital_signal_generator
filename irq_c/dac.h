@@ -47,7 +47,7 @@ typedef struct{
  * @param period    Period of the output signal
  * @param en        Enable DAC
  */
-void dac_init(dac_t *dac, uint8_t gpio_lsb, uint64_t period, bool en);
+void dac_init(dac_t *dac, uint8_t gpio_lsb, bool en);
 
 /**
  * @brief Generate BITS(8-bits) from the input value
@@ -55,7 +55,7 @@ void dac_init(dac_t *dac, uint8_t gpio_lsb, uint64_t period, bool en);
  * @param dac 
  * @param decim_v 
  */
-void dac_calculate(dac_t *dac, uint16_t decim_v);
+void dac_calculate(dac_t *dac, int16_t decim_v);
 
 /**
  * @brief With BITS, output the signal.

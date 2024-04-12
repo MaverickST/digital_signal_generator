@@ -51,20 +51,34 @@ void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, bool en);
 void kp_decode(key_pad_t *kpad);
 
 /**
- * \brief This method captures the currently pressed key. It should only be called when at lest one of the columns is different from zero
+ * \brief This method captures the currently pressed key. 
+ * It should only be called when at lest one of the columns is different from zero
  * \param kpad      pointer to keypad data structure
  * \param cols      value of gpios masked to the gpios connected to the keypad columns
  */
 void kp_capture(key_pad_t *kpad, uint32_t cols);
 
 /** 
- * \brief This method updates the sequence value that drives the keypad rows. The sequence should be updated with a frequency higher than 100Hz
+ * \brief This method updates the sequence value that drives the keypad rows. 
+ * The sequence should be updated with a frequency higher than 100Hz
  * \param kpad   Pointer to keypad data structure
  */
 static inline void kp_gen_seq(key_pad_t *kpad){
     kpad->KEY.cnt += 1;
     kpad->KEY.seq = 1 << kpad->KEY.cnt;
     gpio_put_masked(0x0000000F<<kpad->KEY.rlsb,((uint32_t)kpad->KEY.seq)<<kpad->KEY.rlsb);
+}
+
+/**
+ * @brief This method enables or disables the GPIO IRQs for the keypad columns.
+ * 
+ * @param kpad 
+ * @param en 
+ */
+static inline void kp_set_irq_enabled(key_pad_t *kpad, bool en){
+    for (int i = 0; i < 4; i++){
+        gpio_set_irq_enabled(kpad->KEY.clsb + i, GPIO_IRQ_EDGE_RISE, en);
+    }
 }
 
 /** 

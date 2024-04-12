@@ -39,31 +39,26 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
-#include "hardware/timer.h"
-#include "hardware/pwm.h"
 #include "hardware/irq.h"
-#include "hardware/gpio.h"
 #include "hardware/sync.h"
 
 #include "functs.h"
-#include "keypad_irq.h"
-#include "gpio_led.h"
-#include "gpio_button_irq.h"
-#include "signal_generator_irq.h"
-#include "dac.h"
 
 
 int main() {
     stdio_init_all();
-
-    sleep_ms(5000);
     printf("Hola!!!");
 
+    // Initialize global variables: keypad, signal generator, button, and DAC.
+    initGlobalVariables();
+
+    // Initialize the PWM slices as PIT.
     initPWMasPIT(0,2,true);     // 2ms for the secuence generation
     initPWMasPIT(1,100,false);  // 100ms for the keypad debouncer
     initPWMasPIT(2,100, false); // 100ms for the button debouncer
+
+    initTimer();
 
     // For the PWM interruption, it specifies the handler.
     irq_set_exclusive_handler(PWM_IRQ_WRAP,pwmIRQ);

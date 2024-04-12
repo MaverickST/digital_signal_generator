@@ -29,6 +29,6 @@ void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t off
     signal->offset = offset;
     signal->value = 0;
     signal->STATE.en = en;
-    signal->STATE.signal_state = 0;
+    signal->STATE.ss = 0;
     signal->t_sample = S_TO_US/(SAMPLE_NYQUIST*freq);
 }
