@@ -43,21 +43,25 @@ typedef struct{
 
 void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t offset, bool en);
 
+// ------------------------------------------------------------------
+// ---------------------- GETTING WAVE VALUES ----------------------
+// ------------------------------------------------------------------
+
 static inline void signal_gen_sin(signal_t *signal){
     signal->value = (int16_t)(signal->offset + signal->amp*sin(2*M_PI*signal->freq*time_us_64()*MIN_TIME));
 }
 
 static inline void signal_gen_tri(signal_t *signal){
     if (time_us_64()%(MAX_TIME/signal->freq) <= MAX_TIME/(2*signal->freq)){
-        signal->value = (int16_t)(signal->offset + 4*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME);
+        signal->value = (int16_t)(signal->offset + 4*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME - signal->amp);
     }
     else {
-        signal->value = (int16_t)(signal->offset - 4*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME);  
+        signal->value = (int16_t)(signal->offset - 4*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME + signal->amp);  
     }
 }
 
 static inline void signal_gen_saw(signal_t *signal){
-    signal->value = (int16_t)(signal->offset + 2*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME);
+    signal->value = (int16_t)(signal->offset + 2*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME  - signal->amp);
 }
 
 static inline void signal_gen_sqr(signal_t *signal){
@@ -69,9 +73,11 @@ static inline void signal_gen_sqr(signal_t *signal){
     }
 }
 
+// ------------------------------------------------------------------
+
 static inline void signal_calculate_next_signal(signal_t *signal){
 
-    if(!signal->STATE.en) return; // Actually, it is not necessary to check this condition.
+    if(!signal->STATE.en) return; 
 
     switch(signal->STATE.signal_state){ // Calculate next signal value
         case 0: // Sinusoidal
@@ -87,8 +93,7 @@ static inline void signal_calculate_next_signal(signal_t *signal){
             signal_gen_sqr(signal);
             break;
     }
-    // signal->value = (signal->value/(signal->amp + signal->offset))*RESOLUTION; // Normalize to 8 bits
-    // tb_next(&signal->tb_gen);
+    signal->value -= 500; // To set the bias of the DAC.
 }
 
 static inline int16_t signal_get_value(signal_t *signal){
@@ -97,16 +102,6 @@ static inline int16_t signal_get_value(signal_t *signal){
 
 static inline void signal_set_state(signal_t *signal, uint8_t signal_state){
     signal->STATE.signal_state = signal_state;
-}
-
-static inline void signal_gen_enable(signal_t *signal){
-    signal->STATE.en = 1;
-    tb_enable(&signal->tb_gen);
-}
-
-static inline void signal_gen_disable(signal_t *signal){
-    signal->STATE.en = 0;
-    tb_disable(&signal->tb_gen);
 }
 
 static inline void signal_set_amp(signal_t *signal, uint16_t amp){
@@ -119,8 +114,17 @@ static inline void signal_set_offset(signal_t *signal, uint16_t offset){
 
 static inline void signal_set_freq(signal_t *signal, uint32_t freq){
     signal->freq = freq;
-    tb_set_delta(&signal->tb_gen,MAX_TIME/(2*freq)); // Nyquist theorem
+    tb_set_delta(&signal->tb_gen,MAX_TIME/(16*freq)); // Nyquist theorem
 }
 
+static inline void signal_gen_enable(signal_t *signal){
+    signal->STATE.en = 1;
+    tb_enable(&signal->tb_gen);
+}
+
+static inline void signal_gen_disable(signal_t *signal){
+    signal->STATE.en = 0;
+    tb_disable(&signal->tb_gen);
+}
 
 #endif // __SIGNAL_GENERATOR_
