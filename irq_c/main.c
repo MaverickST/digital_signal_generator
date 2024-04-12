@@ -65,7 +65,6 @@ int main() {
     irq_set_exclusive_handler(PWM_IRQ_WRAP,pwmIRQ);
     irq_set_priority(PWM_IRQ_WRAP, 0xC0);
 
-
     while(1){
         __wfi();
     }

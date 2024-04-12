@@ -6,6 +6,7 @@ set(PICO_BOARD "pico_w")
 # note: this must happen before project()
 include(pico_sdk_import.cmake)
 
+
 project(SignalGenerator)
 
 # initialize the Raspberry Pi Pico SDK
