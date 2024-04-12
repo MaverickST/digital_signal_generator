@@ -13,6 +13,10 @@ pico_sdk_init()
 
 add_executable(access
 	main.c
+	functs.c
+	dac.c
+	keypad_irq.c
+	signal_generator_irq.c
 )
 
 target_include_directories(access PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -23,7 +23,7 @@
  */
 typedef struct{
     struct {
-        uint8_t gpio_num     : 6;        ///< GPIO gpio_num number
+        uint8_t pin     : 6;        ///< GPIO pin number
         uint8_t en      : 1;        ///< Enable keypad processing
         uint8_t dzero   : 1;        ///< Flag for double zero
         uint8_t nkey    : 1;        ///< Flag that indicates that a key was pressed
@@ -36,21 +36,21 @@ typedef struct{
  * @brief 
  * 
  * @param button 
- * @param gpio_num 
+ * @param pin 
  * @param dbnc_time 
  * @param en 
  */
-static inline void button_init(gpio_button_t *button, uint8_t gpio_num, uint64_t dbnc_time, bool en){
+static inline void button_init(gpio_button_t *button, uint8_t pin, uint64_t dbnc_time, bool en){
     button->KEY.en = en;
     button->KEY.dzero = 0;
     button->KEY.nkey = 0;
     button->KEY.dbnc = 0;
-    button->KEY.gpio_num = gpio_num;
+    button->KEY.pin = pin;
     tb_init(&button->tb_dbnce, dbnc_time, false);
 
-    gpio_init(button->KEY.gpio_num);
-    gpio_set_dir(button->KEY.gpio_num, GPIO_IN);
-    gpio_pull_down(button->KEY.gpio_num);
+    gpio_init(button->KEY.pin);
+    gpio_set_dir(button->KEY.pin, GPIO_IN);
+    gpio_pull_down(button->KEY.pin);
 }
 
 /** 

@@ -22,6 +22,8 @@
  * DC Level of 500mV, and frequency of 10Hz. The generated signal and its characteristics 
  * should be able to be verified by a measuring instrument, multimeter, or oscilloscope.
  * 
+ * TESTING: 2000mV, 500mV, 100Hz
+ * 
  * \author      MST_CDA
  * \version     0.0.1
  * \date        05/10/2023
@@ -72,11 +74,11 @@ int main() {
     printf("Hola!!!");
 
     // Initialize signal generator
-    uint8_t in_param_state = 0x0; // 0: Nothing, 1: Entering amp (A), 2: Entering offset (B), 3: Entering freq (C)
+    uint8_t in_param_state = 0x00; // 0: Nothing, 1: Entering amp (A), 2: Entering offset (B), 3: Entering freq (C)
     uint32_t param = 0; // This variable will store the value of any parameter that is being entered
     uint8_t key_cont = 0;
     signal_t my_signal;
-    signal_gen_init(&my_signal,10,1000,500,true);
+    signal_gen_init(&my_signal,1,1000,500,true);
 
     // Initialize DAC
     dac_t my_dac;
@@ -101,10 +103,8 @@ int main() {
 
     while(1){
         // Process keypad
-        uint32_t cols = gpio_get_all() & (0x0000003C);
+        uint32_t cols = gpio_get_all() & (0x0000003C0); // 0000 0100 0000
         if(cols && !my_keypad.KEY.dbnc){
-            // cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-            //printf("%d\n",cols);
             tb_disable(&my_keypad.tb_seq);
             kp_capture(&my_keypad,cols);
             tb_update(&my_keypad.tb_dbnce);
@@ -115,7 +115,6 @@ int main() {
         if(tb_check(&my_keypad.tb_seq)){
             tb_next(&my_keypad.tb_seq);
             kp_gen_seq(&my_keypad);
-            //printf("%d\n",my_keypad.KEY.seq);
         }
         if(tb_check(&my_keypad.tb_dbnce)){
             tb_next(&my_keypad.tb_dbnce);
@@ -138,7 +137,6 @@ int main() {
         // Process button
         bool button = gpio_get(my_button.KEY.pin);
         if(button && !my_button.KEY.dbnc){
-            cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
             my_button.KEY.nkey = true; // This is a flag that indicates that a key was pressed
             tb_update(&my_button.tb_dbnce); 
             tb_enable(&my_button.tb_dbnce);
@@ -167,10 +165,9 @@ int main() {
             tb_next(&my_signal.tb_gen);
             signal_calculate_next_signal(&my_signal);
             dac_calculate(&my_dac,my_signal.value);
-            //printf("%d\n",my_signal.value);
         }
 
-        // // Process printing
+        // Process printing
         if(tb_check(&tb_print)){
             tb_next(&tb_print);
             switch (my_signal.STATE.signal_state){
@@ -187,8 +184,7 @@ int main() {
                     printf("Square: ");
                     break;
             }
-            printf("Value: %d, Amp: %d, Offset: %d, Freq: %d\n",
-                    my_signal.value,my_signal.amp,my_signal.offset,my_signal.freq);
+            printf("Amp: %d, Offset: %d, Freq: %d\n", my_signal.amp, my_signal.offset, my_signal.freq);
         }
 
         // Process entering parameters
@@ -196,14 +192,14 @@ int main() {
             
             // To accept a number, in_param_state must be different of 0
             if(checkNumber(my_keypad.KEY.dkey) && in_param_state){
-                param = (!key_cont)? param : param + my_keypad.KEY.dkey*pow(10,key_cont);
+                param = (!key_cont)? my_keypad.KEY.dkey : param*10 + my_keypad.KEY.dkey;
                 key_cont++;
             }
             // To accept a letter different of 0x0D, in_param_state must be 0
             else if(checkLetter(my_keypad.KEY.dkey) && !in_param_state){
-                // cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+                cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
                 // led_on(my_led);
-                switch (param)
+                switch (my_keypad.KEY.dkey)
                 {
                 case 0x0A:
                     in_param_state = 1;
@@ -215,12 +211,13 @@ int main() {
                     in_param_state = 3;
                     break;
                 default:
+                    printf("Invalid letter\n");
                     break;
                 }
             }
             // To accept a 0x0D, in_param_state must be different of 0
             else if(my_keypad.KEY.dkey == 0x0D && in_param_state){
-                // cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+                cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
                 // led_off(my_led);
                 switch (in_param_state)
                 {
@@ -240,6 +237,7 @@ int main() {
                     }
                     break;
                 default:
+                    printf("Invalid state\n");
                     break;
                 }
                 in_param_state = 0;

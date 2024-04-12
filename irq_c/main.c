@@ -22,6 +22,13 @@
  * DC Level of 500mV, and frequency of 10Hz. The generated signal and its characteristics 
  * should be able to be verified by a measuring instrument, multimeter, or oscilloscope.  
  * 
+ * ISR: Input Shift Register
+ * PIT: Periodic Interrupt Timer
+ * 
+ * Interrupts:  button debouncer, keypad debouncer, secuence -> Slices 0,1,2 of the PWM
+ *              value calculation, printing -> Timers 0, 1
+ *              gpio columns -> GPIO 
+ * 
  * \author      MST_CDA
  * \version     0.0.1
  * \date        05/10/2023
@@ -38,8 +45,13 @@
 #include "hardware/irq.h"
 #include "hardware/gpio.h"
 #include "hardware/sync.h"
-#include "gpio_led.h"
+
 #include "functs.h"
+#include "keypad_irq.h"
+#include "gpio_led.h"
+#include "gpio_button_irq.h"
+#include "signal_generator_irq.h"
+#include "dac.h"
 
 
 int main() {
@@ -49,10 +61,11 @@ int main() {
     printf("Hola!!!");
 
     initPWMasPIT(0,2,true);     // 2ms for the secuence generation
-    initPWMasPIT(1,100,false);  // 100ms for the debouncer
+    initPWMasPIT(1,100,false);  // 100ms for the keypad debouncer
+    initPWMasPIT(2,100, false); // 100ms for the button debouncer
 
     // For the PWM interruption, it specifies the handler.
-    // irq_set_exclusive_handler(PWM_IRQ_WRAP,pwmIRQ);
+    irq_set_exclusive_handler(PWM_IRQ_WRAP,pwmIRQ);
     irq_set_priority(PWM_IRQ_WRAP, 0xC0);
 
 

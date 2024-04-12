@@ -14,7 +14,6 @@
 #include <stdint.h>
 #include "hardware/gpio.h"
 
-
 /**
  * @brief This function initializes a PWM signal using a periodic interrupt timer (PIT).
  * Each slice will generate interruptions at a period of milis miliseconds.

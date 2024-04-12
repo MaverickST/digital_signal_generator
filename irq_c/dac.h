@@ -14,8 +14,7 @@
 #include <stdint.h>
 #include "hardware/timer.h"
 
-#define RESOLUTION  255         // 8 bits
-#define DAC_RANGE   9400        // 0 to 9.3V
+#define RESOLUTION  256         // 8 bits
 
 /**
  * @typedef dac_t 
@@ -35,9 +34,8 @@ typedef struct{
         uint8_t bit7     : 1;
     }BITS;
     bool en;                        ///< Enable DAC
-    uint8_t gpio_lsb;               ///< The LSB position of the GPIOs used to output the DAC signal
-    uint16_t digit_v;               ///< Value to be outputed
-    time_base_t tb_sample;          ///< Periocic time base used to outputs the signal
+    uint8_t gpio_lsb;                ///< The LSB position of the GPIOs used to output the DAC signal
+    uint16_t digit_v;                 ///< Value to be outputed
 }dac_t;
 
 /**
@@ -56,7 +54,7 @@ void dac_init(dac_t *dac, uint8_t gpio_lsb, uint64_t period, bool en);
  * @param dac 
  * @param decim_v 
  */
-void dac_calculate(dac_t *dac, int16_t decim_v);
+void dac_calculate(dac_t *dac, uint16_t decim_v);
 
 /**
  * @brief With BITS, output the signal.

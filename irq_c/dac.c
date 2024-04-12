@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <math.h>
 #include "time_base.h"
 #include "hardware/gpio.h"
 #include "dac.h"
@@ -21,16 +20,14 @@ void dac_init(dac_t *dac, uint8_t gpio_lsb, uint64_t period, bool en)
     dac->gpio_lsb = gpio_lsb;
     dac->digit_v = 0;
     dac->en = en;
-    tb_init(&dac->tb_sample, period, en);
 
     gpio_init_mask(0x000000FF << dac->gpio_lsb);
     gpio_set_dir_masked(0x000000FF << dac->gpio_lsb, 0x000000FF << dac->gpio_lsb); // Set all gpios as outputs
 }
 
-void dac_calculate(dac_t *dac, int16_t decim_v)
+void dac_calculate(dac_t *dac, uint16_t decim_v)
 {
-    
-    dac->digit_v = (decim_v + 5000)*RESOLUTION/DAC_RANGE ; // normalize to 8 bits
+    dac->digit_v = ((decim_v + 5000)/10000) * RESOLUTION; // normalize to 8 bits
     dac->BITS.bit0 = (dac->digit_v & 0x01) >> 0;
     dac->BITS.bit1 = (dac->digit_v & 0x02) >> 1;
     dac->BITS.bit2 = (dac->digit_v & 0x04) >> 2;
