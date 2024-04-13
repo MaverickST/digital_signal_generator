@@ -16,12 +16,11 @@
 #include "dac.h"
 
 
-void dac_init(dac_t *dac, uint8_t gpio_lsb, uint64_t period, bool en)
+void dac_init(dac_t *dac, uint8_t gpio_lsb, bool en)
 {
     dac->gpio_lsb = gpio_lsb;
     dac->digit_v = 0;
     dac->en = en;
-    tb_init(&dac->tb_sample, period, en);
 
     gpio_init_mask(0x000000FF << dac->gpio_lsb);
     gpio_set_dir_masked(0x000000FF << dac->gpio_lsb, 0x000000FF << dac->gpio_lsb); // Set all gpios as outputs

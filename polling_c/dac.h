@@ -37,7 +37,6 @@ typedef struct{
     bool en;                        ///< Enable DAC
     uint8_t gpio_lsb;               ///< The LSB position of the GPIOs used to output the DAC signal
     uint16_t digit_v;               ///< Value to be outputed
-    time_base_t tb_sample;          ///< Periocic time base used to outputs the signal
 }dac_t;
 
 /**
@@ -45,10 +44,9 @@ typedef struct{
  * 
  * @param dac 
  * @param pin_lsb   The LSB position of the GPIOs used to output the DAC signal
- * @param period    Period of the output signal
  * @param en        Enable DAC
  */
-void dac_init(dac_t *dac, uint8_t gpio_lsb, uint64_t period, bool en);
+void dac_init(dac_t *dac, uint8_t gpio_lsb, bool en);
 
 /**
  * @brief Generate BITS(8-bits) from the input value

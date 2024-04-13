@@ -82,7 +82,7 @@ int main() {
 
     // Initialize DAC
     dac_t my_dac;
-    dac_init(&my_dac, 10, my_signal.tb_gen.delta, true);
+    dac_init(&my_dac, 10, true);
 
     // Initialize LED
     uint8_t my_led = 18;
@@ -135,7 +135,7 @@ int main() {
             }
         }
         // Process button
-        bool button = gpio_get(my_button.KEY.pin);
+        bool button = gpio_get(my_button.KEY.gpio_num);
         if(button && !my_button.KEY.dbnc){
             my_button.KEY.nkey = true; // This is a flag that indicates that a key was pressed
             tb_update(&my_button.tb_dbnce); 
@@ -148,7 +148,7 @@ int main() {
             if(button_is_2nd_zero(&my_button)){
                 if(!button){
                     // printf("Button pressed\n");
-                    signal_set_state(&my_signal, (my_signal.STATE.signal_state + 1)%4);
+                    signal_set_state(&my_signal, (my_signal.STATE.ss + 1)%4);
                     tb_disable(&my_button.tb_dbnce);
                     my_button.KEY.dbnc = 0;
                 }
@@ -170,7 +170,7 @@ int main() {
         // Process printing
         if(tb_check(&tb_print)){
             tb_next(&tb_print);
-            switch (my_signal.STATE.signal_state){
+            switch (my_signal.STATE.ss){
                 case 0:
                     printf("Sinusoidal: ");
                     break;

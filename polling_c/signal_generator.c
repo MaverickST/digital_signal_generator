@@ -30,6 +30,6 @@ void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t off
     signal->offset = offset;
     signal->value = 0;
     signal->STATE.en = en;
-    signal->STATE.signal_state = 0;
+    signal->STATE.ss = 0;
     tb_init(&signal->tb_gen,MAX_TIME/(16*freq),true);
 }

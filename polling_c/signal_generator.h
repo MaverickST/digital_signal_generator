@@ -29,8 +29,8 @@
  */
 typedef struct{
     struct{
-        uint8_t signal_state    : 2; // 0: Sinusoidal, 1: Triangular, 2: Saw tooth, 3: Square
-        uint8_t en              : 1; // Enable signal generation
+        uint8_t ss      : 2; // 0: Sinusoidal, 1: Triangular, 2: Saw tooth, 3: Square
+        uint8_t en      : 1; // Enable signal generation
     }STATE;
     uint32_t freq;          // Signal frequency
     uint16_t amp;           // Signal amplitude
@@ -79,7 +79,7 @@ static inline void signal_calculate_next_signal(signal_t *signal){
 
     if(!signal->STATE.en) return; 
 
-    switch(signal->STATE.signal_state){ // Calculate next signal value
+    switch(signal->STATE.ss){ // Calculate next signal value
         case 0: // Sinusoidal
             signal_gen_sin(signal);
             break;
@@ -100,8 +100,8 @@ static inline int16_t signal_get_value(signal_t *signal){
     return signal->value;
 }
 
-static inline void signal_set_state(signal_t *signal, uint8_t signal_state){
-    signal->STATE.signal_state = signal_state;
+static inline void signal_set_state(signal_t *signal, uint8_t ss){
+    signal->STATE.ss = ss;
 }
 
 static inline void signal_set_amp(signal_t *signal, uint16_t amp){
