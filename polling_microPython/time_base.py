@@ -1,7 +1,9 @@
 """
-Module for time_base class.
-    ``author`` MST_CDA
-
+ - ``file``: time_base.py
+ - ``Author``:  MST_CDA
+ - ``Version``:  1.0
+ - ``Date``:  2024-04-14
+ - ``Description``: This module define a class for time_base, wich is the key for the polling strategy.
 """
 
 from utime import ticks_us

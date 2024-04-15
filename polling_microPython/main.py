@@ -41,7 +41,24 @@ NOTE: Using Pin.value(), it must take into accout that:
 
 """
 
-from machine import Pin, Timer
+# Some auxiliary functions
+def checkNumer(number: int):
+    return (number >= 0 & number <= 9)
+
+def checkLetter(letter: int):
+    return (letter >= 0x0A & letter <= 0x0C)
+
+def checkFreq(freq: int):
+    return (freq >= 1 & freq <= 12000000)
+
+def checkAmp(amp: int):
+    return (amp >= 100 & amp <= 2500)
+
+def checkOffset(offset: int):
+    return (offset >= 50 & offset <= 1250)
+
+# Import the modules
+from machine import Pin
 from time_base import Time_base
 from gpio_button import Button
 from keypad_polling import KeyPad
@@ -49,11 +66,131 @@ from signal_generator import Signal
 from dac import DAC
 from gpio_led import Led
 
-led = Pin("LED", Pin.OUT)
-tim = Timer()
-tb_base = Time_base(1000000, True)
-def tick(timer):
-    global led
-    led.toggle()
+# Initialize the objects
+my_signal = Signal(1, 1000, 500, True)
+my_dac = DAC(10, True)
+my_led = Led(1, True)
+my_keypad = KeyPad(2, 6, 100000, True)
+my_button = Button(0, 100000, True)
+tb_print = Time_base(1000000, True)
 
-tim.init(freq=3, mode=Timer.PERIODIC, callback=tick)
+# Auxiliar variables
+in_state: int = 0x0 # 0: Nothing, 1: Amp, 2: Offset, 3: Freq
+key_cnt: int = 0x0
+param: int = 0x0
+
+# Main loop
+while True:
+    # Get the keypad columns
+    my_keypad.captureCols()
+    # Process the keypad
+    if (my_keypad.cols & (not my_keypad.dbnc)):
+        my_keypad.tb_seq.disable()
+        my_keypad.captureKey() # Capture the key
+        my_keypad.tb_dbnce.update()
+        my_keypad.tb_dbnce.enable()
+        my_keypad.set_zflag()
+        my_keypad.dbnc = True
+    
+    if (my_keypad.tb_seq.check()):
+        my_keypad.tb_seq.set_next()
+        my_keypad.gen_seq()
+
+    if (my_keypad.tb_dbnce.check()):
+        my_keypad.tb_dbnce.set_next()
+        if (my_keypad.is_2nd_zero()):
+            if (not my_keypad.cols):
+                my_keypad.tb_seq.update()
+                my_keypad.tb_seq.enable()
+                my_keypad.tb_dbnce.disable()
+                my_keypad.dbnc = False
+            else: 
+                my_keypad.clear_zflag()
+        else:
+            if (not my_keypad.cols):
+                my_keypad.set_zflag()
+    
+    # Process the button
+    boolButton: bool = bool(my_button.gpioPin.value())
+    if (boolButton & (not my_button.dbnc)):
+        my_button.nkey = True # A key was pressed
+        my_button.tb_dbnce.update()
+        my_button.tb_dbnce.enable()
+        my_button.dbnc = True
+    
+    if (my_button.tb_dbnce.check()):
+        my_button.tb_dbnce.set_next()
+        if (my_button.is_2nd_zero()):
+            if (not boolButton):
+                my_signal.set_ss((my_signal.ss + 1) % 4)
+                my_button.tb_dbnce.disable()
+                my_button.dbnc = False
+            else: 
+                my_button.clear_zflag()
+        else:
+            if (not boolButton):
+                my_button.set_zflag()
+    
+    # Process the signal
+    if (my_signal.tb_gen.check()):
+        my_signal.tb_gen.set_next()
+        my_signal.calculate()
+        my_dac.set_dac(my_signal.get_value())
+
+    # Printing the signal
+    if (tb_print.check()):
+        tb_print.set_next()
+        if (my_signal.ss == 0):
+            print("Sinusoidal: ")
+        elif (my_signal.ss == 1):
+            print("Triangular: ")
+        elif (my_signal.ss == 2):
+            print("Sawtooth: ")
+        elif (my_signal.ss == 3):
+            print("Square: ")
+
+        print("Amp: ", my_signal.amp, "mV", "Offset: ", my_signal.offset, "mV", "Freq: ", my_signal.freq, "Hz")
+        print("\n")
+
+    # Process entering parameters
+    if (my_keypad.nkey & (not my_keypad.dbnc)):
+        # To accept a number, in_param_state must be different of 0
+        if (checkNumer(my_keypad.dkey) & in_state):
+            param = param*10 + my_keypad.dkey
+            key_cnt += 1
+        # To accept a letter except 0xD, in_param_state must be 0
+        elif (checkLetter(my_keypad.dkey) & (not in_state)):
+            my_led.set()
+            if (my_keypad.dkey == 0x0A):
+                in_state = 1
+            elif (my_keypad.dkey == 0x0B):
+                in_state = 2
+            elif (my_keypad.dkey == 0x0C):
+                in_state = 3
+        # To accept a 0x0D, in_param_state must be different of 0
+        elif (my_keypad.dkey == 0x0D & in_state):
+            my_led.clear()
+            if (in_state == 1):
+                if (checkAmp(param)):
+                    my_signal.set_amp(param)
+                else:
+                    print("Invalid amplitude value")
+            elif (in_state == 2):
+                if (checkOffset(param)):
+                    my_signal.set_offset(param)
+                else:
+                    print("Invalid offset value")
+            elif (in_state == 3):
+                if (checkFreq(param)):
+                    my_signal.set_freq(param)
+                else:
+                    print("Invalid frequency value")
+            in_state = 0
+            param = 0
+            key_cnt = 0
+        
+        # Aknowledge the key
+        my_keypad.nkey = False
+
+# End of the program
+            

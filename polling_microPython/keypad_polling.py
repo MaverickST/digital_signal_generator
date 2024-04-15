@@ -135,10 +135,7 @@ class KeyPad:
         self.seq = (1 << self.cnt) & 0x0000000F
 
         for i in range(4):
-            if self.seq & (1 << i):
-                self.gpioR[i].high()
-            else:
-                self.gpioR[i].low()
+            self.gpioR[i].value((self.seq >> i) & 0x1)
 
 
     def get_key(self) -> int:
