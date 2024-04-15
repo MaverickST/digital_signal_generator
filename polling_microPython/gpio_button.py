@@ -12,12 +12,12 @@ from time_base import Time_base
 class Button:
     """
     Class to process the button.
-    
+
     It is used as a base class for the keypad -> Herency
     """
-
     gpioPin: Pin        # The gpio for the button
     en: bool            # Enable the button processing
+
     dbnc: bool          # Flag that indicates that debouncer is active
     dzero: bool         # Flag for double zero
     nkey: bool          # Flag that indicates that a key was pressed

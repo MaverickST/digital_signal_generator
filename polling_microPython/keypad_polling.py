@@ -11,7 +11,7 @@ from typing import List
 from machine import Pin
 from gpio_button import Button
 
-class KeyPad(Button):
+class KeyPad:
     cols: int           # store the columns state
     cnt: int            # counter to generate row sequence
     seq: int            # store the current sequence state
@@ -146,5 +146,23 @@ class KeyPad(Button):
         Get the last key pressed.
         """
         return self.dkey
+    
+    def set_zflag(self):
+        """
+        Set the double zero flag.
+        """
+        self.dzero = True
+
+    def clear_zflag(self):
+        """
+        Clear the double zero flag.
+        """
+        self.dzero = False
+
+    def is_2nd_zero(self) -> bool:
+        """
+        This method returns true if a first zero was detected on keypad columns
+        """
+        return self.dzero
             
 

@@ -33,6 +33,12 @@ should be able to be verified by a measuring instrument, multimeter, or oscillos
    - Digital-to-Analog Converter (DAC0808).
    - Operational Amplifier (LM358).
    - LED
+
+NOTE: Using Pin.value(), it must take into accout that: 
+    - If is given a parameter and it is Pin.OUT: it sets the pin to what is given.
+    - If no parameter is given and it is Pin.IN: it returns the current value of the pin.
+    To other cases, its behavior is not defined.
+
 """
 
 from machine import Pin, Timer
@@ -40,7 +46,8 @@ from time_base import Time_base
 from gpio_button import Button
 from keypad_polling import KeyPad
 from signal_generator import Signal
-
+from dac import DAC
+from gpio_led import Led
 
 led = Pin("LED", Pin.OUT)
 tim = Timer()
