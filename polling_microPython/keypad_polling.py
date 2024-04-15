@@ -25,6 +25,8 @@ class KeyPad:
     tb_seq: Time_base           # Periodic time base used to generate row sequence
     tb_dbnce: Time_base         # Periocic time base used to implement the key debouncer
     history: List[int] = []     # The last 10 pressed keys
+    gpioC: List[Pin] = []        # The four gpios for cols
+    gpioR: List[Pin] = []        # The four gpios for rows
 
     def __init__(self, rlsb: int, clsb: int, dbnc_time: int, en: bool):
         """
@@ -55,38 +57,96 @@ class KeyPad:
 
         # Initialize the gpios
         for i in range(4):
-            Pin(self.rlsb + i, Pin.IN, Pin.PULL_DOWN)
-            Pin(self.clsb + i, Pin.OUT, Pin.PULL_DOWN)
+            self.gpioR[i] = Pin(self.rlsb + i, Pin.OUT)
+            self.gpioC[i] = Pin(self.clsb + i, Pin.IN, Pin.PULL_DOWN)
 
-        def capture(self):
-            """
-            Capture the key pressed.
-            """
-            if self.nkey:
-                self.history.pop(0)
-                self.history.append(self.dkey)
-                self.nkey = False
-                self.dbnc = True
-                self.tb_dbnce.reset()
-            if self.dbnc and self.tb_dbnce.state:
-                self.dbnc = False
-                self.ckey = 0x0
-                self.dkey = 0x1F
-            if self.ckey != 0x0:
-                self.nkey = True
-            else:
-                self.nkey = False
-                self.dbnc = False
+
+    def capture(self, cols: int):
+        """
+        Capture the key pressed.
+        """
+        self.ckey = (cols >> 2) | self.seq
+        self.decode()
+        for i in range(9):
+            self.history[9 - i] = self.history[9 - i - 1]
+        self.history[0] = self.dkey
+        self.nkey = True
+    
+    def decode(self):
+        """
+        Decode the key pressed.
+        """
+        if self.ckey == 0x88:
+            self.dkey = 0x01
+        elif self.ckey == 0x48:
+            self.dkey = 0x02
+        elif self.ckey == 0x28:
+            self.dkey = 0x03
+        elif self.ckey == 0x18:
+            self.dkey = 0x0A
+        elif self.ckey == 0x84:
+            self.dkey = 0x04
+        elif self.ckey ==0x44:
+            self.dkey = 0x05
+        elif self.ckey == 0x24:
+            self.dkey = 0x06
+        elif self.ckey == 0x14:
+            self.dkey = 0x0B
+        elif self.ckey == 0x82:
+            self.dkey = 0x07
+        elif self.ckey == 0x42:
+            self.dkey = 0x08
+        elif self.ckey == 0x22:
+            self.dkey = 0x09
+        elif self.ckey == 0x12:
+            self.dkey = 0x0C
+        elif self.ckey == 0x81:
+            self.dkey = 0x0E
+        elif self.ckey == 0x41:
+            self.dkey = 0x00
+        elif self.ckey == 0x21:
+            self.dkey = 0x0F
+        elif self.ckey == 0x11:
+            self.dkey = 0x0D
+
+    def gen_seq(self):
+        """
+        Generate the row sequence.
+        """
+        if not self.en:
+            return
         
-        def decode(self):
-            """
-            Decode the key pressed.
-            """
-            for i in range(4):
-                Pin(self.clsb + i, Pin.OUT, Pin.PULL_UP)
-                for j in range(4):
-                    if Pin(self.rlsb + j).value() == 1:
-                        self.ckey = (i << 2) + j
-                        self.dkey = (i << 2) + j + 1
-                Pin(self.clsb + i, Pin.OUT, Pin.PULL_DOWN)
+        self.cnt = (self.cnt + 1)%4
+        self.seq = (1 << self.cnt) & 0x0000000F
+
+        for i in range(4):
+            if self.seq & (1 << i):
+                self.gpioR[i].high()
+            else:
+                self.gpioR[i].low()
+
+    def set_zflag(self):
+        """
+        Set the double zero flag.
+        """
+        self.dzero = True
+
+    def clear_zflag(self):
+        """
+        Clear the double zero flag.
+        """
+        self.dzero = False
+
+    def is_2nd_zero(self) -> bool:
+        """
+        This method returns true if a first zero was detected on keypad columns
+        """
+        return self.dzero
+    
+    def get_key(self) -> int:
+        """
+        Get the last key pressed.
+        """
+        return self.dkey
+            
 
