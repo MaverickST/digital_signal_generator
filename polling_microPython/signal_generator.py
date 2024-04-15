@@ -14,7 +14,7 @@ S_TO_US = 1000000
 US_TO_S = 0.000001
 SAMPLE = 10
 
-class signal_generator:
+class Signal:
     ss: int             # Signal State: 0: Sinusoidal, 1: Triangular, 2: Sawtooth, 3: Square
     en: bool            # Enable the signal generator
     freq: int           # Frequency in Hz

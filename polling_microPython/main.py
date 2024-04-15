@@ -37,6 +37,10 @@ should be able to be verified by a measuring instrument, multimeter, or oscillos
 
 from machine import Pin, Timer
 from time_base import Time_base
+from gpio_button import Button
+from keypad_polling import KeyPad
+from signal_generator import Signal
+
 
 led = Pin("LED", Pin.OUT)
 tim = Timer()

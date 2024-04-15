@@ -6,12 +6,13 @@
  - ``Description``: This module define a class to process the keypad.
 """
 
-from utime import ticks_us
 from time_base import Time_base
 from typing import List
 from machine import Pin
+from gpio_button import Button
 
-class KeyPad:
+class KeyPad(Button):
+    cols: int           # store the columns state
     cnt: int            # counter to generate row sequence
     seq: int            # store the current sequence state
     ckey: int           # captured key with position coding
@@ -35,12 +36,14 @@ class KeyPad:
         Parameters:
         - ``rlsb`` The rows LSB position for keypad rows, the four gpios for rows must be consecutives.
         - ``clsb`` The cols LSB position for keypad cols, the four gpios for cols must be consecutives.
-        - ``dbnc_time`` Time in ms for the debouncer.
+        - ``dbnc_time`` Time in us for the debouncer.
         - ``en`` Enable keypad processing.
         """
         # Initialize history buffer
         for i in range(10):
             self.history[0xff]
+        # Initialize the keypad variables
+        self.cols = 0
         self.cnt = 0x0
         self.seq = 0x8
         self.ckey = 0
@@ -53,7 +56,7 @@ class KeyPad:
         self.dbnc = False
         # Initialize time bases
         self.tb_seq = Time_base(2000, True)
-        self.tb_dbnce = Time_base(dbnc_time*1000, False)
+        self.tb_dbnce = Time_base(dbnc_time, False)
 
         # Initialize the gpios
         for i in range(4):
@@ -61,16 +64,28 @@ class KeyPad:
             self.gpioC[i] = Pin(self.clsb + i, Pin.IN, Pin.PULL_DOWN)
 
 
-    def capture(self, cols: int):
+    def captureKey(self):
         """
         Capture the key pressed.
+        Before this metod, it must be called the captureCols method.
         """
-        self.ckey = (cols >> 2) | self.seq
+        # Key processing
+        self.ckey = self.cols | self.seq
         self.decode()
+        # Store the key in the history buffer
         for i in range(9):
             self.history[9 - i] = self.history[9 - i - 1]
         self.history[0] = self.dkey
+        # Set the new key flag
         self.nkey = True
+
+    def captureCols(self):
+        """
+        Capture the columns state.
+        """
+        self.cols = 0
+        for i in range(4):
+            self.cols |= (self.gpioC[i].value() << i)
     
     def decode(self):
         """
@@ -125,24 +140,7 @@ class KeyPad:
             else:
                 self.gpioR[i].low()
 
-    def set_zflag(self):
-        """
-        Set the double zero flag.
-        """
-        self.dzero = True
 
-    def clear_zflag(self):
-        """
-        Clear the double zero flag.
-        """
-        self.dzero = False
-
-    def is_2nd_zero(self) -> bool:
-        """
-        This method returns true if a first zero was detected on keypad columns
-        """
-        return self.dzero
-    
     def get_key(self) -> int:
         """
         Get the last key pressed.
