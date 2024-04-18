@@ -34,7 +34,7 @@ should be able to be verified by a measuring instrument, multimeter, or oscillos
    - Operational Amplifier (LM358).
    - LED
 
-NOTE: Using Pin.value(), it must take into accout that: 
+H: Using Pin.value(), it must take into accout that: 
     - If is given a parameter and it is Pin.OUT: it sets the pin to what is given.
     - If no parameter is given and it is Pin.IN: it returns the current value of the pin.
     To other cases, its behavior is not defined.
@@ -58,16 +58,19 @@ def checkOffset(offset: int):
     return (offset >= 50 & offset <= 1250)
 
 # Import the modules
-from machine import Pin
+
+from machine import Pin, Timer
 from time_base import Time_base
 from gpio_button import Button
 from keypad_polling import KeyPad
-from signal_generator import Signal
+from signal_generator import Signal, SAMPLE
 from dac import DAC
 from gpio_led import Led
 
+
 # Initialize the objects
 my_signal = Signal(1, 1000, 500, True)
+my_signal.calculate()
 my_dac = DAC(10, True)
 my_led = Led(1, True)
 my_keypad = KeyPad(2, 6, 100000, True)
@@ -123,6 +126,7 @@ while True:
         if (my_button.is_2nd_zero()):
             if (not boolButton):
                 my_signal.set_ss((my_signal.ss + 1) % 4)
+                my_signal.calculate()
                 my_button.tb_dbnce.disable()
                 my_button.dbnc = False
             else: 
@@ -133,9 +137,9 @@ while True:
     
     # Process the signal
     if (my_signal.tb_gen.check()):
-        my_signal.tb_gen.set_next()
-        my_signal.calculate()
-        my_dac.set_dac(my_signal.get_value())
+        my_signal.tb_gen.set_next() 
+        my_dac.set_dac(my_signal.arrayV[my_signal.cnt])
+        my_signal.cnt = (my_signal.cnt + 1) % SAMPLE
 
     # Printing the signal
     if (tb_print.check()):
@@ -185,6 +189,7 @@ while True:
                     my_signal.set_freq(param)
                 else:
                     print("Invalid frequency value")
+            my_signal.calculate()
             in_state = 0
             param = 0
             key_cnt = 0
