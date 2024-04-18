@@ -48,6 +48,14 @@ void initTimer(void);
 // -------------------------------------------------------------
 
 /**
+ * @brief This function is the main callback function for the GPIO interruptions.
+ * 
+ * @param num 
+ * @param mask 
+ */
+void gpioCallback(uint num, uint32_t mask);
+
+/**
  * @brief Definition of the keypad callback function, which will be called by the handler of the GPIO interruptions.
  * 
  * @param num 

@@ -83,6 +83,7 @@ int main() {
     // Initialize DAC
     dac_t my_dac;
     dac_init(&my_dac, 10, true);
+    signal_calculate_next_value(&my_signal);
 
     // Initialize LED
     uint8_t my_led = 18;
@@ -98,7 +99,7 @@ int main() {
 
     // Initialize Printing
     time_base_t tb_print;
-    tb_init(&tb_print,10000,true);
+    tb_init(&tb_print,1000000,true);
     
 
     while(1){
@@ -149,6 +150,7 @@ int main() {
                 if(!button){
                     // printf("Button pressed\n");
                     signal_set_state(&my_signal, (my_signal.STATE.ss + 1)%4);
+                    signal_calculate_next_value(&my_signal);
                     tb_disable(&my_button.tb_dbnce);
                     my_button.KEY.dbnc = 0;
                 }
@@ -163,8 +165,8 @@ int main() {
         // Process signal
         if (tb_check(&my_signal.tb_gen)){
             tb_next(&my_signal.tb_gen);
-            signal_calculate_next_signal(&my_signal);
-            dac_calculate(&my_dac,my_signal.value);
+            dac_calculate(&my_dac,my_signal.arrayV[my_signal.cnt]);
+            my_signal.cnt = (my_signal.cnt + 1) % SAMPLE_NYQUIST;
         }
 
         // Process printing
@@ -240,6 +242,7 @@ int main() {
                     printf("Invalid state\n");
                     break;
                 }
+                signal_calculate_next_value(&my_signal);
                 in_param_state = 0;
                 param = 0;
                 key_cont = 0;

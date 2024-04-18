@@ -15,9 +15,11 @@
 #define MAX_TIME    1000000     // 1000000us = 1s
 #define MIN_TIME    0.000001    // 1us = 0.000001s
 #define RESOLUTION  255         // 8 bits
+#define SAMPLE_NYQUIST  16      // Nyquist theorem
 
 #include <stdint.h>
 #include <math.h>
+#include <stdio.h>
 #include "hardware/timer.h"
 #include "time_base.h"
 
@@ -36,6 +38,8 @@ typedef struct{
     uint16_t amp;           // Signal amplitude
     uint16_t offset;        // Signal offset
     int16_t value;          // Signal value
+    int16_t arrayV[SAMPLE_NYQUIST]; // Array to store the signal values for the DAC
+    uint8_t cnt;            // Time variable
     time_base_t tb_gen;     // Time base for signal generation
 
 }signal_t;
@@ -47,25 +51,25 @@ void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t off
 // ---------------------- GETTING WAVE VALUES ----------------------
 // ------------------------------------------------------------------
 
-static inline void signal_gen_sin(signal_t *signal){
-    signal->value = (int16_t)(signal->offset + signal->amp*sin(2*M_PI*signal->freq*time_us_64()*MIN_TIME));
+static inline void signal_gen_sin(signal_t *signal, uint8_t t){
+    signal->value = (int16_t)(signal->offset + signal->amp*sin((2*M_PI*t)/SAMPLE_NYQUIST));
 }
 
-static inline void signal_gen_tri(signal_t *signal){
-    if (time_us_64()%(MAX_TIME/signal->freq) <= MAX_TIME/(2*signal->freq)){
-        signal->value = (int16_t)(signal->offset + 4*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME - signal->amp);
+static inline void signal_gen_tri(signal_t *signal, uint8_t t){
+    if (t <= SAMPLE_NYQUIST/2){
+        signal->value = (int16_t)(signal->offset + (4*signal->amp*t)/SAMPLE_NYQUIST - signal->amp);
     }
     else {
-        signal->value = (int16_t)(signal->offset - 4*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME + signal->amp);  
+        signal->value = (int16_t)(signal->offset - (4*signal->amp*t)/SAMPLE_NYQUIST + 3*signal->amp);  
     }
 }
 
-static inline void signal_gen_saw(signal_t *signal){
-    signal->value = (int16_t)(signal->offset + 2*signal->amp*signal->freq*(time_us_64()%(MAX_TIME/signal->freq))*MIN_TIME  - signal->amp);
+static inline void signal_gen_saw(signal_t *signal, uint8_t t){
+    signal->value = (int16_t)(signal->offset + (2*signal->amp*t)/SAMPLE_NYQUIST  - signal->amp);
 }
 
-static inline void signal_gen_sqr(signal_t *signal){
-    if (time_us_64()%(MAX_TIME/signal->freq) <= MAX_TIME/(2*signal->freq)){
+static inline void signal_gen_sqr(signal_t *signal, uint8_t t){
+    if (t <= SAMPLE_NYQUIST/2){
         signal->value = (int16_t)(signal->offset + signal->amp);
     }
     else {
@@ -75,25 +79,37 @@ static inline void signal_gen_sqr(signal_t *signal){
 
 // ------------------------------------------------------------------
 
-static inline void signal_calculate_next_signal(signal_t *signal){
+static inline void signal_calculate_next_value(signal_t *signal){
 
     if(!signal->STATE.en) return; 
 
     switch(signal->STATE.ss){ // Calculate next signal value
         case 0: // Sinusoidal
-            signal_gen_sin(signal);
+            for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
+                signal_gen_sin(signal, i);
+                signal->arrayV[i - 1] = signal->value - 800; // The -500 is to set the bias of the DAC.
+            }
             break;
         case 1: // Triangular
-            signal_gen_tri(signal);
+            for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
+                signal_gen_tri(signal, i);
+                signal->arrayV[i - 1] = signal->value - 800; // The -500 is to set the bias of the DAC.
+            }
             break;
         case 2: // Saw tooth
-            signal_gen_saw(signal);
+            for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
+                signal_gen_saw(signal, i);
+                signal->arrayV[i - 1] = signal->value - 800; // The -500 is to set the bias of the DAC.
+            }
             break;
         case 3: // Square
-            signal_gen_sqr(signal);
+            for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
+                signal_gen_sqr(signal, i);
+                signal->arrayV[i - 1] = signal->value - 800; // The -500 is to set the bias of the DAC.
+            }
             break;
     }
-    signal->value -= 500; // To set the bias of the DAC.
+
 }
 
 static inline int16_t signal_get_value(signal_t *signal){
@@ -114,7 +130,7 @@ static inline void signal_set_offset(signal_t *signal, uint16_t offset){
 
 static inline void signal_set_freq(signal_t *signal, uint32_t freq){
     signal->freq = freq;
-    tb_set_delta(&signal->tb_gen,MAX_TIME/(16*freq)); // Nyquist theorem
+    tb_set_delta(&signal->tb_gen,MAX_TIME/(SAMPLE_NYQUIST*freq)); // Nyquist theorem
 }
 
 static inline void signal_gen_enable(signal_t *signal){

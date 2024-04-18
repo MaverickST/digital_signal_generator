@@ -48,7 +48,7 @@ static inline void button_init(gpio_button_t *button, uint8_t gpio_num){
     gpio_set_dir(button->KEY.gpio_num, GPIO_IN);
     gpio_pull_down(button->KEY.gpio_num);
 
-    gpio_set_irq_enabled_with_callback(button->KEY.gpio_num, GPIO_IRQ_EDGE_RISE, true, buttonCallback);
+    gpio_set_irq_enabled_with_callback(button->KEY.gpio_num, GPIO_IRQ_EDGE_RISE, true, gpioCallback);
 }
 
 /**
