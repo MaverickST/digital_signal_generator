@@ -52,7 +52,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     float prescaler = (float)SYS_CLK_KHZ/500;
     assert(prescaler<256); // the integer part of the clock divider can be greater than 255 
                  // ||   counter frecuency    ||| Period in seconds taking into account de phase correct mode |||   
-    uint32_t wrap = (1000*SYS_CLK_KHZ/prescaler)*(milis/(2*1000)); // 500000*milis/2000
+    uint32_t wrap = (1000*SYS_CLK_KHZ*milis/(prescaler*2*1000)); // 500000*milis/2000
     assert(wrap<((1UL<<17)-1));
     // Configuring the PWM
     pwm_config cfg =  pwm_get_default_config();
@@ -144,11 +144,31 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
  }
 
+void gpioCallback(uint num, uint32_t mask) 
+{
+    printf("GPIO Callback: %d\n", num);
+    switch (num)
+    {
+    case 0:
+        printf("Button\n");
+        buttonCallback(num, mask);
+        break;
+    
+    default:
+        printf("Keypad\n");
+        keypadCallback(num, mask);
+        break;
+    }
+    printf("End of GPIO Callback\n");
+}
+
  void keypadCallback(uint num, uint32_t mask)
  {
+    printf("A key was pressed \n");
     // Capture the key pressed
     uint32_t cols = gpio_get_all() & 0x000003C0; // Get columns gpio values
     kp_capture(&gKeyPad, cols);
+    printf("Key: %02x\n", gKeyPad.KEY.dkey);
 
     pwm_set_enabled(0, false);  // Disable the row sequence
     pwm_set_enabled(1, true);   // Enable the keypad debouncer
@@ -226,6 +246,8 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
 
  void buttonCallback(uint num, uint32_t mask)
  {
+    printf("The button was pressed \n");
+
     pwm_set_enabled(2, true); // Enable the button debouncer
     button_set_irq_enabled(&gButton, false); // Disable the button IRQs
 
@@ -242,7 +264,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     signal_calculate_next_value(&gSignal);
     dac_calculate(&gDac,gSignal.value);
 
-    timer_hw->intr = 0x00000001; // Clear/enable alarm0 interruption
+    timer_hw->intr = 0x00000003; // Clear/enable alarm0 interruption
     timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
  }
 
@@ -265,6 +287,6 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     }
     printf("Amp: %d, Offset: %d, Freq: %d\n", gSignal.amp, gSignal.offset, gSignal.freq);
 
-    timer_hw->intr = 0x00000002; // Clear/enable alarm1 interruption
+    timer_hw->intr = 0x00000003; // Clear/enable alarm1 interruption
     timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
  }
