@@ -12,10 +12,10 @@
 #define __SIGNAL_GENERATOR_
 
 #define M_PI		3.14159265358979323846	/* pi */
-#define MAX_TIME    1000000     // 1000000us = 1s
-#define MIN_TIME    0.000001    // 1us = 0.000001s
-#define RESOLUTION  255         // 8 bits
-#define SAMPLE_NYQUIST  16      // Nyquist theorem
+#define S_TO_US     1000000
+#define US_TO_S     0.000001
+#define SAMPLE      16
+
 
 #include <stdint.h>
 #include <math.h>
@@ -38,7 +38,7 @@ typedef struct{
     uint16_t amp;           // Signal amplitude
     uint16_t offset;        // Signal offset
     int16_t value;          // Signal value
-    int16_t arrayV[SAMPLE_NYQUIST]; // Array to store the signal values for the DAC
+    int16_t arrayV[SAMPLE]; // Array to store the signal values for the DAC
     uint8_t cnt;            // Time variable
     time_base_t tb_gen;     // Time base for signal generation
 
@@ -52,24 +52,24 @@ void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t off
 // ------------------------------------------------------------------
 
 static inline void signal_gen_sin(signal_t *signal, uint8_t t){
-    signal->value = (int16_t)(signal->offset + signal->amp*sin((2*M_PI*t)/SAMPLE_NYQUIST));
+    signal->value = (int16_t)(signal->offset + signal->amp*sin((2*M_PI*t)/SAMPLE));
 }
 
 static inline void signal_gen_tri(signal_t *signal, uint8_t t){
-    if (t <= SAMPLE_NYQUIST/2){
-        signal->value = (int16_t)(signal->offset + (4*signal->amp*t)/SAMPLE_NYQUIST - signal->amp);
+    if (t <= SAMPLE/2){
+        signal->value = (int16_t)(signal->offset + (4*signal->amp*t)/SAMPLE - signal->amp);
     }
     else {
-        signal->value = (int16_t)(signal->offset - (4*signal->amp*t)/SAMPLE_NYQUIST + 3*signal->amp);  
+        signal->value = (int16_t)(signal->offset - (4*signal->amp*t)/SAMPLE + 3*signal->amp);  
     }
 }
 
 static inline void signal_gen_saw(signal_t *signal, uint8_t t){
-    signal->value = (int16_t)(signal->offset + (2*signal->amp*t)/SAMPLE_NYQUIST  - signal->amp);
+    signal->value = (int16_t)(signal->offset + (2*signal->amp*t)/SAMPLE  - signal->amp);
 }
 
 static inline void signal_gen_sqr(signal_t *signal, uint8_t t){
-    if (t <= SAMPLE_NYQUIST/2){
+    if (t <= SAMPLE/2){
         signal->value = (int16_t)(signal->offset + signal->amp);
     }
     else {
@@ -85,25 +85,25 @@ static inline void signal_calculate_next_value(signal_t *signal){
 
     switch(signal->STATE.ss){ // Calculate next signal value
         case 0: // Sinusoidal
-            for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
+            for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_sin(signal, i);
                 signal->arrayV[i - 1] = signal->value - 800; // The -500 is to set the bias of the DAC.
             }
             break;
         case 1: // Triangular
-            for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
+            for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_tri(signal, i);
                 signal->arrayV[i - 1] = signal->value - 800; // The -500 is to set the bias of the DAC.
             }
             break;
         case 2: // Saw tooth
-            for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
+            for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_saw(signal, i);
                 signal->arrayV[i - 1] = signal->value - 800; // The -500 is to set the bias of the DAC.
             }
             break;
         case 3: // Square
-            for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
+            for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_sqr(signal, i);
                 signal->arrayV[i - 1] = signal->value - 800; // The -500 is to set the bias of the DAC.
             }
@@ -130,7 +130,7 @@ static inline void signal_set_offset(signal_t *signal, uint16_t offset){
 
 static inline void signal_set_freq(signal_t *signal, uint32_t freq){
     signal->freq = freq;
-    tb_set_delta(&signal->tb_gen,MAX_TIME/(SAMPLE_NYQUIST*freq)); // Nyquist theorem
+    tb_set_delta(&signal->tb_gen,S_TO_US/(SAMPLE*freq)); // Nyquist theorem
 }
 
 static inline void signal_gen_enable(signal_t *signal){

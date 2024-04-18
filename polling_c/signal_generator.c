@@ -32,5 +32,5 @@ void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t off
     signal->STATE.en = en;
     signal->STATE.ss = 0;
     signal->cnt = 0;
-    tb_init(&signal->tb_gen,MAX_TIME/(SAMPLE_NYQUIST*freq),true);
+    tb_init(&signal->tb_gen,S_TO_US/(SAMPLE*freq),true);
 }

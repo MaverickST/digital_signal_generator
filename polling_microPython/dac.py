@@ -7,7 +7,7 @@
 """
 
 from machine import Pin
-from typing import List, Tuple
+from typing import List
 
 RESOLUTION = 255        # 8 bits
 DAC_RANGE = 9400        # 0 to 9.3V

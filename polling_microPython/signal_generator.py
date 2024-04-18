@@ -9,10 +9,11 @@
 from math import sin, pi
 from utime import ticks_us
 from time_base import Time_base
+from typing import List
 
 S_TO_US = 1000000
 US_TO_S = 0.000001
-SAMPLE = 10
+SAMPLE = 16
 
 class Signal:
     ss: int             # Signal State: 0: Sinusoidal, 1: Triangular, 2: Sawtooth, 3: Square
@@ -21,6 +22,8 @@ class Signal:
     amp: int            # Amplitude in mV
     offset: int         # Offset in mV
     value: int          # Current value in mV
+    arrayV: List[int] = [0] * SAMPLE # Array of values for the signal
+    cnt: int            # Counter for the signal
     tb_gen: Time_base   # Time base for the signal generator
 
     def __init__(self, freq: int, amp: int, offset: int, en: bool):
@@ -39,35 +42,36 @@ class Signal:
         self.amp = amp
         self.offset = offset
         self.value = 0
+        self.cnt = 0
         self.tb_gen = Time_base(S_TO_US // (SAMPLE*freq), True)
 
-    def gen_sin(self):
+    def gen_sin(self, t: int):
         """
         Generate a sinusoidal signal.
         """
-        self.value = int(self.offset + self.amp*sin(2*pi*self.freq*ticks_us()*US_TO_S))
+        self.value = int(self.offset + self.amp*sin((2*pi*t)/SAMPLE))
 
-    def gen_tri(self):
+    def gen_tri(self, t: int):
         """
         Generate a triangular signal.
         """
-        if (ticks_us()%(S_TO_US/self.freq) <= S_TO_US/(2*self.freq)):
-            self.value = int(self.offset + 4*self.amp*self.freq*(ticks_us()%(S_TO_US/self.freq))*US_TO_S - self.amp)
+        if (t <= SAMPLE/2):
+            self.value = int(self.offset + (4*self.amp*t)/SAMPLE - self.amp)
     
         else:
-            self.value = int(self.offset - 4*self.amp*self.freq*(ticks_us()%(S_TO_US/self.freq))*US_TO_S + self.amp)
+            self.value = int(self.offset - (4*self.amp*t)/SAMPLE + 3*self.amp)
 
-    def gen_saw(self):
+    def gen_saw(self, t: int):
         """
         Generate a sawtooth signal.
         """
-        self.value = int(self.offset + 2*self.amp*self.freq*(ticks_us()%(S_TO_US/self.freq))*US_TO_S - self.amp)
+        self.value = int(self.offset + (2*self.amp*t)/SAMPLE - self.amp)
 
-    def gen_sqr(self):
+    def gen_sqr(self, t: int):
         """
         Generate a square signal.
         """
-        if (ticks_us()%(S_TO_US/self.freq) <= S_TO_US/(2*self.freq)):
+        if (t <= SAMPLE/2):
             self.value = int(self.offset + self.amp)
     
         else:
@@ -82,15 +86,22 @@ class Signal:
             return
 
         if self.ss == 0:
-            self.gen_sin()
+            for i in range(SAMPLE):
+                self.gen_sin(i + 1)
+                self.arrayV[i] = self.value - 800 # Offset of the DAC
         elif self.ss == 1:
-            self.gen_tri()
+            for i in range(SAMPLE):
+                self.gen_tri(i + 1)
+                self.arrayV[i] = self.value - 800 # Offset of the DAC
         elif self.ss == 2:
-            self.gen_saw()
+            for i in range(SAMPLE):
+                self.gen_saw(i + 1)
+                self.arrayV[i] = self.value - 800 # Offset of the DAC
         elif self.ss == 3:
-            self.gen_sqr()
+            for i in range(SAMPLE):
+                self.gen_sqr(i + 1)
+                self.arrayV[i] = self.value - 800 # Offset of the DAC
         
-        self.value -= 500 # Offset of the DAC
 
     def get_value(self) -> int:
         """

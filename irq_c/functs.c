@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "pico/time.h"
 #include "hardware/timer.h"
 #include "hardware/pwm.h"
 #include "hardware/irq.h"
@@ -26,6 +27,7 @@
 #include "gpio_button_irq.h"
 #include "signal_generator_irq.h"
 #include "dac.h"
+#include "gpio_led.h"
 
 
 volatile uint8_t gKeyCnt = 0;
@@ -36,6 +38,7 @@ key_pad_t gKeyPad;
 signal_t gSignal;
 gpio_button_t gButton;
 dac_t gDac;
+uint8_t gLed = 18;
 
 
 void initGlobalVariables(void)
@@ -45,6 +48,7 @@ void initGlobalVariables(void)
     signal_calculate_next_value(&gSignal);
     button_init(&gButton, 0);
     dac_init(&gDac, 10, true);
+    led_init(gLed);
 }
 
 void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
@@ -123,43 +127,15 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     }
  }
 
- void initTimer(void)
- {
-    /// claim alarm0 for signal value calculation
-    if(!hardware_alarm_is_claimed (0))
-        hardware_alarm_claim(0);
-    else
-        printf("Tenemos un problemaj alarm 0\n");
-    
-    /// claim alarm0 for signal value calculation
-    if(!hardware_alarm_is_claimed (1))
-        hardware_alarm_claim(1);
-    else
-        printf("Tenemos un problemaj alarm 1\n");
-
-    /// Set callback for each alarm. TODO: replace with an exclusive handler
-    hardware_alarm_set_callback(0, timerSignalCallback);
-    hardware_alarm_set_callback(1, timerPrintCallback);
-
-    timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
-    timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
-    timer_hw->inte = 0x00000003; // Enable alarm0, alarm1 interrupt
-    timer_hw->armed = 0x00000003; // Clear/enable alarm0, alarm1 interruption
- }
 
 void gpioCallback(uint num, uint32_t mask) 
 {
-    
-    printf("Debugging\n");
     if (num == 0){
-        printf("Button\n");
         buttonCallback(num, mask);
     }
     else{
-        printf("Keypad\n");
         keypadCallback(num, mask);
     }
-    printf("End of GPIO Callback\n");
 }
 
  void keypadCallback(uint num, uint32_t mask)
@@ -167,7 +143,7 @@ void gpioCallback(uint num, uint32_t mask)
     // Capture the key pressed
     uint32_t cols = gpio_get_all() & 0x000003C0; // Get columns gpio values
     kp_capture(&gKeyPad, cols);
-    printf("Key: %02x\n", gKeyPad.KEY.dkey);
+    // printf("Key: %02x\n", gKeyPad.KEY.dkey);
 
     pwm_set_enabled(0, false);  // Disable the row sequence
     pwm_set_enabled(1, true);   // Enable the keypad debouncer
@@ -191,8 +167,8 @@ void gpioCallback(uint num, uint32_t mask)
     }
     // To accept a letter different of 0x0D, in_param_state must be 0
     else if(checkLetter(gKeyPad.KEY.dkey) && !in_param_state){
-        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-        // led_on(my_led);
+        // cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+        led_on(gLed);
         switch (gKeyPad.KEY.dkey)
         {
         case 0x0A:
@@ -211,8 +187,8 @@ void gpioCallback(uint num, uint32_t mask)
     }
     // To accept a 0x0D, in_param_state must be different of 0
     else if(gKeyPad.KEY.dkey == 0x0D && in_param_state){
-        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-        // led_off(my_led);
+        // cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+        led_off(gLed);
         switch (in_param_state)
         {
         case 1:
@@ -242,13 +218,10 @@ void gpioCallback(uint num, uint32_t mask)
     gKeyPad.KEY.nkey = 0;
 
     gpio_acknowledge_irq(num, mask); // gpio IRQ acknowledge
-    printf("End of Keypad Callback\n");
  }
 
  void buttonCallback(uint num, uint32_t mask)
  {
-    printf("The button was pressed \n");
-
     pwm_set_enabled(2, true); // Enable the button debouncer
     button_set_irq_enabled(&gButton, false); // Disable the button IRQs
 
@@ -258,19 +231,46 @@ void gpioCallback(uint num, uint32_t mask)
     gpio_acknowledge_irq(num, mask); // gpio IRQ acknowledge
  }
 
-
- void timerSignalCallback(uint num)
+ void timerSignalHandler(void) 
  {
-    // Perform the signal value calculation and output to the DAC
-    signal_calculate_next_value(&gSignal);
-    dac_calculate(&gDac,gSignal.value);
+    // Interrupt acknowledge
+    hw_clear_bits(&timer_hw->intr, 1u << TIMER_IRQ_0);
 
+    // Setting the IRQ handler
+    irq_set_exclusive_handler(TIMER_IRQ_0, timerSignalHandler);
+    irq_set_enabled(TIMER_IRQ_0, true);
+    hw_set_bits(&timer_hw->inte, 1u << TIMER_IRQ_0); // Enable alarm0 for signal value calculation
     timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
-    timer_hw->inte |= 0x00000001; // Enable alarm0, alarm1 interrupt
-    timer_hw->armed |= 0x00000001; // Clear/enable alarm1 interruption
+
+    timerSignalCallback();
+
  }
 
- void timerPrintCallback(uint num)
+ void timerSignalCallback(void)
+ {
+    // Perform the signal value calculation and output to the DAC
+    dac_calculate(&gDac,gSignal.arrayV[gSignal.cnt]);
+    gSignal.cnt = (gSignal.cnt + 1)%SAMPLE_NYQUIST;
+    
+ }
+
+
+ void timerPrintHandler(void)
+ {
+    // Interrupt acknowledge
+    hw_clear_bits(&timer_hw->intr, 1u << TIMER_IRQ_1);
+
+    // Setting the IRQ handler
+    irq_set_exclusive_handler(TIMER_IRQ_1, timerPrintHandler);
+    irq_set_enabled(TIMER_IRQ_1, true);
+    hw_set_bits(&timer_hw->inte, 1u << TIMER_IRQ_1); // Enable alarm1 for printing
+    timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
+
+    timerPrintCallback();
+
+ }
+
+ void timerPrintCallback(void)
  {
     // Print the signal characteristics
     switch (gSignal.STATE.ss){
@@ -289,7 +289,4 @@ void gpioCallback(uint num, uint32_t mask)
     }
     printf("Amp: %d, Offset: %d, Freq: %d\n", gSignal.amp, gSignal.offset, gSignal.freq);
 
-    timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
-    timer_hw->inte |= 0x00000002; // Enable alarm0, alarm1 interrupt
-    timer_hw->armed |= 0x00000002; // Clear/enable alarm1 interruption
  }

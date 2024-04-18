@@ -37,11 +37,9 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable);
  */
 void pwmIRQ(void);
 
-/**
- * @brief This function initializes the timer 0 to generate interruptions every 1ms.
- * 
- */
-void initTimer(void);
+void timerSignalHandler(void);
+
+void timerPrintHandler(void);
 
 // -------------------------------------------------------------
 // ---------------------- Callback functions -------------------
@@ -77,7 +75,7 @@ void buttonCallback(uint num, uint32_t mask);
  * 
  * @param num Alarm number that triggered the interruption
  */
-void timerSignalCallback(uint num);
+void timerSignalCallback(void);
 
 /**
  * @brief Definition of the printing callback function, which will be called by the handler of the timer interruptions.
@@ -86,7 +84,7 @@ void timerSignalCallback(uint num);
  * 
  * @param num Alarm number that triggered the interruption
  */
-void timerPrintCallback(uint num);
+void timerPrintCallback(void);
 
 // -------------------------------------------------------------
 // ---------------------- Check functions ----------------------

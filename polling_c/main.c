@@ -166,7 +166,7 @@ int main() {
         if (tb_check(&my_signal.tb_gen)){
             tb_next(&my_signal.tb_gen);
             dac_calculate(&my_dac,my_signal.arrayV[my_signal.cnt]);
-            my_signal.cnt = (my_signal.cnt + 1) % SAMPLE_NYQUIST;
+            my_signal.cnt = (my_signal.cnt + 1) % SAMPLE;
         }
 
         // Process printing
