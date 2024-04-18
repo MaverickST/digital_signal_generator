@@ -79,7 +79,7 @@ static inline void signal_gen_sqr(signal_t *signal, uint8_t t){
 
 // ------------------------------------------------------------------
 
-static inline void signal_calculate_next_signal(signal_t *signal){
+static inline void signal_calculate_next_value(signal_t *signal){
 
     if(!signal->STATE.en) return; 
 
@@ -109,11 +109,6 @@ static inline void signal_calculate_next_signal(signal_t *signal){
             }
             break;
     }
-
-    for(uint8_t i = 0; i < SAMPLE_NYQUIST; i++){
-        printf("%d ", signal->arrayV[i]);
-    }
-    printf("\n");
 
 }
 

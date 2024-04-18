@@ -83,7 +83,7 @@ int main() {
     // Initialize DAC
     dac_t my_dac;
     dac_init(&my_dac, 10, true);
-    signal_calculate_next_signal(&my_signal);
+    signal_calculate_next_value(&my_signal);
 
     // Initialize LED
     uint8_t my_led = 18;
@@ -150,7 +150,7 @@ int main() {
                 if(!button){
                     // printf("Button pressed\n");
                     signal_set_state(&my_signal, (my_signal.STATE.ss + 1)%4);
-                    signal_calculate_next_signal(&my_signal);
+                    signal_calculate_next_value(&my_signal);
                     tb_disable(&my_button.tb_dbnce);
                     my_button.KEY.dbnc = 0;
                 }
@@ -242,7 +242,7 @@ int main() {
                     printf("Invalid state\n");
                     break;
                 }
-                signal_calculate_next_signal(&my_signal);
+                signal_calculate_next_value(&my_signal);
                 in_param_state = 0;
                 param = 0;
                 key_cont = 0;

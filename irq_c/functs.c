@@ -42,6 +42,7 @@ void initGlobalVariables(void)
 {
     kp_init(&gKeyPad,2,6,true);
     signal_gen_init(&gSignal, 10, 1000, 500, true);
+    signal_calculate_next_value(&gSignal);
     button_init(&gButton, 0);
     dac_init(&gDac, 10, true);
 }
@@ -101,8 +102,9 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
         if(button_is_2nd_zero(&gButton)){
             if(!button){
                 signal_set_state(&gSignal, (gSignal.STATE.ss + 1)%4);
-                button_set_irq_enabled(&gButton, true); // Disable the GPIO IRQs
+                button_set_irq_enabled(&gButton, true); // Enable the GPIO IRQs
                 pwm_set_enabled(2, false);    // Disable the button debouncer
+                signal_calculate_next_value(&gSignal); // Recalculate the signal values
                 gButton.KEY.dbnc = 0;
             }
             else
@@ -139,32 +141,29 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     hardware_alarm_set_callback(0, timerSignalCallback);
     hardware_alarm_set_callback(1, timerPrintCallback);
 
-    timer_hw->intr = 0x00000003; // Clear/enable alarm0, alarm1 interrupt
     timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
     timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
+    timer_hw->inte = 0x00000003; // Enable alarm0, alarm1 interrupt
+    timer_hw->armed = 0x00000003; // Clear/enable alarm0, alarm1 interruption
  }
 
 void gpioCallback(uint num, uint32_t mask) 
 {
-    printf("GPIO Callback: %d\n", num);
-    switch (num)
-    {
-    case 0:
+    
+    printf("Debugging\n");
+    if (num == 0){
         printf("Button\n");
         buttonCallback(num, mask);
-        break;
-    
-    default:
+    }
+    else{
         printf("Keypad\n");
         keypadCallback(num, mask);
-        break;
     }
     printf("End of GPIO Callback\n");
 }
 
  void keypadCallback(uint num, uint32_t mask)
  {
-    printf("A key was pressed \n");
     // Capture the key pressed
     uint32_t cols = gpio_get_all() & 0x000003C0; // Get columns gpio values
     kp_capture(&gKeyPad, cols);
@@ -235,6 +234,7 @@ void gpioCallback(uint num, uint32_t mask)
             printf("Invalid state\n");
             break;
         }
+        signal_calculate_next_value(&gSignal);
         in_param_state = 0;
         param = 0;
         key_cont = 0;
@@ -242,6 +242,7 @@ void gpioCallback(uint num, uint32_t mask)
     gKeyPad.KEY.nkey = 0;
 
     gpio_acknowledge_irq(num, mask); // gpio IRQ acknowledge
+    printf("End of Keypad Callback\n");
  }
 
  void buttonCallback(uint num, uint32_t mask)
@@ -264,8 +265,9 @@ void gpioCallback(uint num, uint32_t mask)
     signal_calculate_next_value(&gSignal);
     dac_calculate(&gDac,gSignal.value);
 
-    timer_hw->intr = 0x00000003; // Clear/enable alarm0 interruption
     timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
+    timer_hw->inte |= 0x00000001; // Enable alarm0, alarm1 interrupt
+    timer_hw->armed |= 0x00000001; // Clear/enable alarm1 interruption
  }
 
  void timerPrintCallback(uint num)
@@ -287,6 +289,7 @@ void gpioCallback(uint num, uint32_t mask)
     }
     printf("Amp: %d, Offset: %d, Freq: %d\n", gSignal.amp, gSignal.offset, gSignal.freq);
 
-    timer_hw->intr = 0x00000003; // Clear/enable alarm1 interruption
     timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
+    timer_hw->inte |= 0x00000002; // Enable alarm0, alarm1 interrupt
+    timer_hw->armed |= 0x00000002; // Clear/enable alarm1 interruption
  }
