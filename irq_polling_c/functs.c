@@ -30,17 +30,17 @@
 #include "gpio_led.h"
 
 
-volatile uint8_t gKeyCnt = 0;
-volatile uint8_t gSeqCnt = 0;
-volatile bool gDZero = false;
+volatile uint8_t gKeyCnt = 0; // Counter for the keypad
+volatile uint8_t gSeqCnt = 0; // Counter for the row sequence
+volatile bool gDZero = false; // Detects the second zero on the keypad
 
-key_pad_t gKeyPad;
-signal_t gSignal;
-gpio_button_t gButton;
-dac_t gDac;
-uint8_t gLed = 18;
+key_pad_t gKeyPad; // Keypad object
+signal_t gSignal; // Signal generator object
+gpio_button_t gButton; // Button object
+dac_t gDac; // DAC object
+uint8_t gLed = 18; // GPIO 18
 
-volatile flags_t gFlags;
+volatile flags_t gFlags; // Global variable that stores the flags of the interruptions
 
 void initGlobalVariables(void)
 {
@@ -74,8 +74,6 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
 
  void pwmIRQ(void)
  {
-    
-    bool button;
     switch (pwm_get_irq_status_mask())
     {
     case 0x01UL: // PWM slice 0 ISR used as a PIT to generate row sequence
@@ -89,22 +87,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
         break;
 
     case 0x04UL: // PWM slice 2 ISR used as a PIT to implement the button debouncer
-        button = gpio_get(gButton.KEY.gpio_num);
-        if(button_is_2nd_zero(&gButton)){
-            if(!button){
-                signal_set_state(&gSignal, (gSignal.STATE.ss + 1)%4);
-                button_set_irq_enabled(&gButton, true); // Enable the GPIO IRQs
-                pwm_set_enabled(2, false);    // Disable the button debouncer
-                signal_calculate_next_value(&gSignal); // Recalculate the signal values
-                gButton.KEY.dbnc = 0;
-            }
-            else
-                button_clr_zflag(&gButton);
-        }
-        else{
-            if(!button)
-                button_set_zflag(&gButton);
-        }
+        gFlags.B.buttonDbnc = true;
         pwm_clear_irq(2); // Acknowledge slice 2 PWM IRQ
         break;
 
@@ -117,7 +100,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
 
 void gpioCallback(uint num, uint32_t mask) 
 {
-    printf("GPIO %d\n", num);
+    //printf("GPIO %d\n", num);
     if (num == 0){
         buttonCallback(num, mask);
     }
@@ -126,23 +109,23 @@ void gpioCallback(uint num, uint32_t mask)
     }
 }
 
- void keypadCallback(uint num, uint32_t mask)
- {
+static inline void keypadCallback(uint num, uint32_t mask)
+{
     gFlags.B.keyFlag = true;
     // Capture the key pressed
     uint32_t cols = gpio_get_all() & 0x000003C0; // Get columns gpio values
     kp_capture(&gKeyPad, cols);
-    printf("Key: %02x\n", gKeyPad.KEY.dkey);
+    //printf("Key: %02x\n", gKeyPad.KEY.dkey);
 
     pwm_set_enabled(0, false);  // Disable the row sequence
     pwm_set_enabled(1, true);   // Enable the keypad debouncer
     kp_set_irq_enabled(&gKeyPad, false); // Disable the keypad IRQs
 
     gpio_acknowledge_irq(num, mask); // gpio IRQ acknowledge
- }
+}
 
- void buttonCallback(uint num, uint32_t mask)
- {
+static inline void buttonCallback(uint num, uint32_t mask)
+{
     gFlags.B.buttonFlag = true;
 
     gpio_acknowledge_irq(num, mask); // gpio IRQ acknowledge
@@ -163,7 +146,7 @@ void gpioCallback(uint num, uint32_t mask)
 
  }
 
- void timerSignalCallback(void)
+static inline void timerSignalCallback(void)
  {
     // Perform the signal value calculation and output to the DAC
     dac_calculate(&gDac,gSignal.arrayV[gSignal.cnt]);
@@ -187,33 +170,33 @@ void gpioCallback(uint num, uint32_t mask)
 
  }
 
- void timerPrintCallback(void)
+static inline void timerPrintCallback(void)
  {
     // Print the signal characteristics
     switch (gSignal.STATE.ss){
         case 0:
-            printf("Sinusoidal: ");
+            printf("Sinusoidal-> ");
             break;
         case 1:
-            printf("Triangular: ");
+            printf("Triangular-> ");
             break;
         case 2:
-            printf("Saw tooth: ");
+            printf("Saw tooth-> ");
             break;
         case 3:
-            printf("Square: ");
+            printf("Square-> ");
             break;
     }
-    printf("Amp: %d, Offset: %d, Freq: %d\n", gSignal.amp, gSignal.offset, gSignal.freq);
+    printf("Amp: %dmV, Offset: %dmV, Freq: %dHz\n", gSignal.amp, gSignal.offset, gSignal.freq);
 
  }
 
-void program(){
+void program(void){
     if(gFlags.B.keyFlag){
         kp_set_zflag(&gKeyPad); // Set the flag that indicates that a zero was detected on keypad
         gKeyPad.KEY.dbnc = 1;
 
-         printf("Key: %02x\n", gKeyPad.KEY.dkey);
+        //printf("Key: %02x\n", gKeyPad.KEY.dkey);
 
         // Auxiliar variables
         static uint8_t in_param_state = 0x00; // 0: Nothing, 1: Entering amp (A), 2: Entering offset (B), 3: Entering freq (C)
@@ -302,13 +285,31 @@ void program(){
         gFlags.B.keyDbnc = false;
     }
     if(gFlags.B.buttonFlag){
-        gFlags.B.buttonFlag = false;
-    }
-    if(gFlags.B.buttonDbnc){
         pwm_set_enabled(2, true); // Enable the button debouncer
         button_set_irq_enabled(&gButton, false); // Disable the button IRQs
         button_set_zflag(&gButton); // Set the flag that indicates that a zero was detected on button
         gButton.KEY.dbnc = 1;
+
+        gFlags.B.buttonFlag = false;
+    }
+    if(gFlags.B.buttonDbnc){
+        bool button;
+        button = gpio_get(gButton.KEY.gpio_num);
+        if(button_is_2nd_zero(&gButton)){
+            if(!button){
+                signal_set_state(&gSignal, (gSignal.STATE.ss + 1)%4);
+                button_set_irq_enabled(&gButton, true); // Enable the GPIO IRQs
+                pwm_set_enabled(2, false);    // Disable the button debouncer
+                signal_calculate_next_value(&gSignal); // Recalculate the signal values
+                gButton.KEY.dbnc = 0;
+            }
+            else
+                button_clr_zflag(&gButton);
+        }
+        else{
+            if(!button)
+                button_set_zflag(&gButton);
+        }
 
         gFlags.B.buttonDbnc = false;
     }
