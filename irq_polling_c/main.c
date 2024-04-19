@@ -55,20 +55,21 @@ int main() {
 
     // Initialize the PWM slices as PIT.
     initPWMasPIT(0,2,true);     // 2ms for the secuence generation
-    //initPWMasPIT(1,100,false);  // 100ms for the keypad debouncer
-    //initPWMasPIT(2,100, false); // 100ms for the button debouncer
+    initPWMasPIT(1,100,false);  // 100ms for the keypad debouncer
+    initPWMasPIT(2,100, false); // 100ms for the button debouncer
 
     // Initialize two timers: one for the value calculation and the other for the printing.
-    //initTimer();
+    timerSignalHandler();
+    timerPrintHandler();
+
 
     // For the PWM interruption, it specifies the handler.
     irq_set_exclusive_handler(PWM_IRQ_WRAP,pwmIRQ);
-    irq_set_priority(PWM_IRQ_WRAP, 0x80);
+    irq_set_priority(PWM_IRQ_WRAP, 0xC0);
 
     while(1){
         while(check()){
             program();
-            printf("Loop\n");
         }
         __wfi(); // Wait for interrupt (Will put the processor into deep sleep until woken by the RTC interrupt)
     }

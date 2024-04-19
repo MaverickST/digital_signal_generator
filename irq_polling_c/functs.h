@@ -8,10 +8,8 @@
  * \copyright   Unlicensed
  */
 
-#ifndef __FUNTCS_H
-#define __FUNTCS_H
-
-#include <stdint.h>
+#ifndef __FUNTCS_
+#define __FUNTCS_
 
 typedef union{
     uint8_t W;
@@ -25,6 +23,8 @@ typedef union{
         uint8_t      :2;
     }B;
 }flags_t;
+
+#include <stdint.h>
 
 /**
  * @brief This function initializes the global variables of the system: keypad, signal generator, button, and DAC.
@@ -50,15 +50,21 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable);
  */
 void pwmIRQ(void);
 
-/**
- * @brief This function initializes the timer 0 to generate interruptions every 1ms.
- * 
- */
-void initTimer(void);
+void timerSignalHandler(void);
+
+void timerPrintHandler(void);
 
 // -------------------------------------------------------------
 // ---------------------- Callback functions -------------------
 // -------------------------------------------------------------
+
+/**
+ * @brief This function is the main callback function for the GPIO interruptions.
+ * 
+ * @param num 
+ * @param mask 
+ */
+void gpioCallback(uint num, uint32_t mask);
 
 /**
  * @brief Definition of the keypad callback function, which will be called by the handler of the GPIO interruptions.
@@ -82,7 +88,7 @@ void buttonCallback(uint num, uint32_t mask);
  * 
  * @param num Alarm number that triggered the interruption
  */
-void timerSignalCallback(uint num);
+void timerSignalCallback(void);
 
 /**
  * @brief Definition of the printing callback function, which will be called by the handler of the timer interruptions.
@@ -91,11 +97,11 @@ void timerSignalCallback(uint num);
  * 
  * @param num Alarm number that triggered the interruption
  */
-void timerPrintCallback(uint num);
-
+void timerPrintCallback(void);
 
 void program();
 bool check();
+
 // -------------------------------------------------------------
 // ---------------------- Check functions ----------------------
 // -------------------------------------------------------------

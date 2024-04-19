@@ -1,19 +1,8 @@
-/**
- * \file        keypad.h
- * \brief
- * \details
- * \author      MST_CDA
- * \version     0.0.1
- * \date        05/10/2023
- * \copyright   Unlicensed
- */
-
-#ifndef __KEYPAD_
-#define __KEYPAD_
-
 #include <stdint.h>
 #include "hardware/gpio.h"
 
+#ifndef __KEYPAD_IRQ_POLLING_
+#define __KEYPAD_IRQ_POLLING_
 /**
  * \typedef key_pad_t
  * \brief Data strcuture to manage a matrix keypad of 16 keys
@@ -64,8 +53,8 @@ void kp_capture(key_pad_t *kpad, uint32_t cols);
  * \param kpad   Pointer to keypad data structure
  */
 static inline void kp_gen_seq(key_pad_t *kpad){
-    kpad->KEY.cnt = (kpad->KEY.cnt + 1)%4;
-    kpad->KEY.seq = 0x1 << kpad->KEY.cnt;
+    kpad->KEY.cnt += 1;
+    kpad->KEY.seq = 1 << kpad->KEY.cnt;
     gpio_put_masked(0x0000000F<<kpad->KEY.rlsb,((uint32_t)kpad->KEY.seq)<<kpad->KEY.rlsb);
 }
 
@@ -129,4 +118,4 @@ static inline bool kp_is_2nd_zero(key_pad_t *kpad){
     return kpad->KEY.dzero;
 }
 
-#endif // __KEYPAD_POLLING_IRQ_
+#endif // __KEYPAD_IRQ_POLLING_

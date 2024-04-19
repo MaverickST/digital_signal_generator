@@ -1,5 +1,5 @@
 /**
- * \file        keypad.c
+ * \file        keypad_polling_irq.c
  * \brief
  * \details
  * \author      MST_CDA
@@ -46,10 +46,10 @@ void kp_init(key_pad_t *kpad, uint8_t rlsb, uint8_t clsb, bool en){
     gpio_pull_down(kpad->KEY.clsb + 3);
 
     // Initialize interrupts
-    gpio_set_irq_enabled_with_callback(kpad->KEY.clsb + 0,GPIO_IRQ_EDGE_RISE,true,keypadCallback);
-    gpio_set_irq_enabled_with_callback(kpad->KEY.clsb + 1,GPIO_IRQ_EDGE_RISE,true,keypadCallback);
-    gpio_set_irq_enabled_with_callback(kpad->KEY.clsb + 2,GPIO_IRQ_EDGE_RISE,true,keypadCallback);
-    gpio_set_irq_enabled_with_callback(kpad->KEY.clsb + 3,GPIO_IRQ_EDGE_RISE,true,keypadCallback);
+    gpio_set_irq_enabled_with_callback(kpad->KEY.clsb + 0,GPIO_IRQ_EDGE_RISE,true,gpioCallback);
+    gpio_set_irq_enabled_with_callback(kpad->KEY.clsb + 1,GPIO_IRQ_EDGE_RISE,true,gpioCallback);
+    gpio_set_irq_enabled_with_callback(kpad->KEY.clsb + 2,GPIO_IRQ_EDGE_RISE,true,gpioCallback);
+    gpio_set_irq_enabled_with_callback(kpad->KEY.clsb + 3,GPIO_IRQ_EDGE_RISE,true,gpioCallback);
 }
 
 void kp_decode(key_pad_t *kpad){

@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "pico/time.h"
 #include "hardware/timer.h"
 #include "hardware/pwm.h"
 #include "hardware/irq.h"
@@ -26,6 +27,7 @@
 #include "gpio_button.h"
 #include "signal_generator.h"
 #include "dac.h"
+#include "gpio_led.h"
 
 
 volatile uint8_t gKeyCnt = 0;
@@ -36,15 +38,19 @@ key_pad_t gKeyPad;
 signal_t gSignal;
 gpio_button_t gButton;
 dac_t gDac;
+uint8_t gLed = 18;
 
 volatile flags_t gFlags;
 
 void initGlobalVariables(void)
 {
-    kp_init(&gKeyPad,6,2,true);
+    gFlags.W = 0x00U;
+    kp_init(&gKeyPad,2,6,true);
     signal_gen_init(&gSignal, 10, 1000, 500, true);
+    signal_calculate_next_value(&gSignal);
     button_init(&gButton, 0);
     dac_init(&gDac, 10, true);
+    led_init(gLed);
 }
 
 void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
@@ -53,7 +59,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     float prescaler = (float)SYS_CLK_KHZ/500;
     assert(prescaler<256); // the integer part of the clock divider can be greater than 255 
                  // ||   counter frecuency    ||| Period in seconds taking into account de phase correct mode |||   
-    uint32_t wrap = (1000*SYS_CLK_KHZ/prescaler)*(milis/(2*1000)); // 500000*milis/2000
+    uint32_t wrap = (1000*SYS_CLK_KHZ*milis/(prescaler*2*1000)); // 500000*milis/2000
     assert(wrap<((1UL<<17)-1));
     // Configuring the PWM
     pwm_config cfg =  pwm_get_default_config();
@@ -68,7 +74,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
 
  void pwmIRQ(void)
  {
-    uint32_t cols;
+    
     bool button;
     switch (pwm_get_irq_status_mask())
     {
@@ -79,7 +85,6 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
 
     case 0x02UL: // PWM slice 1 ISR used as a PIT to implement the keypad debouncer
         gFlags.B.keyDbnc = true;
-        cols = gpio_get_all() & 0x000003C0; // Get columns gpio values
         pwm_clear_irq(1); // Acknowledge slice 1 PWM IRQ
         break;
 
@@ -88,8 +93,9 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
         if(button_is_2nd_zero(&gButton)){
             if(!button){
                 signal_set_state(&gSignal, (gSignal.STATE.ss + 1)%4);
-                button_set_irq_enabled(&gButton, true); // Disable the GPIO IRQs
+                button_set_irq_enabled(&gButton, true); // Enable the GPIO IRQs
                 pwm_set_enabled(2, false);    // Disable the button debouncer
+                signal_calculate_next_value(&gSignal); // Recalculate the signal values
                 gButton.KEY.dbnc = 0;
             }
             else
@@ -108,68 +114,80 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     }
  }
 
- void initTimer(void)
- {
-    /// claim alarm0 for signal value calculation
-    if(!hardware_alarm_is_claimed (0))
-        hardware_alarm_claim(0);
-    else
-        printf("Tenemos un problemaj alarm 0\n");
-    
-    /// claim alarm0 for signal value calculation
-    if(!hardware_alarm_is_claimed (1))
-        hardware_alarm_claim(1);
-    else
-        printf("Tenemos un problemaj alarm 1\n");
 
-    /// Set callback for each alarm. TODO: replace with an exclusive handler
-    hardware_alarm_set_callback(0, timerSignalCallback);
-    hardware_alarm_set_callback(1, timerPrintCallback);
-
-    timer_hw->intr = 0x00000003; // Clear/enable alarm0, alarm1 interrupt
-    timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
-    timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
- }
+void gpioCallback(uint num, uint32_t mask) 
+{
+    printf("GPIO %d\n", num);
+    if (num == 0){
+        buttonCallback(num, mask);
+    }
+    else{
+        keypadCallback(num, mask);
+    }
+}
 
  void keypadCallback(uint num, uint32_t mask)
  {
     gFlags.B.keyFlag = true;
-    printf("// Capture the key pressed");
     // Capture the key pressed
     uint32_t cols = gpio_get_all() & 0x000003C0; // Get columns gpio values
     kp_capture(&gKeyPad, cols);
-    pwm_set_enabled(0,false);                                           ///< Froze the row sequence
-    pwm_set_enabled(1,true);
-    gpio_set_irq_enabled(6,GPIO_IRQ_EDGE_RISE,false);  
-    gpio_set_irq_enabled(7,GPIO_IRQ_EDGE_RISE,false);  
-    gpio_set_irq_enabled(8,GPIO_IRQ_EDGE_RISE,false);  
-    gpio_set_irq_enabled(9,GPIO_IRQ_EDGE_RISE,false);
+    printf("Key: %02x\n", gKeyPad.KEY.dkey);
+
+    pwm_set_enabled(0, false);  // Disable the row sequence
+    pwm_set_enabled(1, true);   // Enable the keypad debouncer
+    kp_set_irq_enabled(&gKeyPad, false); // Disable the keypad IRQs
+
     gpio_acknowledge_irq(num, mask); // gpio IRQ acknowledge
  }
 
  void buttonCallback(uint num, uint32_t mask)
  {
-    pwm_set_enabled(2, true); // Enable the button debouncer
-    button_set_irq_enabled(&gButton, false); // Disable the button IRQs
-
-    button_set_zflag(&gButton); // Set the flag that indicates that a zero was detected on button
-    gButton.KEY.dbnc = 1;
+    gFlags.B.buttonFlag = true;
 
     gpio_acknowledge_irq(num, mask); // gpio IRQ acknowledge
  }
 
-
- void timerSignalCallback(uint num)
+ void timerSignalHandler(void) 
  {
-    // Perform the signal value calculation and output to the DAC
-    signal_calculate_next_value(&gSignal);
-    dac_calculate(&gDac,gSignal.value);
+    // Interrupt acknowledge
+    hw_clear_bits(&timer_hw->intr, 1u << TIMER_IRQ_0);
 
-    timer_hw->intr = 0x00000001; // Clear/enable alarm0 interruption
+    // Setting the IRQ handler
+    irq_set_exclusive_handler(TIMER_IRQ_0, timerSignalHandler);
+    irq_set_enabled(TIMER_IRQ_0, true);
+    hw_set_bits(&timer_hw->inte, 1u << TIMER_IRQ_0); // Enable alarm0 for signal value calculation
     timer_hw->alarm[0] = (uint32_t)(time_us_64() + gSignal.t_sample); // Set alarm0 to trigger in t_sample
+
+    gFlags.B.signalFlag = true;
+
  }
 
- void timerPrintCallback(uint num)
+ void timerSignalCallback(void)
+ {
+    // Perform the signal value calculation and output to the DAC
+    dac_calculate(&gDac,gSignal.arrayV[gSignal.cnt]);
+    gSignal.cnt = (gSignal.cnt + 1)%SAMPLE_NYQUIST;
+    
+ }
+
+
+ void timerPrintHandler(void)
+ {
+    // Interrupt acknowledge
+    hw_clear_bits(&timer_hw->intr, 1u << TIMER_IRQ_1);
+
+    // Setting the IRQ handler
+    irq_set_exclusive_handler(TIMER_IRQ_1, timerPrintHandler);
+    irq_set_enabled(TIMER_IRQ_1, true);
+    hw_set_bits(&timer_hw->inte, 1u << TIMER_IRQ_1); // Enable alarm1 for printing
+    timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
+
+    gFlags.B.printFlag = true;
+
+ }
+
+ void timerPrintCallback(void)
  {
     // Print the signal characteristics
     switch (gSignal.STATE.ss){
@@ -180,7 +198,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
             printf("Triangular: ");
             break;
         case 2:
-            printf("Sawtooth: ");
+            printf("Saw tooth: ");
             break;
         case 3:
             printf("Square: ");
@@ -188,20 +206,14 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
     }
     printf("Amp: %d, Offset: %d, Freq: %d\n", gSignal.amp, gSignal.offset, gSignal.freq);
 
-    gFlags.B.printFlag = 0; // Clear the print flag interrup
-
-    timer_hw->intr = 0x00000002; // Clear/enable alarm1 interruption
-    timer_hw->alarm[1] = (uint32_t)(time_us_64() + 1000000); // Set alarm1 to trigger in 1s
  }
 
 void program(){
     if(gFlags.B.keyFlag){
-        pwm_set_enabled(0, false);  // Disable the row sequence
-        pwm_set_enabled(1, true);   // Enable the keypad debouncer
-        kp_set_irq_enabled(&gKeyPad, false); // Disable the keypad IRQs
-
         kp_set_zflag(&gKeyPad); // Set the flag that indicates that a zero was detected on keypad
         gKeyPad.KEY.dbnc = 1;
+
+         printf("Key: %02x\n", gKeyPad.KEY.dkey);
 
         // Auxiliar variables
         static uint8_t in_param_state = 0x00; // 0: Nothing, 1: Entering amp (A), 2: Entering offset (B), 3: Entering freq (C)
@@ -215,12 +227,11 @@ void program(){
         if(checkNumber(gKeyPad.KEY.dkey) && in_param_state){
             param = (!key_cont)? gKeyPad.KEY.dkey : param*10 + gKeyPad.KEY.dkey;
             key_cont++;
-            printf("El valor es %d.\n", param);
         }
         // To accept a letter different of 0x0D, in_param_state must be 0
         else if(checkLetter(gKeyPad.KEY.dkey) && !in_param_state){
-            cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
-            // led_on(my_led);
+            // cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+            led_on(gLed);
             switch (gKeyPad.KEY.dkey)
             {
             case 0x0A:
@@ -239,8 +250,8 @@ void program(){
         }
         // To accept a 0x0D, in_param_state must be different of 0
         else if(gKeyPad.KEY.dkey == 0x0D && in_param_state){
-            cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
-            // led_off(my_led);
+            // cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+            led_off(gLed);
             switch (in_param_state)
             {
             case 1:
@@ -262,26 +273,51 @@ void program(){
                 printf("Invalid state\n");
                 break;
             }
+            signal_calculate_next_value(&gSignal);
             in_param_state = 0;
             param = 0;
             key_cont = 0;
         }
         gKeyPad.KEY.nkey = 0;
+
         gFlags.B.keyFlag = false;
     }
     if(gFlags.B.keyDbnc){
+        uint32_t cols;
+        cols = gpio_get_all() & 0x000003C0; // Get columns gpio values
+        if(kp_is_2nd_zero(&gKeyPad)){
+            if(!cols){
+                kp_set_irq_enabled(&gKeyPad, true); // Enable the GPIO IRQs
+                pwm_set_enabled(0, true);    // Enable the row sequence
+                pwm_set_enabled(1, false);   // Disable the keypad debouncer
+                gKeyPad.KEY.dbnc = 0;
+            }
+            else
+                kp_clr_zflag(&gKeyPad);
+        }
+        else{
+            if(!cols)
+                kp_set_zflag(&gKeyPad);
+        }
         gFlags.B.keyDbnc = false;
     }
     if(gFlags.B.buttonFlag){
         gFlags.B.buttonFlag = false;
     }
     if(gFlags.B.buttonDbnc){
+        pwm_set_enabled(2, true); // Enable the button debouncer
+        button_set_irq_enabled(&gButton, false); // Disable the button IRQs
+        button_set_zflag(&gButton); // Set the flag that indicates that a zero was detected on button
+        gButton.KEY.dbnc = 1;
+
         gFlags.B.buttonDbnc = false;
     }
     if(gFlags.B.signalFlag){
+        timerSignalCallback();
         gFlags.B.signalFlag = false;
     }
     if(gFlags.B.printFlag){
+        timerPrintCallback();
         gFlags.B.printFlag = false;
     }
 }
