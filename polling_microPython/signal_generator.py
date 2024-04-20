@@ -9,7 +9,6 @@
 from math import sin, pi
 from utime import ticks_us
 from time_base import Time_base
-from typing import List
 
 S_TO_US = 1000000
 US_TO_S = 0.000001
@@ -22,7 +21,7 @@ class Signal:
     amp: int            # Amplitude in mV
     offset: int         # Offset in mV
     value: int          # Current value in mV
-    arrayV: List[int] = [0] * SAMPLE # Array of values for the signal
+    arrayV = [] # Array of values for the signal
     cnt: int            # Counter for the signal
     tb_gen: Time_base   # Time base for the signal generator
 
@@ -44,6 +43,8 @@ class Signal:
         self.value = 0
         self.cnt = 0
         self.tb_gen = Time_base(S_TO_US // (SAMPLE*freq), True)
+        for i in range(SAMPLE):
+            self.arrayV.append(0)
 
     def gen_sin(self, t: int):
         """

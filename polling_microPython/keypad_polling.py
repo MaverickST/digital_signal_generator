@@ -7,9 +7,7 @@
 """
 
 from time_base import Time_base
-from typing import List
 from machine import Pin
-from gpio_button import Button
 
 class KeyPad:
     cols: int           # store the columns state
@@ -25,9 +23,9 @@ class KeyPad:
     dbnc: bool          # Flag that indicates that debouncer is active      
     tb_seq: Time_base           # Periodic time base used to generate row sequence
     tb_dbnce: Time_base         # Periocic time base used to implement the key debouncer
-    history: List[int] = []     # The last 10 pressed keys
-    gpioC: List[Pin] = []        # The four gpios for cols
-    gpioR: List[Pin] = []        # The four gpios for rows
+    history = []     # The last 10 pressed keys
+    gpioC = []        # The four gpios for cols
+    gpioR = []        # The four gpios for rows
 
     def __init__(self, rlsb: int, clsb: int, dbnc_time: int, en: bool):
         """
@@ -41,7 +39,7 @@ class KeyPad:
         """
         # Initialize history buffer
         for i in range(10):
-            self.history[0xff]
+            self.history.append(int(0xff))
         # Initialize the keypad variables
         self.cols = 0
         self.cnt = 0x0
@@ -60,8 +58,8 @@ class KeyPad:
 
         # Initialize the gpios
         for i in range(4):
-            self.gpioR[i] = Pin(self.rlsb + i, Pin.OUT)
-            self.gpioC[i] = Pin(self.clsb + i, Pin.IN, Pin.PULL_DOWN)
+            self.gpioR.append(Pin(self.rlsb + i, Pin.OUT))
+            self.gpioC.append(Pin(self.clsb + i, Pin.IN, Pin.PULL_UP))
 
 
     def captureKey(self):
@@ -70,7 +68,7 @@ class KeyPad:
         Before this metod, it must be called the captureCols method.
         """
         # Key processing
-        self.ckey = self.cols | self.seq
+        self.ckey = (self.cols << 4) | self.seq
         self.decode()
         # Store the key in the history buffer
         for i in range(9):
@@ -91,37 +89,37 @@ class KeyPad:
         """
         Decode the key pressed.
         """
-        if self.ckey == 0x88:
+        if self.ckey == 0xe8:
             self.dkey = 0x01
-        elif self.ckey == 0x48:
+        elif self.ckey == 0xd8:
             self.dkey = 0x02
-        elif self.ckey == 0x28:
+        elif self.ckey == 0xb8:
             self.dkey = 0x03
-        elif self.ckey == 0x18:
+        elif self.ckey == 0x78:
             self.dkey = 0x0A
-        elif self.ckey == 0x84:
+        elif self.ckey == 0xe4:
             self.dkey = 0x04
-        elif self.ckey ==0x44:
+        elif self.ckey ==0xd4:
             self.dkey = 0x05
-        elif self.ckey == 0x24:
+        elif self.ckey == 0xb4:
             self.dkey = 0x06
-        elif self.ckey == 0x14:
+        elif self.ckey == 0x74:
             self.dkey = 0x0B
-        elif self.ckey == 0x82:
+        elif self.ckey == 0xe2:
             self.dkey = 0x07
-        elif self.ckey == 0x42:
+        elif self.ckey == 0xd2:
             self.dkey = 0x08
-        elif self.ckey == 0x22:
+        elif self.ckey == 0xb2:
             self.dkey = 0x09
-        elif self.ckey == 0x12:
+        elif self.ckey == 0x72:
             self.dkey = 0x0C
-        elif self.ckey == 0x81:
+        elif self.ckey == 0xe1:
             self.dkey = 0x0E
-        elif self.ckey == 0x41:
+        elif self.ckey == 0xd1:
             self.dkey = 0x00
-        elif self.ckey == 0x21:
+        elif self.ckey == 0xb1:
             self.dkey = 0x0F
-        elif self.ckey == 0x11:
+        elif self.ckey == 0x71:
             self.dkey = 0x0D
 
     def gen_seq(self):
