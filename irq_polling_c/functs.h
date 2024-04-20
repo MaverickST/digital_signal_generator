@@ -11,15 +11,19 @@
 #ifndef __FUNTCS_
 #define __FUNTCS_
 
+/**
+ * @brief This typedef is for generate a word on we have the flags of interrups pending.
+ * @typedef flags_t
+ */
 typedef union{
     uint8_t W;
     struct{
-        bool keyFlag :1;
-        bool keyDbnc :1;
-        bool buttonFlag  :1;
-        bool buttonDbnc  :1;
-        bool signalFlag  :1;
-        bool printFlag  :1;
+        bool keyFlag :1; //keypad interruption pending
+        bool keyDbnc :1; //keypad debouncer interruption pending
+        bool buttonFlag  :1; //button interruption pending
+        bool buttonDbnc  :1; //button debouncer interruption pending
+        bool signalFlag  :1; //signal interruption pending
+        bool printFlag  :1; //print interruption pending
         uint8_t      :2;
     }B;
 }flags_t;
@@ -72,7 +76,7 @@ void gpioCallback(uint num, uint32_t mask);
  * @param num 
  * @param mask 
  */
-void keypadCallback(uint num, uint32_t mask);
+static inline void keypadCallback(uint num, uint32_t mask);
 
 /**
  * @brief Definition of the button callback function, which will be called by the handler of the GPIO interruptions.
@@ -80,7 +84,7 @@ void keypadCallback(uint num, uint32_t mask);
  * @param num 
  * @param mask 
  */
-void buttonCallback(uint num, uint32_t mask);
+static inline void buttonCallback(uint num, uint32_t mask);
 
 /**
  * @brief Definition of the signal callback function, which will be called by the handler of the timer interruptions.
@@ -88,7 +92,7 @@ void buttonCallback(uint num, uint32_t mask);
  * 
  * @param num Alarm number that triggered the interruption
  */
-void timerSignalCallback(void);
+static inline void timerSignalCallback(void);
 
 /**
  * @brief Definition of the printing callback function, which will be called by the handler of the timer interruptions.
@@ -97,9 +101,20 @@ void timerSignalCallback(void);
  * 
  * @param num Alarm number that triggered the interruption
  */
-void timerPrintCallback(void);
+static inline void timerPrintCallback(void);
 
-void program();
+/**
+ * @brief This function is the main, here the program is executed when a flag of interruption is pending.
+ * 
+ */
+void program(void);
+
+/**
+ * @brief This function checks if there are a flag of interruption pending for execute the program.
+ * 
+ * @return true When there are a flag of interruption pending
+ * @return false When there are not a flag of interruption pending
+ */
 bool check();
 
 // -------------------------------------------------------------
