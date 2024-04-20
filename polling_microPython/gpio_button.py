@@ -38,7 +38,7 @@ class Button:
         self.dzero = False
         self.nkey = False
 
-        self.gpioPin = Pin(gpio, Pin.IN, Pin.PULL_DOWN)
+        self.gpioPin = Pin(gpio, Pin.IN, Pin.PULL_UP)
         self.tb_dbnce = Time_base(dbnc_time, False)
 
     def set_zflag(self):

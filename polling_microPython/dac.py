@@ -7,7 +7,6 @@
 """
 
 from machine import Pin
-from typing import List
 
 RESOLUTION = 255        # 8 bits
 DAC_RANGE = 9400        # 0 to 9.3V
@@ -17,7 +16,7 @@ class DAC:
     Class to impress the DAC (8bits).
     """
     en: bool                # Enable the DAC processing
-    gpioD: List[Pin] = []   # The eight gpios for the DAC
+    gpioD = []   # The eight gpios for the DAC
     lsb: int                # The LSB position for the DAC, the eight gpios must be consecutives.
     digit_v: int            # The digit value for the DAC
 
@@ -34,7 +33,7 @@ class DAC:
         self.lsb = lsb
         # Initialize the DAC gpios
         for i in range(8):
-            self.gpioD[i] = Pin(lsb + i, Pin.OUT)
+            self.gpioD.append(Pin(lsb + i, Pin.OUT)) 
 
     def set_dac(self, value: int):
         """
@@ -48,4 +47,5 @@ class DAC:
 
         self.digit_v = (value + 5000)*RESOLUTION//DAC_RANGE
         for i in range(8):
-            self.gpioD[i].value((value >> i) & 0x1)
+            self.gpioD[i].value(self.digit_v % 2)
+            self.digit_v = self.digit_v // 2
