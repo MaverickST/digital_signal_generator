@@ -11,9 +11,7 @@
 #ifndef __GPIO_BUTTON_
 #define __GPIO_BUTTON_
 
-// #include <stdint.h>
-// #include "hardware/timer.h"
-// #include "hardware/gpio.h"
+#include "time_base.h"
 
 /**
  * @typedef gpio_button_t 
@@ -23,11 +21,11 @@
  */
 typedef struct{
     struct {
-        byte gpio_num     : 6;        ///< GPIO gpio_num number
-        byte en      : 1;        ///< Enable keypad processing
-        byte dzero   : 1;        ///< Flag for double zero
-        byte nkey    : 1;        ///< Flag that indicates that a key was pressed
-        byte dbnc    : 1;        ///< Flag that indicates that debouncer is active
+        uint8_t gpio_num     : 6;        ///< GPIO gpio_num number
+        uint8_t en      : 1;        ///< Enable keypad processing
+        uint8_t dzero   : 1;        ///< Flag for double zero
+        uint8_t nkey    : 1;        ///< Flag that indicates that a key was pressed
+        uint8_t dbnc    : 1;        ///< Flag that indicates that debouncer is active
     }KEY;
     time_base_t tb_dbnce;       ///< Periocic time base used to implement the key debouncer
 }gpio_button_t;
@@ -40,17 +38,15 @@ typedef struct{
  * @param dbnc_time 
  * @param en 
  */
-static inline void button_init(gpio_button_t *button, byte gpio_num, long dbnc_time, bool en){
-    button->KEY.en = en;
-    button->KEY.dzero = 0;
-    button->KEY.nkey = 0;
-    button->KEY.dbnc = 0;
-    button->KEY.gpio_num = gpio_num;
-    tb_init(&button->tb_dbnce, dbnc_time, false);
+static inline void button_init(gpio_button_t *button, uint8_t gpio_num, uint64_t dbnc_time, bool en){
+  button->KEY.en = en;
+  button->KEY.dzero = 0;
+  button->KEY.nkey = 0;
+  button->KEY.dbnc = 0;
+  button->KEY.gpio_num = gpio_num;
+  tb_init(&button->tb_dbnce, dbnc_time, false);
 
-    gpio_init(button->KEY.gpio_num);
-    gpio_set_dir(button->KEY.gpio_num, GPIO_IN);
-    gpio_pull_down(button->KEY.gpio_num);
+  pinMode(button->KEY.gpio_num, INPUT_PULLDOWN);
 }
 
 /** 

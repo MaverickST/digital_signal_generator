@@ -54,9 +54,31 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable);
  */
 void pwmIRQ(void);
 
+/**
+ * @brief This definition is the handler for the timer signal interruptions.
+ * 
+ */
 void timerSignalHandler(void);
 
+/**
+ * @brief This definition is the handler for the timer print interruptions.
+ * 
+ */
 void timerPrintHandler(void);
+
+/**
+ * @brief This function is the main, here the program is executed when a flag of interruption is pending.
+ * 
+ */
+void program(void);
+
+/**
+ * @brief This function checks if there are a flag of interruption pending for execute the program.
+ * 
+ * @return true When there are a flag of interruption pending
+ * @return false When there are not a flag of interruption pending
+ */
+bool check();
 
 // -------------------------------------------------------------
 // ---------------------- Callback functions -------------------
@@ -102,20 +124,6 @@ static inline void timerSignalCallback(void);
  * @param num Alarm number that triggered the interruption
  */
 static inline void timerPrintCallback(void);
-
-/**
- * @brief This function is the main, here the program is executed when a flag of interruption is pending.
- * 
- */
-void program(void);
-
-/**
- * @brief This function checks if there are a flag of interruption pending for execute the program.
- * 
- * @return true When there are a flag of interruption pending
- * @return false When there are not a flag of interruption pending
- */
-bool check();
 
 // -------------------------------------------------------------
 // ---------------------- Check functions ----------------------

@@ -34,7 +34,7 @@ should be able to be verified by a measuring instrument, multimeter, or oscillos
    - Operational Amplifier (LM358).
    - LED
 
-H: Using Pin.value(), it must take into accout that: 
+NOTE: Using Pin.value(), it must take into account that: 
     - If is given a parameter and it is Pin.OUT: it sets the pin to what is given.
     - If no parameter is given and it is Pin.IN: it returns the current value of the pin.
     To other cases, its behavior is not defined.
@@ -352,6 +352,7 @@ from utime import ticks_us
 S_TO_US = 1000000
 US_TO_S = 0.000001
 SAMPLE = 16
+DAC_BIAS = 500
 
 class Signal:
     ss: int             # Signal State: 0: Sinusoidal, 1: Triangular, 2: Sawtooth, 3: Square
@@ -428,19 +429,19 @@ class Signal:
         if self.ss == 0:
             for i in range(SAMPLE):
                 self.gen_sin(i + 1)
-                self.arrayV[i] = self.value - 800 # Offset of the DAC
+                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
         elif self.ss == 1:
             for i in range(SAMPLE):
                 self.gen_tri(i + 1)
-                self.arrayV[i] = self.value - 800 # Offset of the DAC
+                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
         elif self.ss == 2:
             for i in range(SAMPLE):
                 self.gen_saw(i + 1)
-                self.arrayV[i] = self.value - 800 # Offset of the DAC
+                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
         elif self.ss == 3:
             for i in range(SAMPLE):
                 self.gen_sqr(i + 1)
-                self.arrayV[i] = self.value - 800 # Offset of the DAC
+                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
         
 
     def get_value(self) -> int:
