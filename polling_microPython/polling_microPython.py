@@ -34,7 +34,7 @@ should be able to be verified by a measuring instrument, multimeter, or oscillos
    - Operational Amplifier (LM358).
    - LED
 
-H: Using Pin.value(), it must take into accout that: 
+NOTE: Using Pin.value(), it must take into account that: 
     - If is given a parameter and it is Pin.OUT: it sets the pin to what is given.
     - If no parameter is given and it is Pin.IN: it returns the current value of the pin.
     To other cases, its behavior is not defined.

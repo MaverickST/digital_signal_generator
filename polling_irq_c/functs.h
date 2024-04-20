@@ -54,8 +54,16 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable);
  */
 void pwmIRQ(void);
 
+/**
+ * @brief This definition is the handler for the timer single interruptions.
+ * 
+ */
 void timerSignalHandler(void);
 
+/**
+ * @brief This definition is the handler for the timer print interruptions.
+ * 
+ */
 void timerPrintHandler(void);
 
 // -------------------------------------------------------------

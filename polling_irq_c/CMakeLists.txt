@@ -12,7 +12,7 @@ project(SignalGenerator)
 # initialize the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-add_executable(signal_irq_polling
+add_executable(signal_polling_irq
 	main.c
 	functs.c
 	dac.c
@@ -20,10 +20,10 @@ add_executable(signal_irq_polling
 	signal_generator.c
 )
 
-target_include_directories(signal_irq_polling PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(signal_polling_irq PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add pico_stdlib library which aggregates commonly used features
-target_link_libraries(signal_irq_polling 
+target_link_libraries(signal_polling_irq 
 	pico_stdlib 
 	hardware_timer
 	pico_cyw43_arch_none 
@@ -32,8 +32,8 @@ target_link_libraries(signal_irq_polling
 	hardware_irq 
 	hardware_sync)
 
-pico_enable_stdio_uart(signal_irq_polling 0)
-pico_enable_stdio_usb(signal_irq_polling 1)
+pico_enable_stdio_uart(signal_polling_irq 0)
+pico_enable_stdio_usb(signal_polling_irq 1)
 
 # create map/bin/hex/uf2 file in addition to ELF.
-pico_add_extra_outputs(signal_irq_polling)
+pico_add_extra_outputs(signal_polling_irq)
