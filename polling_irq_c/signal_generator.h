@@ -16,6 +16,7 @@
 #define US_TO_S    0.000001    // 1us = 0.000001s
 #define RESOLUTION  255         // 8 bits
 #define SAMPLE_NYQUIST  16      // Nyquist theorem
+#define DAC_BIAS    700         // DAC bias
 
 #include <stdint.h>
 #include <math.h>
@@ -83,25 +84,25 @@ static inline void signal_calculate_next_value(signal_t *signal){
         case 0: // Sinusoidal
             for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
                 signal_gen_sin(signal, i);
-                signal->arrayV[i - 1] = signal->value + 700; // The -500 is to set the bias of the DAC.
+                signal->arrayV[i - 1] = signal->value + DAC_BIAS; // The -500 is to set the bias of the DAC.
             }
             break;
         case 1: // Triangular
             for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
                 signal_gen_tri(signal, i);
-                signal->arrayV[i - 1] = signal->value + 700; // The -500 is to set the bias of the DAC.
+                signal->arrayV[i - 1] = signal->value + DAC_BIAS; // The -500 is to set the bias of the DAC.
             }
             break;
         case 2: // Saw tooth
             for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
                 signal_gen_saw(signal, i);
-                signal->arrayV[i - 1] = signal->value + 700; // The -500 is to set the bias of the DAC.
+                signal->arrayV[i - 1] = signal->value + DAC_BIAS; // The -500 is to set the bias of the DAC.
             }
             break;
         case 3: // Square
             for (uint8_t i = 1; i <= SAMPLE_NYQUIST; i++){
                 signal_gen_sqr(signal, i);
-                signal->arrayV[i - 1] = signal->value + 700; // The -500 is to set the bias of the DAC.
+                signal->arrayV[i - 1] = signal->value + DAC_BIAS; // The -500 is to set the bias of the DAC.
             }
             break;
     }
