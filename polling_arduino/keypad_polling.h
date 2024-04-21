@@ -157,8 +157,10 @@ void kp_capture(key_pad_t *kpad)
  */
 void kp_captureCols(key_pad_t *kpad){
     kpad->KEY.cols = 0;
+    bool press;
     for (int i = 0; i < 4; i++){
-      kpad->KEY.cols |= (digitalRead(kpad->KEY.clsb + i) << i);
+      press = digitalRead(kpad->KEY.clsb + i);
+      kpad->KEY.cols |= (press << i);
     }
 }
 
@@ -169,7 +171,10 @@ void kp_captureCols(key_pad_t *kpad){
 static inline void kp_gen_seq(key_pad_t *kpad){
     kpad->KEY.cnt += 1;
     kpad->KEY.seq = 1 << kpad->KEY.cnt;
-    gpio_put_masked(0x0000000F<<kpad->KEY.rlsb,((uint32_t)kpad->KEY.seq)<<kpad->KEY.rlsb);
+    for (int i = 0; i < 4; i++) {
+      digitalWrite(kpad->KEY.rlsb + i, (kpad->KEY.seq >> i) & 0x1);
+    }
+    // gpio_put_masked(0x0000000F<<kpad->KEY.rlsb,((uint32_t)kpad->KEY.seq)<<kpad->KEY.rlsb);
 }
 
 /** 

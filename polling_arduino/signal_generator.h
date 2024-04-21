@@ -127,7 +127,6 @@ static inline void signal_calculate_next_value(signal_t *signal){
             }
             break;
     }
-
 }
 
 static inline int16_t signal_get_value(signal_t *signal){
