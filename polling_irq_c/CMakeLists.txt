@@ -26,7 +26,7 @@ target_include_directories(signal_polling_irq PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 target_link_libraries(signal_polling_irq 
 	pico_stdlib 
 	hardware_timer
-	pico_cyw43_arch_none 
+	# pico_cyw43_arch_none 
 	hardware_gpio 
 	hardware_pwm 
 	hardware_irq 
