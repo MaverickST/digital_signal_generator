@@ -29,11 +29,6 @@
 #include "dac.h"
 #include "gpio_led.h"
 
-
-volatile uint8_t gKeyCnt = 0;
-volatile uint8_t gSeqCnt = 0;
-volatile bool gDZero = false;
-
 key_pad_t gKeyPad;
 signal_t gSignal;
 gpio_button_t gButton;
@@ -45,7 +40,7 @@ void initGlobalVariables(void)
 {
     kp_init(&gKeyPad,2,6,true);
     signal_gen_init(&gSignal, 10, 1000, 500, true);
-    signal_calculate_next_value(&gSignal);
+    signal_calculate(&gSignal);
     button_init(&gButton, 0);
     dac_init(&gDac, 10, true);
     led_init(gLed);
@@ -108,7 +103,7 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable)
                 signal_set_state(&gSignal, (gSignal.STATE.ss + 1)%4);
                 button_set_irq_enabled(&gButton, true); // Enable the GPIO IRQs
                 pwm_set_enabled(2, false);    // Disable the button debouncer
-                signal_calculate_next_value(&gSignal); // Recalculate the signal values
+                signal_calculate(&gSignal); // Recalculate the signal values
                 gButton.KEY.dbnc = 0;
             }
             else
@@ -210,7 +205,7 @@ void gpioCallback(uint num, uint32_t mask)
             printf("Invalid state\n");
             break;
         }
-        signal_calculate_next_value(&gSignal);
+        signal_calculate(&gSignal);
         in_param_state = 0;
         param = 0;
         key_cont = 0;
@@ -250,7 +245,7 @@ void gpioCallback(uint num, uint32_t mask)
  {
     // Perform the signal value calculation and output to the DAC
     dac_calculate(&gDac,gSignal.arrayV[gSignal.cnt]);
-    gSignal.cnt = (gSignal.cnt + 1)%SAMPLE_NYQUIST;
+    gSignal.cnt = (gSignal.cnt + 1)%SAMPLE;
     
  }
 

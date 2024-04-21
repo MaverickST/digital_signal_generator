@@ -30,10 +30,6 @@
 #include "gpio_led.h"
 
 
-volatile uint8_t gKeyCnt = 0; // Counter for the keypad
-volatile uint8_t gSeqCnt = 0; // Counter for the row sequence
-volatile bool gDZero = false; // Detects the second zero on the keypad
-
 key_pad_t gKeyPad; // Keypad object
 signal_t gSignal; // Signal generator object
 gpio_button_t gButton; // Button object
@@ -47,7 +43,7 @@ void initGlobalVariables(void)
     gFlags.W = 0x00U;
     kp_init(&gKeyPad,2,6,true);
     signal_gen_init(&gSignal, 10, 1000, 500, true);
-    signal_calculate_next_value(&gSignal);
+    signal_calculate(&gSignal);
     button_init(&gButton, 0);
     dac_init(&gDac, 10, true);
     led_init(gLed);
@@ -150,7 +146,7 @@ static inline void timerSignalCallback(void)
  {
     // Perform the signal value calculation and output to the DAC
     dac_calculate(&gDac,gSignal.arrayV[gSignal.cnt]);
-    gSignal.cnt = (gSignal.cnt + 1)%SAMPLE_NYQUIST;
+    gSignal.cnt = (gSignal.cnt + 1)%SAMPLE;
     
  }
 
@@ -256,7 +252,7 @@ void program(void){
                 printf("Invalid state\n");
                 break;
             }
-            signal_calculate_next_value(&gSignal);
+            signal_calculate(&gSignal);
             in_param_state = 0;
             param = 0;
             key_cont = 0;
@@ -300,7 +296,7 @@ void program(void){
                 signal_set_state(&gSignal, (gSignal.STATE.ss + 1)%4);
                 button_set_irq_enabled(&gButton, true); // Enable the GPIO IRQs
                 pwm_set_enabled(2, false);    // Disable the button debouncer
-                signal_calculate_next_value(&gSignal); // Recalculate the signal values
+                signal_calculate(&gSignal); // Recalculate the signal values
                 gButton.KEY.dbnc = 0;
             }
             else
