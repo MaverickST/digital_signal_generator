@@ -37,8 +37,17 @@ void initPWMasPIT(uint8_t slice, uint16_t milis, bool enable);
  */
 void pwmIRQ(void);
 
+/** 
+ * @brief Definition of the handler for the signal generation interruptions, 
+ * which will be called by the NVIC.
+*/
 void timerSignalHandler(void);
 
+/**
+ * @brief Definition of the handler for the printing interruptions,
+ * which will be called by the NVIC.
+ * 
+ */
 void timerPrintHandler(void);
 
 // -------------------------------------------------------------
