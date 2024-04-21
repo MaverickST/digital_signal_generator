@@ -42,17 +42,19 @@ uint32_t param = 0; // This variable will store the value of any parameter that 
 uint8_t key_cont = 0;
 
 void setup (){
+  Serial1.begin(9600);
+
   tb_init(&tb_print, 1000000, true);
   dac_init(&my_dac, 10, true);
   button_init(&my_button, 0, 100000, true);
-  dac_init(&my_dac, 10, true);
+  signal_gen_init(&my_signal, 1, 1000, 500, true);
   signal_calculate_next_value(&my_signal);
   kp_init(&my_keypad,2,6,100000,true);
   pinMode(my_led, OUTPUT);
 }
 
 void loop(){
-// Process keypad
+  // Process keypad
   kp_captureCols(&my_keypad);
   if(my_keypad.KEY.cols && !my_keypad.KEY.dbnc){
       tb_disable(&my_keypad.tb_seq);
@@ -61,10 +63,12 @@ void loop(){
       tb_enable(&my_keypad.tb_dbnce);
       kp_set_zflag(&my_keypad);
       my_keypad.KEY.dbnc = 1;
+      Serial1.println("Key pressed");
   }
   if(tb_check(&my_keypad.tb_seq)){
       tb_next(&my_keypad.tb_seq);
       kp_gen_seq(&my_keypad);
+      // Serial1.println(my_keypad.KEY.cols);
   }
   if(tb_check(&my_keypad.tb_dbnce)){
       tb_next(&my_keypad.tb_dbnce);
@@ -75,9 +79,11 @@ void loop(){
               tb_enable(&my_keypad.tb_seq);
               tb_disable(&my_keypad.tb_dbnce);
               my_keypad.KEY.dbnc = 0;
+              Serial1.println("Key processed");
           }
-          else
-              kp_clr_zflag(&my_keypad);
+          else {
+            kp_clr_zflag(&my_keypad);
+          }
       }
       else{
           if(!my_keypad.KEY.cols)
@@ -85,7 +91,7 @@ void loop(){
       }
   }
   // Process button
-  bool button = gpio_get(my_button.KEY.gpio_num);
+  bool button = digitalRead(my_button.KEY.gpio_num);
   if(button && !my_button.KEY.dbnc){
       my_button.KEY.nkey = true; // This is a flag that indicates that a key was pressed
       tb_update(&my_button.tb_dbnce); 
@@ -97,14 +103,16 @@ void loop(){
       tb_next(&my_button.tb_dbnce);
       if(button_is_2nd_zero(&my_button)){
           if(!button){
-              // printf("Button pressed\n");
+              // Serial1.println("Button pressed\n");
               signal_set_state(&my_signal, (my_signal.STATE.ss + 1)%4);
               signal_calculate_next_value(&my_signal);
               tb_disable(&my_button.tb_dbnce);
               my_button.KEY.dbnc = 0;
+              Serial1.println("Button Processed");
           }
-          else
+          else {
               button_clr_zflag(&my_button);
+          }
       }
       else{
           if(!button)
@@ -123,19 +131,24 @@ void loop(){
       tb_next(&tb_print);
       switch (my_signal.STATE.ss){
           case 0:
-              printf("Sinusoidal: ");
+              Serial1.print("Sinusoidal: ");
               break;
           case 1:
-              printf("Triangular: ");
+              Serial1.print("Triangular: ");
               break;
           case 2:
-              printf("Saw tooth: ");
+              Serial1.print("Saw tooth: ");
               break;
           case 3:
-              printf("Square: ");
+              Serial1.print("Square: ");
               break;
       }
-      printf("Amp: %d, Offset: %d, Freq: %d\n", my_signal.amp, my_signal.offset, my_signal.freq);
+      Serial1.print("Amp: ");
+      Serial1.print(my_signal.amp);
+      Serial1.print("  Offset: ");
+      Serial1.print(my_signal.offset);
+      Serial1.print("  Freq: ");
+      Serial1.println(my_signal.freq);
   }
 
   // Process entering parameters
@@ -162,7 +175,7 @@ void loop(){
               in_param_state = 3;
               break;
           default:
-              printf("Invalid letter\n");
+              Serial1.println("Invalid letter\n");
               break;
           }
       }
@@ -188,7 +201,7 @@ void loop(){
               }
               break;
           default:
-              printf("Invalid state\n");
+              Serial1.println("Invalid state\n");
               break;
           }
           signal_calculate_next_value(&my_signal);
