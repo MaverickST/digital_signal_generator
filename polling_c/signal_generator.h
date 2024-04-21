@@ -14,7 +14,7 @@
 #define M_PI		3.14159265358979323846	/* pi */
 #define S_TO_US     1000000
 #define US_TO_S     0.000001
-#define SAMPLE      16
+#define SAMPLE      16 // Number of points in the signal.
 #define DAC_BIAS    500
 
 #include <stdint.h>
@@ -44,18 +44,47 @@ typedef struct{
 
 }signal_t;
 
-
+/**
+ * @brief Initialize the signal generator
+ * 
+ * @param signal 
+ * @param freq in Hz
+ * @param amp in mV
+ * @param offset in mV
+ * @param en 
+ */
 void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t offset, bool en);
 
 // ------------------------------------------------------------------
-// ---------------------- GETTING WAVE VALUES ----------------------
+// ---------------------- GETTING WAVE VALUES -----------------------
 // ------------------------------------------------------------------
 
-static inline void signal_gen_sin(signal_t *signal, uint8_t t){
+/**
+ * @brief This function calculates the values of the signal and stores them in the arrayV.
+ * 
+ * @param signal 
+ */
+void signal_calculate(signal_t *signal);
+
+/**
+ * @brief This function calculates the value of a sinusoidal signal
+ * 
+ * @param signal 
+ * @param t 
+ */
+static inline void signal_gen_sin(signal_t *signal, uint8_t t)
+{
     signal->value = (int16_t)(signal->offset + signal->amp*sin((2*M_PI*t)/SAMPLE));
 }
 
-static inline void signal_gen_tri(signal_t *signal, uint8_t t){
+/**
+ * @brief This function calculates the value of a triangular signal
+ * 
+ * @param signal 
+ * @param t 
+ */
+static inline void signal_gen_tri(signal_t *signal, uint8_t t)
+{
     if (t <= SAMPLE/2){
         signal->value = (int16_t)(signal->offset + (4*signal->amp*t)/SAMPLE - signal->amp);
     }
@@ -64,11 +93,25 @@ static inline void signal_gen_tri(signal_t *signal, uint8_t t){
     }
 }
 
-static inline void signal_gen_saw(signal_t *signal, uint8_t t){
+/**
+ * @brief This function calculates the value of a saw tooth signal
+ * 
+ * @param signal 
+ * @param t 
+ */
+static inline void signal_gen_saw(signal_t *signal, uint8_t t)
+{
     signal->value = (int16_t)(signal->offset + (2*signal->amp*t)/SAMPLE  - signal->amp);
 }
 
-static inline void signal_gen_sqr(signal_t *signal, uint8_t t){
+/**
+ * @brief This function calculates the value of a square signal
+ * 
+ * @param signal 
+ * @param t 
+ */
+static inline void signal_gen_sqr(signal_t *signal, uint8_t t)
+{
     if (t <= SAMPLE/2){
         signal->value = (int16_t)(signal->offset + signal->amp);
     }
@@ -78,39 +121,7 @@ static inline void signal_gen_sqr(signal_t *signal, uint8_t t){
 }
 
 // ------------------------------------------------------------------
-
-static inline void signal_calculate_next_value(signal_t *signal){
-
-    if(!signal->STATE.en) return; 
-
-    switch(signal->STATE.ss){ // Calculate next signal value
-        case 0: // Sinusoidal
-            for (uint8_t i = 1; i <= SAMPLE; i++){
-                signal_gen_sin(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
-            }
-            break;
-        case 1: // Triangular
-            for (uint8_t i = 1; i <= SAMPLE; i++){
-                signal_gen_tri(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
-            }
-            break;
-        case 2: // Saw tooth
-            for (uint8_t i = 1; i <= SAMPLE; i++){
-                signal_gen_saw(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
-            }
-            break;
-        case 3: // Square
-            for (uint8_t i = 1; i <= SAMPLE; i++){
-                signal_gen_sqr(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
-            }
-            break;
-    }
-
-}
+// ------------------------------------------------------------------
 
 static inline int16_t signal_get_value(signal_t *signal){
     return signal->value;

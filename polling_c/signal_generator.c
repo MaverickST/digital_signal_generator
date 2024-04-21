@@ -14,15 +14,7 @@
 #include "signal_generator.h"
 #include "time_base.h"
 
-/**
- * @brief 
- * 
- * @param signal 
- * @param freq 
- * @param amp 
- * @param offset 
- * @param en 
- */
+
 void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t offset, bool en)
 {
     signal->freq = freq;
@@ -33,4 +25,36 @@ void signal_gen_init(signal_t *signal, uint32_t freq, uint16_t amp, uint16_t off
     signal->STATE.ss = 0;
     signal->cnt = 0;
     tb_init(&signal->tb_gen,S_TO_US/(SAMPLE*freq),true);
+}
+
+void signal_calculate(signal_t *signal)
+{
+    if(!signal->STATE.en) return; 
+
+    switch(signal->STATE.ss){ // Calculate next signal value
+        case 0: // Sinusoidal
+            for (uint8_t i = 1; i <= SAMPLE; i++){
+                signal_gen_sin(signal, i);
+                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+            }
+            break;
+        case 1: // Triangular
+            for (uint8_t i = 1; i <= SAMPLE; i++){
+                signal_gen_tri(signal, i);
+                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+            }
+            break;
+        case 2: // Saw tooth
+            for (uint8_t i = 1; i <= SAMPLE; i++){
+                signal_gen_saw(signal, i);
+                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+            }
+            break;
+        case 3: // Square
+            for (uint8_t i = 1; i <= SAMPLE; i++){
+                signal_gen_sqr(signal, i);
+                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+            }
+            break;
+    }
 }
