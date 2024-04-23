@@ -270,37 +270,37 @@ class KeyPad:
         """
         Decode the key pressed.
         """
-        if self.ckey == 0xe8:
+        if self.ckey == 0x77:
             self.dkey = 0x01
-        elif self.ckey == 0xd8:
+        elif self.ckey == 0xb7:
             self.dkey = 0x02
-        elif self.ckey == 0xb8:
+        elif self.ckey == 0xd7:
             self.dkey = 0x03
-        elif self.ckey == 0x78:
+        elif self.ckey == 0xe7:
             self.dkey = 0x0A
-        elif self.ckey == 0xe4:
+        elif self.ckey == 0x7b:
             self.dkey = 0x04
-        elif self.ckey ==0xd4:
+        elif self.ckey ==0xbb:
             self.dkey = 0x05
-        elif self.ckey == 0xb4:
+        elif self.ckey == 0xdb:
             self.dkey = 0x06
-        elif self.ckey == 0x74:
+        elif self.ckey == 0xeb:
             self.dkey = 0x0B
-        elif self.ckey == 0xe2:
+        elif self.ckey == 0x7d:
             self.dkey = 0x07
-        elif self.ckey == 0xd2:
+        elif self.ckey == 0xbd:
             self.dkey = 0x08
-        elif self.ckey == 0xb2:
+        elif self.ckey == 0xdd:
             self.dkey = 0x09
-        elif self.ckey == 0x72:
+        elif self.ckey == 0xed:
             self.dkey = 0x0C
-        elif self.ckey == 0xe1:
+        elif self.ckey == 0x7e:
             self.dkey = 0x0E
-        elif self.ckey == 0xd1:
+        elif self.ckey == 0xbe:
             self.dkey = 0x00
-        elif self.ckey == 0xb1:
+        elif self.ckey == 0xde:
             self.dkey = 0x0F
-        elif self.ckey == 0x71:
+        elif self.ckey == 0xee:
             self.dkey = 0x0D
 
     def gen_seq(self):
@@ -311,7 +311,16 @@ class KeyPad:
             return
         
         self.cnt = (self.cnt + 1)%4
-        self.seq = (1 << self.cnt) & 0x0000000F
+        # self.seq = (1 << self.cnt) & 0x0000000F
+        # Reverse the sequence
+        if self.cnt == 0x0:
+            self.seq = 0b1110
+        elif self.cnt == 0x1:
+            self.seq = 0b1101
+        elif self.cnt == 0x2:
+            self.seq = 0b1011
+        elif self.cnt == 0x3:
+            self.seq = 0b0111
 
         for i in range(4):
             self.gpioR[i].value((self.seq >> i) & 0x1)
@@ -630,7 +639,6 @@ while True:
                 my_keypad.tb_seq.enable()
                 my_keypad.tb_dbnce.disable()
                 my_keypad.dbnc = False
-                print("dkey: 0x{0:02x}".format(my_keypad.dkey))
             else: 
                 my_keypad.clear_zflag()
         else:
@@ -686,10 +694,12 @@ while True:
     if (my_keypad.nkey & (not my_keypad.dbnc)):
         # To accept a number, in_param_state must be different of 0
         if (checkNumer(my_keypad.dkey) & in_state):
+            print("Number \n")
             param = param*10 + my_keypad.dkey
             key_cnt += 1
         # To accept a letter except 0xD, in_param_state must be 0
         elif (checkLetter(my_keypad.dkey) & (not in_state)):
+            print("Letter \n")
             my_led.set()
             if (my_keypad.dkey == 0x0A):
                 in_state = 1
@@ -699,6 +709,7 @@ while True:
                 in_state = 3
         # To accept a 0x0D, in_param_state must be different of 0
         elif (my_keypad.dkey == 0x0D & in_state):
+            print("D \n")
             my_led.clear()
             if (in_state == 1):
                 if (checkAmp(param)):
@@ -719,7 +730,8 @@ while True:
             in_state = 0
             param = 0
             key_cnt = 0
-        
+        print("State: ", in_state)
+        print("\n")
         # Aknowledge the key
         my_keypad.nkey = False
 
