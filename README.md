@@ -47,3 +47,24 @@ For testing purposes, the following parameters were used:
 ## Verification
 
 The generated signal and its characteristics should be verifiable using a measuring instrument such as a multimeter or oscilloscope.
+
+## Testing
+Polling Arduino
+Samples: 16      Max freq: 2kHz
+Samples: 70      Max freq: 450Hz
+
+Polling C
+Samples: 16      Max freq: 15kHz
+Samples: 70      Max freq: 3.3kHz
+
+Polling + IRQ in C
+Samples: 16      Max freq: 12.5kHz
+Samples: 70      Max freq: 2.6kHz
+
+IRQ in C
+Samples: 16      Max freq: 17kHz
+Samples: 70      Max freq: 3.7kHz
+
+Polling MicroPyhon
+Samples: 16      Max freq: 94Hz
+Samples: 70      Max freq: 21Hz
