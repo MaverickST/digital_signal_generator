@@ -16,7 +16,7 @@
 #define US_TO_S    0.000001    // 1us = 0.000001s
 #define RESOLUTION  255         // 8 bits
 #define SAMPLE  16      // Nyquist theorem
-#define DAC_BIAS    700         // DAC bias
+#define DAC_BIAS    240         // DAC bias
 
 #include <stdint.h>
 #include <math.h>
