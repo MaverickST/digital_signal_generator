@@ -16,6 +16,7 @@
 
 #define RESOLUTION  255         // 8 bits
 #define DAC_RANGE   10000        // 0 to 9.3V
+#define DAC_BIAS    -60         // DAC bias
 
 /**
  * @typedef dac_t 

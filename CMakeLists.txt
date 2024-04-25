@@ -30,6 +30,6 @@ endif()
 # Hardware-specific examples in subdirectories:
 add_subdirectory(irq_c)
 add_subdirectory(polling_c)
-add_subdirectory(irq_polling_c)
-#add_subdirectory(polling_arduino)
+add_subdirectory(polling_irq_c)
+add_subdirectory(testDAC)
 #add_subdirectory(polling_microPython)

@@ -34,25 +34,25 @@ void signal_calculate(signal_t *signal)
         case 0: // Sinusoidal
             for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_sin(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+                signal->arrayV[i - 1] = signal->value;
             }
             break;
         case 1: // Triangular
             for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_tri(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+                signal->arrayV[i - 1] = signal->value;
             }
             break;
         case 2: // Saw tooth
             for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_saw(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+                signal->arrayV[i - 1] = signal->value;
             }
             break;
         case 3: // Square
             for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_sqr(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+                signal->arrayV[i - 1] = signal->value;
             }
             break;
     }

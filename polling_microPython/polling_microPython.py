@@ -42,20 +42,20 @@ NOTE: Using Pin.value(), it must take into account that:
 """
 
 # Some auxiliary functions
-def checkNumer(number: int):
-    return (number >= 0 & number <= 9)
+def checkNumer(number: int) -> bool:
+    return (number >= 0 and number <= 9)
 
-def checkLetter(letter: int):
-    return (letter >= 0x0A & letter <= 0x0C)
+def checkLetter(letter: int) -> bool:
+    return (letter >= 0x0A and letter <= 0x0C)
 
-def checkFreq(freq: int):
-    return (freq >= 1 & freq <= 12000000)
+def checkFreq(freq: int) -> bool:
+    return (freq >= 1 and freq <= 12000000)
 
-def checkAmp(amp: int):
-    return (amp >= 100 & amp <= 2500)
+def checkAmp(amp: int) -> bool:
+    return (amp >= 100 and amp <= 2500)
 
-def checkOffset(offset: int):
-    return (offset >= 50 & offset <= 1250)
+def checkOffset(offset: int) -> bool:
+    return (offset >= 50 and offset <= 1250)
 
 # ----------------------------------------------------------------------------
 # ----------------------------- TIME BASE ------------------------------------
@@ -162,7 +162,7 @@ class Button:
         self.dzero = False
         self.nkey = False
 
-        self.gpioPin = Pin(gpio, Pin.IN, Pin.PULL_UP)
+        self.gpioPin = Pin(gpio, Pin.IN, Pin.PULL_DOWN)
         self.tb_dbnce = Time_base(dbnc_time, False)
 
     def set_zflag(self):
@@ -360,8 +360,7 @@ from utime import ticks_us
 
 S_TO_US = 1000000
 US_TO_S = 0.000001
-SAMPLE = 16
-DAC_BIAS = 500
+SAMPLE = 70
 
 class Signal:
     ss: int             # Signal State: 0: Sinusoidal, 1: Triangular, 2: Sawtooth, 3: Square
@@ -370,8 +369,8 @@ class Signal:
     amp: int            # Amplitude in mV
     offset: int         # Offset in mV
     value: int          # Current value in mV
-    arrayV = [] # Array of values for the signal
-    cnt: int            # Counter for the signal
+    arrayV = []         # Array of values for the signal
+    cnt: int            # Counter for the signal generator: 0 to SAMPLE - 1
     tb_gen: Time_base   # Time base for the signal generator
 
     def __init__(self, freq: int, amp: int, offset: int, en: bool):
@@ -438,19 +437,19 @@ class Signal:
         if self.ss == 0:
             for i in range(SAMPLE):
                 self.gen_sin(i + 1)
-                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
+                self.arrayV[i] = self.value # Offset of the DAC
         elif self.ss == 1:
             for i in range(SAMPLE):
                 self.gen_tri(i + 1)
-                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
+                self.arrayV[i] = self.value # Offset of the DAC
         elif self.ss == 2:
             for i in range(SAMPLE):
                 self.gen_saw(i + 1)
-                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
+                self.arrayV[i] = self.value # Offset of the DAC
         elif self.ss == 3:
             for i in range(SAMPLE):
                 self.gen_sqr(i + 1)
-                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
+                self.arrayV[i] = self.value # Offset of the DAC
         
 
     def get_value(self) -> int:
@@ -504,7 +503,8 @@ class Signal:
 # ----------------------------------------------------------------------------
 
 RESOLUTION = 255        # 8 bits
-DAC_RANGE = 9400        # 0 to 9.3V
+DAC_RANGE = 10120        # 0 to 9.3V
+DAC_BIAS = -60
 
 class DAC:
     """
@@ -540,7 +540,7 @@ class DAC:
         if not self.en:
             return
 
-        self.digit_v = (value + 5000)*RESOLUTION//DAC_RANGE
+        self.digit_v = (value + DAC_BIAS + 5000)*RESOLUTION//DAC_RANGE
         for i in range(8):
             self.gpioD[i].value(self.digit_v % 2)
             self.digit_v = self.digit_v // 2
@@ -601,7 +601,7 @@ class Led:
 # from gpio_led import Led
 
 # Initialize the objects
-my_signal = Signal(1, 1000, 500, True)
+my_signal = Signal(10, 1000, 500, True)
 my_signal.calculate()
 my_dac = DAC(10, True)
 my_led = Led(18, True)
@@ -619,7 +619,7 @@ while True:
     # Get the keypad columns
     my_keypad.captureCols()
     # Process the keypad
-    if ((my_keypad.cols != 0x0f) & (not my_keypad.dbnc)):
+    if ((my_keypad.cols != 0x0f) and (not my_keypad.dbnc)):
         my_keypad.tb_seq.disable()
         my_keypad.captureKey() # Capture the key
         my_keypad.tb_dbnce.update()
@@ -647,7 +647,7 @@ while True:
     
     # Process the button (low active)
     boolButton: bool = bool(my_button.gpioPin.value())
-    if ((not boolButton) & (not my_button.dbnc)):
+    if (boolButton and (not my_button.dbnc)):
         my_button.nkey = True # A key was pressed
         my_button.tb_dbnce.update()
         my_button.tb_dbnce.enable()
@@ -655,17 +655,16 @@ while True:
     
     if (my_button.tb_dbnce.check()):
         my_button.tb_dbnce.set_next()
-        if (my_button.is_2nd_zero()):   
-            if (boolButton):
+        if (my_button.is_2nd_zero()):
+            if (not boolButton):
                 my_signal.set_ss((my_signal.ss + 1) % 4)
                 my_signal.calculate()
                 my_button.tb_dbnce.disable()
                 my_button.dbnc = False
-                print("The button was proccessed")
             else: 
                 my_button.clear_zflag()
         else:
-            if (boolButton):
+            if (not boolButton):
                 my_button.set_zflag()
     
     
@@ -693,13 +692,11 @@ while True:
     # Process entering parameters
     if (my_keypad.nkey & (not my_keypad.dbnc)):
         # To accept a number, in_param_state must be different of 0
-        if (checkNumer(my_keypad.dkey) & in_state):
-            print("Number \n")
+        if (checkNumer(my_keypad.dkey) and in_state):
             param = param*10 + my_keypad.dkey
             key_cnt += 1
         # To accept a letter except 0xD, in_param_state must be 0
-        elif (checkLetter(my_keypad.dkey) & (not in_state)):
-            print("Letter \n")
+        elif (checkLetter(my_keypad.dkey) and (not in_state)):
             my_led.set()
             if (my_keypad.dkey == 0x0A):
                 in_state = 1
@@ -708,8 +705,7 @@ while True:
             elif (my_keypad.dkey == 0x0C):
                 in_state = 3
         # To accept a 0x0D, in_param_state must be different of 0
-        elif (my_keypad.dkey == 0x0D & in_state):
-            print("D \n")
+        elif ((my_keypad.dkey == 0x0D) and in_state):
             my_led.clear()
             if (in_state == 1):
                 if (checkAmp(param)):
@@ -730,8 +726,6 @@ while True:
             in_state = 0
             param = 0
             key_cnt = 0
-        print("State: ", in_state)
-        print("\n")
         # Aknowledge the key
         my_keypad.nkey = False
 

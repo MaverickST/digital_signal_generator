@@ -14,8 +14,7 @@
 #define M_PI		    3.14159265358979323846	/* pi */
 #define S_TO_US     1000000
 #define US_TO_S     0.000001
-#define SAMPLE      16
-#define DAC_BIAS    700
+#define SAMPLE      70
 
 
 #include <math.h>
@@ -105,25 +104,25 @@ static inline void signal_calculate_next_value(signal_t *signal){
         case 0: // Sinusoidal
             for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_sin(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+                signal->arrayV[i - 1] = signal->value;
             }
             break;
         case 1: // Triangular
             for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_tri(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+                signal->arrayV[i - 1] = signal->value;
             }
             break;
         case 2: // Saw tooth
             for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_saw(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+                signal->arrayV[i - 1] = signal->value;
             }
             break;
         case 3: // Square
             for (uint8_t i = 1; i <= SAMPLE; i++){
                 signal_gen_sqr(signal, i);
-                signal->arrayV[i - 1] = signal->value + DAC_BIAS;
+                signal->arrayV[i - 1] = signal->value;
             }
             break;
     }
