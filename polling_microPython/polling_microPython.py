@@ -360,8 +360,7 @@ from utime import ticks_us
 
 S_TO_US = 1000000
 US_TO_S = 0.000001
-SAMPLE = 16
-DAC_BIAS = 500
+SAMPLE = 70
 
 class Signal:
     ss: int             # Signal State: 0: Sinusoidal, 1: Triangular, 2: Sawtooth, 3: Square
@@ -438,19 +437,19 @@ class Signal:
         if self.ss == 0:
             for i in range(SAMPLE):
                 self.gen_sin(i + 1)
-                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
+                self.arrayV[i] = self.value # Offset of the DAC
         elif self.ss == 1:
             for i in range(SAMPLE):
                 self.gen_tri(i + 1)
-                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
+                self.arrayV[i] = self.value # Offset of the DAC
         elif self.ss == 2:
             for i in range(SAMPLE):
                 self.gen_saw(i + 1)
-                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
+                self.arrayV[i] = self.value # Offset of the DAC
         elif self.ss == 3:
             for i in range(SAMPLE):
                 self.gen_sqr(i + 1)
-                self.arrayV[i] = self.value + DAC_BIAS # Offset of the DAC
+                self.arrayV[i] = self.value # Offset of the DAC
         
 
     def get_value(self) -> int:
@@ -504,7 +503,8 @@ class Signal:
 # ----------------------------------------------------------------------------
 
 RESOLUTION = 255        # 8 bits
-DAC_RANGE = 9400        # 0 to 9.3V
+DAC_RANGE = 10120        # 0 to 9.3V
+DAC_BIAS = -60
 
 class DAC:
     """
@@ -540,7 +540,7 @@ class DAC:
         if not self.en:
             return
 
-        self.digit_v = (value + 5000)*RESOLUTION//DAC_RANGE
+        self.digit_v = (value + DAC_BIAS + 5000)*RESOLUTION//DAC_RANGE
         for i in range(8):
             self.gpioD[i].value(self.digit_v % 2)
             self.digit_v = self.digit_v // 2
@@ -601,13 +601,13 @@ class Led:
 # from gpio_led import Led
 
 # Initialize the objects
-my_signal = Signal(1, 1000, 500, True)
+my_signal = Signal(10, 1000, 500, True)
 my_signal.calculate()
 my_dac = DAC(10, True)
 my_led = Led(18, True)
 my_keypad = KeyPad(2, 6, 100000, True)
 my_button = Button(0, 100000, True)
-tb_print = Time_base(3000000, True)
+tb_print = Time_base(1000000, True)
 
 # Auxiliar variables
 in_state: int = 0x0 # 0: Nothing, 1: Amp, 2: Offset, 3: Freq
@@ -673,7 +673,6 @@ while True:
         my_signal.tb_gen.set_next() 
         my_dac.set_dac(my_signal.arrayV[my_signal.cnt])
         my_signal.cnt = (my_signal.cnt + 1) % SAMPLE
-        print("DAC: ", my_dac.digit_v, "Value: ", my_signal.value, "Cnt: ", my_signal.cnt)
 
     # Printing the signal
     if (tb_print.check()):
@@ -694,12 +693,10 @@ while True:
     if (my_keypad.nkey & (not my_keypad.dbnc)):
         # To accept a number, in_param_state must be different of 0
         if (checkNumer(my_keypad.dkey) and in_state):
-            print("Number \n")
             param = param*10 + my_keypad.dkey
             key_cnt += 1
         # To accept a letter except 0xD, in_param_state must be 0
         elif (checkLetter(my_keypad.dkey) and (not in_state)):
-            print("Letter \n")
             my_led.set()
             if (my_keypad.dkey == 0x0A):
                 in_state = 1
@@ -709,7 +706,6 @@ while True:
                 in_state = 3
         # To accept a 0x0D, in_param_state must be different of 0
         elif ((my_keypad.dkey == 0x0D) and in_state):
-            print("D \n")
             my_led.clear()
             if (in_state == 1):
                 if (checkAmp(param)):
@@ -730,8 +726,6 @@ while True:
             in_state = 0
             param = 0
             key_cnt = 0
-        print("State: ", in_state, "Key: ", my_keypad.dkey, "Param: ", param)
-        print("\n")
         # Aknowledge the key
         my_keypad.nkey = False
 

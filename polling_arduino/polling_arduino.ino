@@ -42,12 +42,12 @@ uint32_t param = 0; // This variable will store the value of any parameter that 
 uint8_t key_cont = 0;
 
 void setup (){
-  Serial1.begin(9600);
+  Serial.begin(9600);
 
   tb_init(&tb_print, 1000000, true);
   dac_init(&my_dac, 10, true);
   button_init(&my_button, 0, 100000, true);
-  signal_gen_init(&my_signal, 1, 1000, 500, true);
+  signal_gen_init(&my_signal, 10, 1000, 500, true);
   signal_calculate_next_value(&my_signal);
   kp_init(&my_keypad,2,6,100000,true);
   pinMode(my_led, OUTPUT);
@@ -63,12 +63,11 @@ void loop(){
       tb_enable(&my_keypad.tb_dbnce);
       kp_set_zflag(&my_keypad);
       my_keypad.KEY.dbnc = 1;
-      Serial1.println("Key pressed");
   }
   if(tb_check(&my_keypad.tb_seq)){
       tb_next(&my_keypad.tb_seq);
       kp_gen_seq(&my_keypad);
-      // Serial1.println(my_keypad.KEY.cols);
+      // Serial.println(my_keypad.KEY.cols);
   }
   if(tb_check(&my_keypad.tb_dbnce)){
       tb_next(&my_keypad.tb_dbnce);
@@ -79,7 +78,6 @@ void loop(){
               tb_enable(&my_keypad.tb_seq);
               tb_disable(&my_keypad.tb_dbnce);
               my_keypad.KEY.dbnc = 0;
-              Serial1.println("Key processed");
           }
           else {
             kp_clr_zflag(&my_keypad);
@@ -103,12 +101,11 @@ void loop(){
       tb_next(&my_button.tb_dbnce);
       if(button_is_2nd_zero(&my_button)){
           if(!button){
-              // Serial1.println("Button pressed\n");
+              // Serial.println("Button pressed\n");
               signal_set_state(&my_signal, (my_signal.STATE.ss + 1)%4);
               signal_calculate_next_value(&my_signal);
               tb_disable(&my_button.tb_dbnce);
               my_button.KEY.dbnc = 0;
-              Serial1.println("Button Processed");
           }
           else {
               button_clr_zflag(&my_button);
@@ -131,24 +128,24 @@ void loop(){
       tb_next(&tb_print);
       switch (my_signal.STATE.ss){
           case 0:
-              Serial1.print("Sinusoidal: ");
+              Serial.print("Sinusoidal: ");
               break;
           case 1:
-              Serial1.print("Triangular: ");
+              Serial.print("Triangular: ");
               break;
           case 2:
-              Serial1.print("Saw tooth: ");
+              Serial.print("Saw tooth: ");
               break;
           case 3:
-              Serial1.print("Square: ");
+              Serial.print("Square: ");
               break;
       }
-      Serial1.print("Amp: ");
-      Serial1.print(my_signal.amp);
-      Serial1.print("  Offset: ");
-      Serial1.print(my_signal.offset);
-      Serial1.print("  Freq: ");
-      Serial1.println(my_signal.freq);
+      Serial.print("Amp: ");
+      Serial.print(my_signal.amp);
+      Serial.print("  Offset: ");
+      Serial.print(my_signal.offset);
+      Serial.print("  Freq: ");
+      Serial.println(my_signal.freq);
   }
 
   // Process entering parameters
@@ -175,7 +172,7 @@ void loop(){
               in_param_state = 3;
               break;
           default:
-              Serial1.println("Invalid letter\n");
+              Serial.println("Invalid letter\n");
               break;
           }
       }
@@ -201,7 +198,7 @@ void loop(){
               }
               break;
           default:
-              Serial1.println("Invalid state\n");
+              Serial.println("Invalid state\n");
               break;
           }
           signal_calculate_next_value(&my_signal);

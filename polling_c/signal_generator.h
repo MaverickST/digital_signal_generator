@@ -14,8 +14,7 @@
 #define M_PI		3.14159265358979323846	/* pi */
 #define S_TO_US     1000000
 #define US_TO_S     0.000001
-#define SAMPLE      16 // Number of points in the signal.
-#define DAC_BIAS    500
+#define SAMPLE      70 // Number of points in the signal.
 
 #include <stdint.h>
 #include <math.h>

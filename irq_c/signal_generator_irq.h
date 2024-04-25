@@ -15,7 +15,7 @@
 #define S_TO_US    1000000     ///< 1000000us = 1s
 #define US_TO_S    0.000001    // 1us = 0.000001s
 #define RESOLUTION  255         // 8 bits
-#define SAMPLE  16      // Nyquist theorem
+#define SAMPLE  70      // Nyquist theorem
 
 #include <stdint.h>
 #include <math.h>

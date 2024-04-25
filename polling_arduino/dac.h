@@ -15,7 +15,8 @@
 #include "api/Compat.h"
 
 #define RESOLUTION  255         // 8 bits
-#define DAC_RANGE   10000        // 0 to 9.3V
+#define DAC_RANGE   10120        // 0 to 9.3V
+#define DAC_BIAS    -60         // DAC bias
 
 // typedef unsigned short uint16_t;
 
@@ -88,7 +89,7 @@ void dac_output(dac_t *dac)
 void dac_calculate(dac_t *dac, int16_t decim_v)
 {
     
-  dac->digit_v = (decim_v + 5000)*RESOLUTION/DAC_RANGE ; // normalize to 8 bits
+  dac->digit_v = (decim_v + (int16_t)DAC_BIAS + 5000)*RESOLUTION/DAC_RANGE ; // normalize to 8 bits
   dac->BITS.bit0 = (dac->digit_v & 0x01) >> 0;
   dac->BITS.bit1 = (dac->digit_v & 0x02) >> 1;
   dac->BITS.bit2 = (dac->digit_v & 0x04) >> 2;
