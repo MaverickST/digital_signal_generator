@@ -33,38 +33,53 @@ This project was developed using a Raspberry Pi Pico microcontroller. Three diff
 
 1. Connect the device to a power source.
 2. Select the desired waveform by pressing the push button.
-3. Enter the parameters (amplitude, DC level, frequency) using the keypad.
+3. Enter the parameters using the keypad: A (Amplitud), B (Offset), C (Frequency).
 4. Press the 'D' key to finalize each parameter entry.
 5. Monitor the generated signal and its characteristics via the serial or USB interface.
-
-## Testing
-
-For testing purposes, the following parameters were used:
-- Amplitude: 2000mV
-- DC Level: 500mV
-- Frequency: 100Hz
 
 ## Verification
 
 The generated signal and its characteristics should be verifiable using a measuring instrument such as a multimeter or oscilloscope.
 
 ## Testing
-Polling Arduino
-Samples: 16      Max freq: 2kHz
-Samples: 70      Max freq: 450Hz
+This will consist of finding out the maximum frequency that each program strategy can generate.
+When the signal is generated, then a oscilloscope is used to measure the frequency of the signal.
 
-Polling C
-Samples: 16      Max freq: 15kHz
-Samples: 70      Max freq: 3.3kHz
+For testing purposes, the following parameters were used:
+- Amplitude: 2000mV
+- DC Level: 500mV
 
-Polling + IRQ in C
-Samples: 16      Max freq: 12.5kHz
-Samples: 70      Max freq: 2.6kHz
+The next table sumarizes the testing data.
 
-IRQ in C
-Samples: 16      Max freq: 17kHz
-Samples: 70      Max freq: 3.7kHz
+<table>
+  <thead>
+    <tr>
+      <th scope="col">SAMPLES </th>
+      <th scope="col">MicroPython</th>
+      <th scope="col">Arduino</th>
+	  <th scope="col">Polling in C</th>
+	  <th scope="col">IRQ in C</th>
+	  <th scope="col">Polling + IRQ in C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">16</th>
+      <td>94Hz</td>
+      <td>2kHz</td>
+	  <td>15kHz</td>
+	  <td>17kHz</td>
+	  <td>12.5kHz</td>
+    </tr>
+    <tr>
+	<th scope="row">70</th>
+      <td>21Hz</td>
+	  <td>450Hz</td>
+	  <td>3.3kHz</td>
+	  <td>3.7kHz</td>
+	  <td>2.4kHz</td>
+    </tr>
+  </tbody>
+</table>
 
-Polling MicroPyhon
-Samples: 16      Max freq: 94Hz
-Samples: 70      Max freq: 21Hz
+> **_NOTE:_** SAMPLES = number of point per signal period
