@@ -41,8 +41,8 @@ This project was developed using a Raspberry Pi Pico microcontroller. Three diff
 
 The generated signal and its characteristics should be verifiable using a measuring instrument such as a multimeter or oscilloscope.
 
-## Testing
-This will consist of finding out the maximum frequency that each program strategy can generate.
+## Maximum frequencies
+This will consist of finding out the maximum frequency that each programming flow can generate.
 When the signal is generated, then a oscilloscope is used to measure the frequency of the signal.
 
 For testing purposes, the following parameters were used:
@@ -83,3 +83,120 @@ The next table sumarizes the testing data.
 </table>
 
 > **_NOTE:_** SAMPLES = number of point per signal period
+
+
+## Memory Usage
+
+Polling in C:
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Memory Region </th>
+      <th scope="col">Used Size</th>
+      <th scope="col">Region Size</th>
+	  <th scope="col">%age Used</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">FLASH:</th>
+      <td>286288 B</td>
+      <td>2 MB</td>
+	  <td>13.65%</td>
+    </tr>
+    <tr>
+	<th scope="row">RAM:</th>
+      <td>9692 B</td>
+	  <td>256 KB</td>
+	  <td>3.70%</td>
+    </tr>
+	<tr>
+	<th scope="row">SCRATCH_X:</th>
+      <td>0 GB</td>
+	  <td>256 KB</td>
+	  <td>0.00%</td>
+    </tr>
+	<tr>
+	<th scope="row">SCRATCH_Y:</th>
+      <td>0 GB</td>
+	  <td>4 KB</td>
+	  <td>0.00%</td>
+    </tr>
+  </tbody>
+</table>
+
+IRQ in C:
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Memory Region </th>
+      <th scope="col">Used Size</th>
+      <th scope="col">Region Size</th>
+	  <th scope="col">%age Used</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">FLASH:</th>
+      <td>40540 B</td>
+      <td> 2 MB</td>
+	  <td>1.93%</td>
+    </tr>
+    <tr>
+	<th scope="row">RAM:</th>
+      <td>6920 B </td>
+	  <td>256 KB</td>
+	  <td>2.64%</td>
+    </tr>
+	<tr>
+	<th scope="row">SCRATCH_X:</th>
+      <td>0 GB</td>
+	  <td>4 KB</td>
+	  <td>0.00%</td>
+    </tr>
+	<tr>
+	<th scope="row">SCRATCH_Y:</th>
+      <td>0 GB</td>
+	  <td>4 KB</td>
+	  <td>0.00%</td>
+    </tr>
+  </tbody>
+</table>
+
+Polling + IRQ in C:
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Memory Region </th>
+      <th scope="col">Used Size</th>
+      <th scope="col">Region Size</th>
+	  <th scope="col">%age Used</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">FLASH:</th>
+      <td>40788 B</td>
+      <td> 2 MB</td>
+	  <td>1.94%</td>
+    </tr>
+    <tr>
+	<th scope="row">RAM:</th>
+      <td>6924 B</td>
+	  <td>256 KB</td>
+	  <td>2.64%</td>
+    </tr>
+	<tr>
+	<th scope="row">SCRATCH_X:</th>
+      <td>0 GB</td>
+	  <td>4 KB</td>
+	  <td>0.00%</td>
+    </tr>
+	<tr>
+	<th scope="row">SCRATCH_Y:</th>
+      <td>0 GB</td>
+	  <td>4 KB</td>
+	  <td>0.00%</td>
+    </tr>
+  </tbody>
+</table>
