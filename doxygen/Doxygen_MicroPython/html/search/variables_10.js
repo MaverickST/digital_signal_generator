@@ -1,7 +1,0 @@
-var searchData=
-[
-  ['s_5fto_5fus_0',['S_TO_US',['../namespacepolling__micro_python.html#acb2ed62259de03988281f02de3f4f889',1,'polling_microPython.S_TO_US'],['../namespacesignal__generator.html#aa3706917307476fc89acd7f0accb0947',1,'signal_generator.S_TO_US']]],
-  ['sample_1',['SAMPLE',['../namespacepolling__micro_python.html#a20ce2e882100b4247c53ccb0cdf62ff9',1,'polling_microPython.SAMPLE'],['../namespacesignal__generator.html#a30a30e98bfc91800a912a3773f808247',1,'signal_generator.SAMPLE']]],
-  ['seq_2',['seq',['../classkeypad__polling_1_1_key_pad.html#a713ec0e1aeadabc14f64035855350365',1,'keypad_polling.KeyPad.seq'],['../classkeypad__polling_1_1_key_pad.html#ac9a1048b9808be6f769c92acfcb86abb',1,'keypad_polling.KeyPad.seq'],['../classpolling__micro_python_1_1_key_pad.html#a1416748dff2aff40efe9a4d85d4bf4e2',1,'polling_microPython.KeyPad.seq'],['../classpolling__micro_python_1_1_key_pad.html#a83726d4b1dae64a61df494930377ba5c',1,'polling_microPython.KeyPad.seq']]],
-  ['ss_3',['ss',['../classpolling__micro_python_1_1_signal.html#a7e5d8ee80b1b5033dda8023aff0f64d4',1,'polling_microPython.Signal.ss'],['../classpolling__micro_python_1_1_signal.html#ab114eeb83be0384223a2bf037f2b8ddd',1,'polling_microPython.Signal.ss'],['../classsignal__generator_1_1_signal.html#a428b27bea6b894165e1793a72fc4b598',1,'signal_generator.Signal.ss'],['../classsignal__generator_1_1_signal.html#af59a87693af6a22f1e1daa2d8a1e2e28',1,'signal_generator.Signal.ss']]]
-];
