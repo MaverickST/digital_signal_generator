@@ -113,7 +113,7 @@ Polling in C:
 	<tr>
 	<th scope="row">SCRATCH_X:</th>
       <td>0 GB</td>
-	  <td>256 KB</td>
+	  <td>4 KB</td>
 	  <td>0.00%</td>
     </tr>
 	<tr>
