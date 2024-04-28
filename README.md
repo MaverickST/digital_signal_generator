@@ -46,7 +46,7 @@ This will consist of finding out the maximum frequency that each programming flo
 When the signal is generated, then a oscilloscope is used to measure the frequency of the signal.
 
 For testing purposes, the following parameters were used:
-- Amplitude: 2000mV
+- Amplitude: 1000mV
 - DC Level: 500mV
 
 The next table sumarizes the testing data.
@@ -87,7 +87,13 @@ The next table sumarizes the testing data.
 
 ## Memory Usage
 
-Polling in C:
+To obtain the memory usage of the C codes were used the next lines in the CMakeLists.txt file:
+```cmake
+SET(GCC_EXE_LINKER_FLAGS    "-Wl,--print-memory-usage")
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_EXE_LINKER_FLAGS}")
+```
+
+### Polling in C
 <table>
   <thead>
     <tr>
@@ -125,7 +131,7 @@ Polling in C:
   </tbody>
 </table>
 
-IRQ in C:
+### IRQ in C
 <table>
   <thead>
     <tr>
@@ -163,7 +169,7 @@ IRQ in C:
   </tbody>
 </table>
 
-Polling + IRQ in C:
+### Polling + IRQ in C
 <table>
   <thead>
     <tr>
@@ -200,3 +206,22 @@ Polling + IRQ in C:
     </tr>
   </tbody>
 </table>
+
+### Polling in MicroPython
+
+To get the memory usage information with microPython it is needed to use the next code lines: 
+```python
+import micropython
+micropython.mem_info()
+```
+
+>GC: total: 191872, used: 22096, free: 169776
+
+Which means a use of 11.5% of the total memory.
+
+### Polling in Arduino
+Just uploading the sketch from Arduino IDE to Raspberry Pi Pico, we get the next information:
+
+```
+Global variables use 43172 bytes (15%) of dynamic memory, leaving 227164 bytes for local variables. Maximum is 270336 bytes.
+```
