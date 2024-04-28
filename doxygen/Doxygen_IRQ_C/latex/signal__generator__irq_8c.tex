@@ -1,0 +1,81 @@
+\doxysection{C\+:/\+Users/johan/\+One\+Drive -\/ Universidad de Antioquia/\+Semestre VII/\+Elec. Digital III/\+Laboratorio/\+Practica\+\_\+3/digital\+\_\+signal\+\_\+generator/irq\+\_\+c/signal\+\_\+generator\+\_\+irq.c File Reference}
+\hypertarget{signal__generator__irq_8c}{}\label{signal__generator__irq_8c}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/signal\_generator\_irq.c@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/signal\_generator\_irq.c}}
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}signal\+\_\+generator\+\_\+irq.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{signal__generator__irq_8c_ad055ea8f20af6eaafd70dafccff98f3a}{signal\+\_\+gen\+\_\+init}} (\mbox{\hyperlink{structsignal__t}{signal\+\_\+t}} \texorpdfstring{$\ast$}{*}signal, uint32\+\_\+t freq, uint16\+\_\+t amp, uint16\+\_\+t offset, bool en)
+\begin{DoxyCompactList}\small\item\em Initialize the signal generator. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{signal__generator__irq_8c_a98cf69bd455f4cec4133bdd3957378ca}{signal\+\_\+calculate}} (\mbox{\hyperlink{structsignal__t}{signal\+\_\+t}} \texorpdfstring{$\ast$}{*}signal)
+\begin{DoxyCompactList}\small\item\em This function calculates the values of the signal and stores them in the arrayV. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+MST\+\_\+\+CDA 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+07/04/2024 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Unlicensed 
+\end{DoxyCopyright}
+
+
+Definition in file \mbox{\hyperlink{signal__generator__irq_8c_source}{signal\+\_\+generator\+\_\+irq.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{signal__generator__irq_8c_a98cf69bd455f4cec4133bdd3957378ca}\label{signal__generator__irq_8c_a98cf69bd455f4cec4133bdd3957378ca} 
+\index{signal\_generator\_irq.c@{signal\_generator\_irq.c}!signal\_calculate@{signal\_calculate}}
+\index{signal\_calculate@{signal\_calculate}!signal\_generator\_irq.c@{signal\_generator\_irq.c}}
+\doxysubsubsection{\texorpdfstring{signal\_calculate()}{signal\_calculate()}}
+{\footnotesize\ttfamily void signal\+\_\+calculate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structsignal__t}{signal\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{signal }\end{DoxyParamCaption})}
+
+
+
+This function calculates the values of the signal and stores them in the arrayV. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em signal} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{signal__generator__irq_8c_source_l00029}{29}} of file \mbox{\hyperlink{signal__generator__irq_8c_source}{signal\+\_\+generator\+\_\+irq.\+c}}.
+
+\Hypertarget{signal__generator__irq_8c_ad055ea8f20af6eaafd70dafccff98f3a}\label{signal__generator__irq_8c_ad055ea8f20af6eaafd70dafccff98f3a} 
+\index{signal\_generator\_irq.c@{signal\_generator\_irq.c}!signal\_gen\_init@{signal\_gen\_init}}
+\index{signal\_gen\_init@{signal\_gen\_init}!signal\_generator\_irq.c@{signal\_generator\_irq.c}}
+\doxysubsubsection{\texorpdfstring{signal\_gen\_init()}{signal\_gen\_init()}}
+{\footnotesize\ttfamily void signal\+\_\+gen\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structsignal__t}{signal\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{signal,  }\item[{uint32\+\_\+t}]{freq,  }\item[{uint16\+\_\+t}]{amp,  }\item[{uint16\+\_\+t}]{offset,  }\item[{bool}]{en }\end{DoxyParamCaption})}
+
+
+
+Initialize the signal generator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em signal} & \\
+\hline
+{\em freq} & in Hz \\
+\hline
+{\em amp} & in mV \\
+\hline
+{\em offset} & in mV \\
+\hline
+{\em en} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{signal__generator__irq_8c_source_l00017}{17}} of file \mbox{\hyperlink{signal__generator__irq_8c_source}{signal\+\_\+generator\+\_\+irq.\+c}}.
+

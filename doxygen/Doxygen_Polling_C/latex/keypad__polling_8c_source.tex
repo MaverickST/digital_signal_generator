@@ -1,0 +1,111 @@
+\doxysection{keypad\+\_\+polling.\+c}
+\label{keypad__polling_8c_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/keypad\_polling.c@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/keypad\_polling.c}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}keypad\_polling.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}time\_base.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{void}\ kp\_init(key\_pad\_t\ *kpad,\ uint8\_t\ rlsb,\ uint8\_t\ clsb,\ uint64\_t\ dbnc\_time,\ \textcolor{keywordtype}{bool}\ en)\{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//\ Initialize\ history\ buffer}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i=0;\ i<10;i++)\{}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ kpad-\/>history[i]\ =\ 0xFF;}
+\DoxyCodeLine{00021\ \ \ \ \ \}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//\ Verify\ that\ the\ keypad's\ rows\ and\ colums\ gpios\ do\ not\ overlap}}
+\DoxyCodeLine{00023\ \ \ \ \ assert(abs(rlsb-\/clsb)>=4);}
+\DoxyCodeLine{00024\ \ \ \ \ kpad-\/>KEY.rlsb\ =\ rlsb;}
+\DoxyCodeLine{00025\ \ \ \ \ kpad-\/>KEY.clsb\ =\ clsb;}
+\DoxyCodeLine{00026\ \ \ \ \ kpad-\/>KEY.ckey\ =\ 0x00;}
+\DoxyCodeLine{00027\ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x1F;}
+\DoxyCodeLine{00028\ \ \ \ \ kpad-\/>KEY.cnt\ =\ 0x0;}
+\DoxyCodeLine{00029\ \ \ \ \ kpad-\/>KEY.seq\ =\ 0x8;}
+\DoxyCodeLine{00030\ \ \ \ \ kpad-\/>KEY.nkey\ =\ 0;}
+\DoxyCodeLine{00031\ \ \ \ \ kpad-\/>KEY.dbnc\ =\ 0;}
+\DoxyCodeLine{00032\ \ \ \ \ kpad-\/>KEY.dzero\ =\ 0;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordflow}{if}(en)}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ kpad-\/>KEY.en\ =\ 1;}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{comment}{//\ Initialize\ keypad\ time\ bases}}
+\DoxyCodeLine{00036\ \ \ \ \ tb\_init(\&kpad-\/>tb\_seq,2000,en);}
+\DoxyCodeLine{00037\ \ \ \ \ tb\_init(\&kpad-\/>tb\_dbnce,100000,\textcolor{keyword}{false});}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{comment}{//\ Initialize\ keypad\ gpios}}
+\DoxyCodeLine{00040\ \ \ \ \ gpio\_init\_mask(0x0000000F\ <<\ kpad-\/>KEY.rlsb);\ \textcolor{comment}{//\ gpios\ for\ key\ rows\ 2,3,4,5}}
+\DoxyCodeLine{00041\ \ \ \ \ gpio\_init\_mask(0x0000000F\ <<\ kpad-\/>KEY.clsb);\ \textcolor{comment}{//\ gpios\ for\ key\ cols\ 6,7,8,9}}
+\DoxyCodeLine{00042\ \ \ \ \ gpio\_set\_dir\_masked(0x0000000F\ <<\ kpad-\/>KEY.rlsb,0x0000000F\ <<\ kpad-\/>KEY.rlsb);\ \textcolor{comment}{//\ rows\ as\ outputs\ and\ cols\ as\ inputs}}
+\DoxyCodeLine{00043\ \ \ \ \ gpio\_set\_dir\_masked(0x0000000F\ <<\ kpad-\/>KEY.clsb,0x00000000);\ \textcolor{comment}{//\ rows\ as\ outputs\ and\ cols\ as\ inputs}}
+\DoxyCodeLine{00044\ \ \ \ \ gpio\_pull\_down(kpad-\/>KEY.clsb);}
+\DoxyCodeLine{00045\ \ \ \ \ gpio\_pull\_down(kpad-\/>KEY.clsb\ +\ 1);}
+\DoxyCodeLine{00046\ \ \ \ \ gpio\_pull\_down(kpad-\/>KEY.clsb\ +\ 2);}
+\DoxyCodeLine{00047\ \ \ \ \ gpio\_pull\_down(kpad-\/>KEY.clsb\ +\ 3);}
+\DoxyCodeLine{00048\ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{keywordtype}{void}\ kp\_decode(key\_pad\_t\ *kpad)\{}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordflow}{switch}\ (kpad-\/>KEY.ckey)}
+\DoxyCodeLine{00052\ \ \ \ \ \{}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x88:}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x01;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x48:}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x02;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x28:}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x03;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x18:}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x0A;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x84:}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x04;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x44:}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x05;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x24:}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x06;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x14:}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x0B;}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x82:}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x07;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x42:}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x08;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x22:}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x09;}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x12:}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x0C;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x81:}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x0E;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x41:}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x00;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x21:}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x0F;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x11:}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ kpad-\/>KEY.dkey\ =\ 0x0D;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ \ \ \ \ }
+\DoxyCodeLine{00103\ \}}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{keywordtype}{void}\ kp\_capture(key\_pad\_t\ *kpad,\ uint32\_t\ cols)\{}
+\DoxyCodeLine{00106\ \ \ \ \ kpad-\/>KEY.ckey\ =\ (cols\ >>\ 2)\ |\ kpad-\/>KEY.seq;}
+\DoxyCodeLine{00107\ \ \ \ \ kp\_decode(kpad);}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i=0;i<9;i++)\{}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ kpad-\/>history[9-\/i]\ =\ kpad-\/>history[9-\/i-\/1];}
+\DoxyCodeLine{00110\ \ \ \ \ \}}
+\DoxyCodeLine{00111\ \ \ \ \ kpad-\/>history[0]\ =\ kpad-\/>KEY.dkey;}
+\DoxyCodeLine{00112\ \ \ \ \ kpad-\/>KEY.nkey\ =\ 1;}
+\DoxyCodeLine{00113\ \}}
+
+\end{DoxyCode}

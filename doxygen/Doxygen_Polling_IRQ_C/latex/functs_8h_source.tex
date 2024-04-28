@@ -1,0 +1,79 @@
+\doxysection{functs.\+h}
+\hypertarget{functs_8h_source}{}\label{functs_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_irq\_c/functs.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_irq\_c/functs.h}}
+\mbox{\hyperlink{functs_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00011}00011\ \textcolor{preprocessor}{\#ifndef\ \_\_FUNTCS\_}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00012}00012\ \textcolor{preprocessor}{\#define\ \_\_FUNTCS\_}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00018}\mbox{\hyperlink{unionflags__t}{00018}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{union}\{}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00019}\mbox{\hyperlink{unionflags__t_a59c323e3c1dee620e647291c51283d03}{00019}}\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{unionflags__t_a59c323e3c1dee620e647291c51283d03}{W}};}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00020}00020\ \ \ \ \ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00021}\mbox{\hyperlink{unionflags__t_acb9baebbd2d3e8db172e473fd6d09a7b}{00021}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{unionflags__t_acb9baebbd2d3e8db172e473fd6d09a7b}{keyFlag}}\ :1;\ \textcolor{comment}{//keypad\ interruption\ pending}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00022}\mbox{\hyperlink{unionflags__t_a27b76287f9c68d66449ecaec360fd6db}{00022}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{unionflags__t_a27b76287f9c68d66449ecaec360fd6db}{keyDbnc}}\ :1;\ \textcolor{comment}{//keypad\ debouncer\ interruption\ pending}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00023}\mbox{\hyperlink{unionflags__t_a95114ce67739e06d781c9dc06c2dcd23}{00023}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{unionflags__t_a95114ce67739e06d781c9dc06c2dcd23}{buttonFlag}}\ \ :1;\ \textcolor{comment}{//button\ interruption\ pending}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00024}\mbox{\hyperlink{unionflags__t_a829b3c45acc045472d74a56e750cb646}{00024}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{unionflags__t_a829b3c45acc045472d74a56e750cb646}{buttonDbnc}}\ \ :1;\ \textcolor{comment}{//button\ debouncer\ interruption\ pending}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00025}\mbox{\hyperlink{unionflags__t_ac080ac12add1c6ad3b56cf74a7c502c1}{00025}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{unionflags__t_ac080ac12add1c6ad3b56cf74a7c502c1}{signalFlag}}\ \ :1;\ \textcolor{comment}{//signal\ interruption\ pending}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00026}\mbox{\hyperlink{unionflags__t_a0af97ccba3427a822cdf2af2d4dac387}{00026}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{unionflags__t_a0af97ccba3427a822cdf2af2d4dac387}{printFlag}}\ \ :1;\ \textcolor{comment}{//print\ interruption\ pending}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00027}\mbox{\hyperlink{unionflags__t_a8b4eebe79ded0459acec2f4950102ba3}{00027}}\ \ \ \ \ \ \ \ \ uint8\_t\ \ \ \ \ \ :2;}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00028}\mbox{\hyperlink{unionflags__t_a09fbbb27654611223dca7c30a170a208}{00028}}\ \ \ \ \ \}B;}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00029}00029\ \}\mbox{\hyperlink{unionflags__t}{flags\_t}};}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00031}00031\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00037}00037\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{functs_8h_a629036ec38541014989c9e7742abbd10}{initGlobalVariables}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00049}00049\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{functs_8h_a93e6c5d836271a733b566dc411ba242c}{initPWMasPIT}}(uint8\_t\ slice,\ uint16\_t\ milis,\ \textcolor{keywordtype}{bool}\ enable);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00055}00055\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{functs_8h_a9b43f682608095f12809025dbf580cbc}{pwmIRQ}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00061}00061\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{functs_8h_a33f848f09a4c7c0588e65f3f37f4a365}{timerSignalHandler}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00067}00067\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{functs_8h_a30f824461cc3d717467aae0a2fdbecd5}{timerPrintHandler}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00073}00073\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{functs_8h_a4e60091b55013a9208e1f53f8bc391c9}{program}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00081}00081\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{functs_8h_ae1ee541bb22588b6a71650c807efca90}{check}}();}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00083}00083\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00084}00084\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Callback\ functions\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00085}00085\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00093}00093\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{functs_8h_ac9f46f69dc14753f6829b24f0479dfe6}{gpioCallback}}(uint\ num,\ uint32\_t\ mask);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00101}00101\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ keypadCallback(uint\ num,\ uint32\_t\ mask);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00109}00109\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ buttonCallback(uint\ num,\ uint32\_t\ mask);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00117}00117\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ timerSignalCallback(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00126}00126\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ timerPrintCallback(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00128}00128\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00129}00129\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Check\ functions\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00130}00130\ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00132}00132\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkNumber(uint8\_t\ number)\{}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00133}00133\ \ \ \ \ \textcolor{keywordflow}{return}\ (number\ >=\ 0\ \&\&\ number\ <=\ 9);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00134}00134\ \}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00136}00136\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkLetter(uint8\_t\ letter)\{}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00137}00137\ \ \ \ \ \textcolor{keywordflow}{return}\ (letter\ >=\ 0x0A\ \&\&\ letter\ <=\ 0x0C);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00138}00138\ \}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00140}00140\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkFreq(uint32\_t\ freq)\{}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00141}00141\ \ \ \ \ \textcolor{keywordflow}{return}\ (freq\ >=\ 1\ \&\&\ freq\ <=\ 12000000);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00142}00142\ \}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00144}00144\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkAmp(uint32\_t\ amp)\{}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00145}00145\ \ \ \ \ \textcolor{keywordflow}{return}\ (amp\ >=\ 100\ \&\&\ amp\ <=\ 2500);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00146}00146\ \}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00148}00148\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkOffset(uint32\_t\ offset)\{}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00149}00149\ \ \ \ \ \textcolor{keywordflow}{return}\ (offset\ >=\ 50\ \&\&\ offset\ <=\ 1250);}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00150}00150\ \}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00152}00152\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ FUNTCS}}
+\DoxyCodeLine{\Hypertarget{functs_8h_source_l00153}00153\ }
+
+\end{DoxyCode}

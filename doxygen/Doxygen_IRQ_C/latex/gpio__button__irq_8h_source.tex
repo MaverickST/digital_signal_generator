@@ -1,0 +1,55 @@
+\doxysection{gpio\+\_\+button\+\_\+irq.\+h}
+\hypertarget{gpio__button__irq_8h_source}{}\label{gpio__button__irq_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/gpio\_button\_irq.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/gpio\_button\_irq.h}}
+\mbox{\hyperlink{gpio__button__irq_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00011}00011\ \textcolor{preprocessor}{\#ifndef\ \_\_GPIO\_BUTTON\_}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00012}00012\ \textcolor{preprocessor}{\#define\ \_\_GPIO\_BUTTON\_}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}hardware/timer.h"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00018}00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{functs_8h}{functs.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00026}\mbox{\hyperlink{structgpio__button__t}{00026}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00027}00027\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00028}\mbox{\hyperlink{structgpio__button__t_a851d06672ce2f294eeac407ef204cbb5}{00028}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structgpio__button__t_a851d06672ce2f294eeac407ef204cbb5}{gpio\_num}}\ \ \ \ :\ 6;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ GPIO\ gpio\_num\ number}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00029}\mbox{\hyperlink{structgpio__button__t_a9cb039d6835ff19e94b33797f32e5e38}{00029}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structgpio__button__t_a9cb039d6835ff19e94b33797f32e5e38}{dzero}}\ \ \ \ \ \ \ :\ 1;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flag\ for\ double\ zero}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00030}\mbox{\hyperlink{structgpio__button__t_a2b8766d184b7e87a49d64a5893f6267d}{00030}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structgpio__button__t_a2b8766d184b7e87a49d64a5893f6267d}{nkey}}\ \ \ \ \ \ \ \ :\ 1;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flag\ that\ indicates\ that\ a\ key\ was\ pressed}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00031}\mbox{\hyperlink{structgpio__button__t_afca375850a2ea82cc362237ad4ddfc46}{00031}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structgpio__button__t_afca375850a2ea82cc362237ad4ddfc46}{dbnc}}\ \ \ \ \ \ \ \ :\ 1;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Flag\ that\ indicates\ that\ debouncer\ is\ active}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00032}\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{00032}}\ \ \ \ \ \}KEY;}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00033}00033\ \}\mbox{\hyperlink{structgpio__button__t}{gpio\_button\_t}};}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00041}00041\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ button\_init(\mbox{\hyperlink{structgpio__button__t}{gpio\_button\_t}}\ *button,\ uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00042}00042\ \ \ \ \ button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a9cb039d6835ff19e94b33797f32e5e38}{dzero}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00043}00043\ \ \ \ \ button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a2b8766d184b7e87a49d64a5893f6267d}{nkey}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00044}00044\ \ \ \ \ button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_afca375850a2ea82cc362237ad4ddfc46}{dbnc}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00045}00045\ \ \ \ \ button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a851d06672ce2f294eeac407ef204cbb5}{gpio\_num}}\ =\ gpio\_num;}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00047}00047\ \ \ \ \ gpio\_init(button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a851d06672ce2f294eeac407ef204cbb5}{gpio\_num}});}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00048}00048\ \ \ \ \ gpio\_set\_dir(button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a851d06672ce2f294eeac407ef204cbb5}{gpio\_num}},\ GPIO\_IN);}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00049}00049\ \ \ \ \ gpio\_pull\_down(button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a851d06672ce2f294eeac407ef204cbb5}{gpio\_num}});}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00051}00051\ \ \ \ \ gpio\_set\_irq\_enabled\_with\_callback(button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a851d06672ce2f294eeac407ef204cbb5}{gpio\_num}},\ GPIO\_IRQ\_EDGE\_RISE,\ \textcolor{keyword}{true},\ \mbox{\hyperlink{functs_8c_ac9f46f69dc14753f6829b24f0479dfe6}{gpioCallback}});}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00052}00052\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00060}00060\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ button\_set\_irq\_enabled(\mbox{\hyperlink{structgpio__button__t}{gpio\_button\_t}}\ *button,\ \textcolor{keywordtype}{bool}\ enable)\{}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00061}00061\ \ \ \ \ gpio\_set\_irq\_enabled(button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a851d06672ce2f294eeac407ef204cbb5}{gpio\_num}},\ GPIO\_IRQ\_EDGE\_RISE,\ enable);}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00062}00062\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00068}00068\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ button\_set\_zflag(\mbox{\hyperlink{structgpio__button__t}{gpio\_button\_t}}\ *button)\{}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00069}00069\ \ \ \ \ button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a9cb039d6835ff19e94b33797f32e5e38}{dzero}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00070}00070\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00075}00075\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ button\_clr\_zflag(\mbox{\hyperlink{structgpio__button__t}{gpio\_button\_t}}\ *button)\{}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00076}00076\ \ \ \ \ button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a9cb039d6835ff19e94b33797f32e5e38}{dzero}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00077}00077\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00083}00083\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ button\_is\_2nd\_zero(\mbox{\hyperlink{structgpio__button__t}{gpio\_button\_t}}\ *button)\{}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{return}\ button-\/>\mbox{\hyperlink{structgpio__button__t_a1f100ab2934b5e261174e9709b227b09}{KEY}}.\mbox{\hyperlink{structgpio__button__t_a9cb039d6835ff19e94b33797f32e5e38}{dzero}};}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00085}00085\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{gpio__button__irq_8h_source_l00088}00088\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

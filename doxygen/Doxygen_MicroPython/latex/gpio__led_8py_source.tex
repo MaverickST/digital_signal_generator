@@ -1,0 +1,56 @@
+\doxysection{gpio\+\_\+led.\+py}
+\hypertarget{gpio__led_8py_source}{}\label{gpio__led_8py_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_microPython/gpio\_led.py@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_microPython/gpio\_led.py}}
+\mbox{\hyperlink{gpio__led_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00001}\mbox{\hyperlink{namespacegpio__led}{00001}}\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00002}00002\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}file\`{}\`{}:\ gpio\_led.py}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00003}00003\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Author\`{}\`{}:\ \ MST\_CDA}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00004}00004\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Version\`{}\`{}:\ \ 1.0}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00005}00005\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Date\`{}\`{}:\ \ 2024-\/04-\/14}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00006}00006\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Description\`{}\`{}:\ This\ module\ define\ a\ class\ to\ process\ a\ led.}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00007}00007\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00009}00009\ \textcolor{keyword}{from}\ machine\ \textcolor{keyword}{import}\ Pin}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00011}\mbox{\hyperlink{classgpio__led_1_1_led}{00011}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgpio__led_1_1_led}{Led}}:}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00012}00012\ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00013}00013\ \textcolor{stringliteral}{\ \ \ \ Class\ to\ process\ a\ led.}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00014}00014\ \textcolor{stringliteral}{\ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00015}\mbox{\hyperlink{classgpio__led_1_1_led_a809eadf960d01b47b1a67d8f6e06816c}{00015}}\ \ \ \ \ gpioPin:\ Pin\ \ \ \ \ \ \ \textcolor{comment}{\#\ The\ gpio\ for\ the\ led}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00016}\mbox{\hyperlink{classgpio__led_1_1_led_ac9f3b860ff1ef5c788a3b6badff402d4}{00016}}\ \ \ \ \ on:\ bool\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Its\ principal\ aim\ is\ to\ make\ a\ toggle}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00018}\mbox{\hyperlink{classgpio__led_1_1_led_a4c6f5e3fa9aebec0a4690fc122e23029}{00018}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classgpio__led_1_1_led_a4c6f5e3fa9aebec0a4690fc122e23029}{\_\_init\_\_}}(self,\ gpio:\ int,\ on:\ bool):}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00019}00019\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00020}00020\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Constructor\ for\ Led.}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00021}00021\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00022}00022\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Parameters:}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00023}00023\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}gpio\`{}\`{}\ The\ gpio\ number\ for\ the\ led.}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00024}00024\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}state\`{}\`{}\ True\ to\ turn\ on\ the\ led,\ False\ to\ turn\ off\ the\ led.}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00025}00025\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00026}00026\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Initialize\ the\ led\ variables}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00027}\mbox{\hyperlink{classgpio__led_1_1_led_a027313fb214024419404ca599f0eb63b}{00027}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_ac9f3b860ff1ef5c788a3b6badff402d4}{on}}\mbox{\hyperlink{classgpio__led_1_1_led_a027313fb214024419404ca599f0eb63b}{on}}\ =\ on}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00028}\mbox{\hyperlink{classgpio__led_1_1_led_a0ba40cb3d96d812a1037807f587c33b6}{00028}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_a809eadf960d01b47b1a67d8f6e06816c}{gpioPin}}\mbox{\hyperlink{classgpio__led_1_1_led_a0ba40cb3d96d812a1037807f587c33b6}{gpioPin}}\ =\ Pin(gpio,\ Pin.OUT)}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00029}00029\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_a809eadf960d01b47b1a67d8f6e06816c}{gpioPin}}\mbox{\hyperlink{classgpio__led_1_1_led_a0ba40cb3d96d812a1037807f587c33b6}{gpioPin}}.value(self.\mbox{\hyperlink{classgpio__led_1_1_led_ac9f3b860ff1ef5c788a3b6badff402d4}{on}}\mbox{\hyperlink{classgpio__led_1_1_led_a027313fb214024419404ca599f0eb63b}{on}})}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00031}\mbox{\hyperlink{classgpio__led_1_1_led_acc4ed0494054df4ed3ff0fbfe826965f}{00031}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classgpio__led_1_1_led_acc4ed0494054df4ed3ff0fbfe826965f}{set}}(self):}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00032}00032\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00033}00033\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Turn\ on\ the\ led.}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00034}00034\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00035}00035\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_a809eadf960d01b47b1a67d8f6e06816c}{gpioPin}}\mbox{\hyperlink{classgpio__led_1_1_led_a0ba40cb3d96d812a1037807f587c33b6}{gpioPin}}.high()}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00036}00036\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_ac9f3b860ff1ef5c788a3b6badff402d4}{on}}\mbox{\hyperlink{classgpio__led_1_1_led_a027313fb214024419404ca599f0eb63b}{on}}\ =\ \textcolor{keyword}{True}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00038}\mbox{\hyperlink{classgpio__led_1_1_led_a9e10e7bc7d68dbd3a8415b69d5b58ec9}{00038}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classgpio__led_1_1_led_a9e10e7bc7d68dbd3a8415b69d5b58ec9}{clear}}(self):}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00039}00039\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00040}00040\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Turn\ off\ the\ led.}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00041}00041\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00042}00042\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_a809eadf960d01b47b1a67d8f6e06816c}{gpioPin}}\mbox{\hyperlink{classgpio__led_1_1_led_a0ba40cb3d96d812a1037807f587c33b6}{gpioPin}}.low()}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00043}00043\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_ac9f3b860ff1ef5c788a3b6badff402d4}{on}}\mbox{\hyperlink{classgpio__led_1_1_led_a027313fb214024419404ca599f0eb63b}{on}}\ =\ \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00045}\mbox{\hyperlink{classgpio__led_1_1_led_ad3128a8c5ec6b38ee800796562d91e38}{00045}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classgpio__led_1_1_led_ad3128a8c5ec6b38ee800796562d91e38}{toggle}}(self):}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00046}00046\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00047}00047\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Toggle\ the\ led.}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00048}00048\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00049}00049\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_a809eadf960d01b47b1a67d8f6e06816c}{gpioPin}}\mbox{\hyperlink{classgpio__led_1_1_led_a0ba40cb3d96d812a1037807f587c33b6}{gpioPin}}.value(\textcolor{keywordflow}{not}\ self.\mbox{\hyperlink{classgpio__led_1_1_led_ac9f3b860ff1ef5c788a3b6badff402d4}{on}}\mbox{\hyperlink{classgpio__led_1_1_led_a027313fb214024419404ca599f0eb63b}{on}})}
+\DoxyCodeLine{\Hypertarget{gpio__led_8py_source_l00050}00050\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__led_1_1_led_ac9f3b860ff1ef5c788a3b6badff402d4}{on}}\mbox{\hyperlink{classgpio__led_1_1_led_a027313fb214024419404ca599f0eb63b}{on}}\ =\ \textcolor{keywordflow}{not}\ self.\mbox{\hyperlink{classgpio__led_1_1_led_ac9f3b860ff1ef5c788a3b6badff402d4}{on}}\mbox{\hyperlink{classgpio__led_1_1_led_a027313fb214024419404ca599f0eb63b}{on}}}
+
+\end{DoxyCode}

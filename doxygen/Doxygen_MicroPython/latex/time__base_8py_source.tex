@@ -1,0 +1,79 @@
+\doxysection{time\+\_\+base.\+py}
+\hypertarget{time__base_8py_source}{}\label{time__base_8py_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_microPython/time\_base.py@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_microPython/time\_base.py}}
+\mbox{\hyperlink{time__base_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00001}\mbox{\hyperlink{namespacetime__base}{00001}}\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00002}00002\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}file\`{}\`{}:\ time\_base.py}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00003}00003\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Author\`{}\`{}:\ \ MST\_CDA}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00004}00004\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Version\`{}\`{}:\ \ 1.0}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00005}00005\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Date\`{}\`{}:\ \ 2024-\/04-\/14}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00006}00006\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Description\`{}\`{}:\ This\ module\ define\ a\ class\ for\ time\_base,\ wich\ is\ the\ key\ for\ the\ polling\ strategy.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00007}00007\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00009}00009\ \textcolor{keyword}{from}\ utime\ \textcolor{keyword}{import}\ ticks\_us}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00011}\mbox{\hyperlink{classtime__base_1_1_time__base}{00011}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classtime__base_1_1_time__base}{Time\_base}}:}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00012}00012\ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00013}00013\ \textcolor{stringliteral}{\ \ \ \ Class\ for\ time\_base.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00014}00014\ \textcolor{stringliteral}{\ \ \ \ It\ is\ the\ key\ for\ the\ polling\ strategy.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00015}00015\ \textcolor{stringliteral}{\ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00017}\mbox{\hyperlink{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978}{00017}}\ \ \ \ \ next:\ int}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00018}\mbox{\hyperlink{classtime__base_1_1_time__base_a78724859a6215ec08624f28f170f0363}{00018}}\ \ \ \ \ delta:\ int}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00019}\mbox{\hyperlink{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298}{00019}}\ \ \ \ \ en:\ bool}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00021}\mbox{\hyperlink{classtime__base_1_1_time__base_a859885cf025943af0f813c03f1cf270d}{00021}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classtime__base_1_1_time__base_a859885cf025943af0f813c03f1cf270d}{\_\_init\_\_}}(self,\ us:\ int,\ en:\ bool):}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00022}00022\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00023}00023\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Constructor\ for\ time\_base.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00024}00024\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00025}00025\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Parameters:}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00026}00026\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}us\`{}\`{}\ Time\ in\ microseconds.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00027}00027\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}en\`{}\`{}\ Enable\ the\ timer.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00028}00028\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00029}\mbox{\hyperlink{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052}{00029}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978}{next}}\mbox{\hyperlink{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052}{next}}\ =\ ticks\_us()\ +\ us}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00030}\mbox{\hyperlink{classtime__base_1_1_time__base_a02a8dfa3f3e77145547ceb4ff0a0d73e}{00030}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a78724859a6215ec08624f28f170f0363}{delta}}\mbox{\hyperlink{classtime__base_1_1_time__base_a02a8dfa3f3e77145547ceb4ff0a0d73e}{delta}}\ =\ us}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00031}\mbox{\hyperlink{classtime__base_1_1_time__base_a9a39ed354dbe818b99cce7c2ce791f99}{00031}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298}{en}}\mbox{\hyperlink{classtime__base_1_1_time__base_a9a39ed354dbe818b99cce7c2ce791f99}{en}}\ =\ en}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00032}00032\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00033}\mbox{\hyperlink{classtime__base_1_1_time__base_a5b37f75e3bdfd15ad329b68f3d0bd48f}{00033}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classtime__base_1_1_time__base_a5b37f75e3bdfd15ad329b68f3d0bd48f}{check}}(self):}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00034}00034\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00035}00035\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Check\ if\ the\ timer\ has\ expired.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00036}00036\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00037}00037\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Returns:}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00038}00038\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}bool\`{}\`{}\ True\ if\ the\ timer\ has\ expired.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00039}00039\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00040}00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (self.\mbox{\hyperlink{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298}{en}}\mbox{\hyperlink{classtime__base_1_1_time__base_a9a39ed354dbe818b99cce7c2ce791f99}{en}}\ \textcolor{keywordflow}{and}\ ticks\_us()\ >=\ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978}{next}}\mbox{\hyperlink{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052}{next}})}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00041}00041\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00042}\mbox{\hyperlink{classtime__base_1_1_time__base_ab8556f59609847a5b54e003c3616b882}{00042}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classtime__base_1_1_time__base_ab8556f59609847a5b54e003c3616b882}{update}}(self):}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00043}00043\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00044}00044\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Update\ the\ next\ time\ in\ microseconds.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00045}00045\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00046}00046\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978}{next}}\mbox{\hyperlink{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052}{next}}\ =\ ticks\_us()\ +\ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a78724859a6215ec08624f28f170f0363}{delta}}\mbox{\hyperlink{classtime__base_1_1_time__base_a02a8dfa3f3e77145547ceb4ff0a0d73e}{delta}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00048}\mbox{\hyperlink{classtime__base_1_1_time__base_ab5587d16a752cbd80f24282b331305ef}{00048}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classtime__base_1_1_time__base_ab5587d16a752cbd80f24282b331305ef}{set\_next}}(self):}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00049}00049\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00050}00050\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Set\ the\ next\ time\ in\ microseconds.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00051}00051\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00052}00052\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978}{next}}\mbox{\hyperlink{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052}{next}}\ =\ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978}{next}}\mbox{\hyperlink{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052}{next}}\ +\ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a78724859a6215ec08624f28f170f0363}{delta}}\mbox{\hyperlink{classtime__base_1_1_time__base_a02a8dfa3f3e77145547ceb4ff0a0d73e}{delta}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00054}\mbox{\hyperlink{classtime__base_1_1_time__base_aeb6935c17da64257c2d338dd817592ba}{00054}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classtime__base_1_1_time__base_aeb6935c17da64257c2d338dd817592ba}{enable}}(self):}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00055}00055\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00056}00056\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Enable\ the\ timer.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00057}00057\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00058}00058\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298}{en}}\mbox{\hyperlink{classtime__base_1_1_time__base_a9a39ed354dbe818b99cce7c2ce791f99}{en}}\ =\ \textcolor{keyword}{True}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00060}\mbox{\hyperlink{classtime__base_1_1_time__base_a1cc575380c966d7af12d3ce0383ff28c}{00060}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classtime__base_1_1_time__base_a1cc575380c966d7af12d3ce0383ff28c}{disable}}(self):}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00061}00061\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00062}00062\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Disable\ the\ timer.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00063}00063\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00064}00064\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298}{en}}\mbox{\hyperlink{classtime__base_1_1_time__base_a9a39ed354dbe818b99cce7c2ce791f99}{en}}\ =\ \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00066}\mbox{\hyperlink{classtime__base_1_1_time__base_a97e052108e76b3fdccc4cbd035fa4f97}{00066}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classtime__base_1_1_time__base_a97e052108e76b3fdccc4cbd035fa4f97}{set\_delta}}(self,\ us:\ int):}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00067}00067\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00068}00068\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Set\ the\ time\ in\ microseconds.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00069}00069\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00070}00070\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Parameters:}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00071}00071\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}us\`{}\`{}\ Time\ in\ microseconds.}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00072}00072\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{time__base_8py_source_l00073}00073\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classtime__base_1_1_time__base_a78724859a6215ec08624f28f170f0363}{delta}}\mbox{\hyperlink{classtime__base_1_1_time__base_a02a8dfa3f3e77145547ceb4ff0a0d73e}{delta}}\ =\ us}
+
+\end{DoxyCode}

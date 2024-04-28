@@ -37,3 +37,8 @@ pico_enable_stdio_usb(signal_irq 1)
 
 # create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(signal_irq)
+
+# Memory usage
+SET(GCC_EXE_LINKER_FLAGS    "-Wl,--print-memory-usage")
+
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_EXE_LINKER_FLAGS}")

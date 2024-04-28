@@ -1,0 +1,215 @@
+\doxysection{time\+\_\+base.\+Time\+\_\+base Class Reference}
+\hypertarget{classtime__base_1_1_time__base}{}\label{classtime__base_1_1_time__base}\index{time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_a859885cf025943af0f813c03f1cf270d}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, int us, bool \mbox{\hyperlink{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298}{en}})
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_a5b37f75e3bdfd15ad329b68f3d0bd48f}{check}} (self)
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_ab8556f59609847a5b54e003c3616b882}{update}} (self)
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_ab5587d16a752cbd80f24282b331305ef}{set\+\_\+next}} (self)
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_aeb6935c17da64257c2d338dd817592ba}{enable}} (self)
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_a1cc575380c966d7af12d3ce0383ff28c}{disable}} (self)
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_a97e052108e76b3fdccc4cbd035fa4f97}{set\+\_\+delta}} (self, int us)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052}{next}}
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_a02a8dfa3f3e77145547ceb4ff0a0d73e}{delta}}
+\item 
+\mbox{\hyperlink{classtime__base_1_1_time__base_a9a39ed354dbe818b99cce7c2ce791f99}{en}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978}{next}}
+\item 
+int \mbox{\hyperlink{classtime__base_1_1_time__base_a78724859a6215ec08624f28f170f0363}{delta}}
+\item 
+bool \mbox{\hyperlink{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298}{en}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Class for time_base.
+It is the key for the polling strategy.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00011}{11}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classtime__base_1_1_time__base_a859885cf025943af0f813c03f1cf270d}\label{classtime__base_1_1_time__base_a859885cf025943af0f813c03f1cf270d} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{int}]{us,  }\item[{bool}]{en }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Constructor for time_base.
+
+Parameters:
+- ``us`` Time in microseconds.
+- ``en`` Enable the timer.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00021}{21}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classtime__base_1_1_time__base_a5b37f75e3bdfd15ad329b68f3d0bd48f}\label{classtime__base_1_1_time__base_a5b37f75e3bdfd15ad329b68f3d0bd48f} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!check@{check}}
+\index{check@{check}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{check()}{check()}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+check (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Check if the timer has expired.
+
+Returns:
+- ``bool`` True if the timer has expired.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00033}{33}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_a1cc575380c966d7af12d3ce0383ff28c}\label{classtime__base_1_1_time__base_a1cc575380c966d7af12d3ce0383ff28c} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!disable@{disable}}
+\index{disable@{disable}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{disable()}{disable()}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+disable (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Disable the timer.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00060}{60}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_aeb6935c17da64257c2d338dd817592ba}\label{classtime__base_1_1_time__base_aeb6935c17da64257c2d338dd817592ba} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!enable@{enable}}
+\index{enable@{enable}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{enable()}{enable()}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+enable (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Enable the timer.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00054}{54}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_a97e052108e76b3fdccc4cbd035fa4f97}\label{classtime__base_1_1_time__base_a97e052108e76b3fdccc4cbd035fa4f97} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!set\_delta@{set\_delta}}
+\index{set\_delta@{set\_delta}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{set\_delta()}{set\_delta()}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+set\+\_\+delta (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{int}]{us }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Set the time in microseconds.
+
+Parameters:
+- ``us`` Time in microseconds.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00066}{66}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_ab5587d16a752cbd80f24282b331305ef}\label{classtime__base_1_1_time__base_ab5587d16a752cbd80f24282b331305ef} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!set\_next@{set\_next}}
+\index{set\_next@{set\_next}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{set\_next()}{set\_next()}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+set\+\_\+next (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Set the next time in microseconds.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00048}{48}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_ab8556f59609847a5b54e003c3616b882}\label{classtime__base_1_1_time__base_ab8556f59609847a5b54e003c3616b882} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!update@{update}}
+\index{update@{update}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+update (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Update the next time in microseconds.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00042}{42}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classtime__base_1_1_time__base_a78724859a6215ec08624f28f170f0363}\label{classtime__base_1_1_time__base_a78724859a6215ec08624f28f170f0363} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!delta@{delta}}
+\index{delta@{delta}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{delta}{delta}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int time\+\_\+base.\+Time\+\_\+base.\+delta\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00018}{18}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_a02a8dfa3f3e77145547ceb4ff0a0d73e}\label{classtime__base_1_1_time__base_a02a8dfa3f3e77145547ceb4ff0a0d73e} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!delta@{delta}}
+\index{delta@{delta}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{delta}{delta}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+delta}
+
+
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00030}{30}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298}\label{classtime__base_1_1_time__base_a371c578aeb7eaffbbbc4a7e37ea1a298} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!en@{en}}
+\index{en@{en}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{en}{en}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool time\+\_\+base.\+Time\+\_\+base.\+en\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00019}{19}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_a9a39ed354dbe818b99cce7c2ce791f99}\label{classtime__base_1_1_time__base_a9a39ed354dbe818b99cce7c2ce791f99} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!en@{en}}
+\index{en@{en}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{en}{en}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+en}
+
+
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00031}{31}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978}\label{classtime__base_1_1_time__base_a0e965fef0f7f8c6a06d3a0c4ddd2e978} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!next@{next}}
+\index{next@{next}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{next}{next}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int time\+\_\+base.\+Time\+\_\+base.\+next\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00017}{17}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+\Hypertarget{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052}\label{classtime__base_1_1_time__base_ae815decf8eaa11694d2cadf3a7eb0052} 
+\index{time\_base.Time\_base@{time\_base.Time\_base}!next@{next}}
+\index{next@{next}!time\_base.Time\_base@{time\_base.Time\_base}}
+\doxysubsubsection{\texorpdfstring{next}{next}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily time\+\_\+base.\+Time\+\_\+base.\+next}
+
+
+
+Definition at line \mbox{\hyperlink{time__base_8py_source_l00029}{29}} of file \mbox{\hyperlink{time__base_8py_source}{time\+\_\+base.\+py}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/johan/\+One\+Drive -\/ Universidad de Antioquia/\+Semestre VII/\+Elec. Digital III/\+Laboratorio/\+Practica\+\_\+3/digital\+\_\+signal\+\_\+generator/polling\+\_\+micro\+Python/\mbox{\hyperlink{time__base_8py}{time\+\_\+base.\+py}}\end{DoxyCompactItemize}

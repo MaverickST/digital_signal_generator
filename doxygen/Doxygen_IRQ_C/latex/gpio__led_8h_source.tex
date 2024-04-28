@@ -1,0 +1,32 @@
+\doxysection{gpio\+\_\+led.\+h}
+\hypertarget{gpio__led_8h_source}{}\label{gpio__led_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/gpio\_led.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/gpio\_led.h}}
+\mbox{\hyperlink{gpio__led_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00011}00011\ \textcolor{preprocessor}{\#ifndef\ \_\_GPIO\_LED\_H\_\_}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00012}00012\ \textcolor{preprocessor}{\#define\ \_\_GPIO\_LED\_H\_\_}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00017}00017\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ led\_init(uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00018}00018\ \ \ \ \ gpio\_init(\ gpio\_num);\ \textcolor{comment}{//\ gpios\ for\ key\ rows\ 2,3,4,5}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00019}00019\ \ \ \ \ gpio\_set\_dir(gpio\_num,\textcolor{keyword}{true});\ \textcolor{comment}{//\ rows\ as\ outputs\ and\ cols\ as\ inputs}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00020}00020\ \ \ \ \ gpio\_put(gpio\_num,\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00021}00021\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00023}00023\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ led\_on(uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00024}00024\ \ \ \ \ gpio\_put(gpio\_num,\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00025}00025\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00027}00027\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ led\_off(uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00028}00028\ \ \ \ \ gpio\_put(gpio\_num,\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00029}00029\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00031}00031\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ led\_toggle(uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00032}00032\ \ \ \ \ gpio\_xor\_mask(0x00000001\ <<\ gpio\_num);}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00033}00033\ \}}
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{gpio__led_8h_source_l00035}00035\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

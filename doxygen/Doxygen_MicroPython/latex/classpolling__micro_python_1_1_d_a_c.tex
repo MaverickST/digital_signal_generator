@@ -1,0 +1,153 @@
+\doxysection{polling\+\_\+micro\+Python.\+DAC Class Reference}
+\hypertarget{classpolling__micro_python_1_1_d_a_c}{}\label{classpolling__micro_python_1_1_d_a_c}\index{polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_afcc89ecbcc843b1ed51500490bebf8ff}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, int \mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_acf693e010cd332352693ea02086ff0ba}{lsb}}, bool \mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_aacd0a28953f4bc6ee98dc745e20415b8}{en}})
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_abd43ede2f873b8a6acf8f1e2e0e49b20}{set\+\_\+dac}} (self, int value)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_a89b27ab58afadf3bf1343c06e0c7d7fc}{en}}
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_ad8e7e9a5c4e360fc3d27e8d26be32ee8}{lsb}}
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_ae6b8e40d821d24b3041065cb11d6bda9}{digit\+\_\+v}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_aacd0a28953f4bc6ee98dc745e20415b8}{en}}
+\item 
+list \mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_ade5c9b8753089dd58fbc2301969838ff}{gpioD}} = \mbox{[}$\,$\mbox{]}
+\item 
+int \mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_acf693e010cd332352693ea02086ff0ba}{lsb}}
+\item 
+int \mbox{\hyperlink{classpolling__micro_python_1_1_d_a_c_ada5febd3e4fa8529915895e0479d7390}{digit\+\_\+v}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Class to impress the DAC (8bits).
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00509}{509}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_afcc89ecbcc843b1ed51500490bebf8ff}\label{classpolling__micro_python_1_1_d_a_c_afcc89ecbcc843b1ed51500490bebf8ff} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+DAC.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{int}]{lsb,  }\item[{bool}]{en }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Constructor for DAC.
+
+Parameters:
+- ``lsb`` The LSB position for the DAC, the eight gpios must be consecutives.
+- ``en`` Enable DAC processing.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00518}{518}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_abd43ede2f873b8a6acf8f1e2e0e49b20}\label{classpolling__micro_python_1_1_d_a_c_abd43ede2f873b8a6acf8f1e2e0e49b20} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!set\_dac@{set\_dac}}
+\index{set\_dac@{set\_dac}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{set\_dac()}{set\_dac()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+DAC.\+set\+\_\+dac (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{int}]{value }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Set the DAC value.
+
+Parameters:
+- ``value`` The value to be set in the DAC.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00533}{533}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_ada5febd3e4fa8529915895e0479d7390}\label{classpolling__micro_python_1_1_d_a_c_ada5febd3e4fa8529915895e0479d7390} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!digit\_v@{digit\_v}}
+\index{digit\_v@{digit\_v}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{digit\_v}{digit\_v}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int polling\+\_\+micro\+Python.\+DAC.\+digit\+\_\+v\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00516}{516}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_ae6b8e40d821d24b3041065cb11d6bda9}\label{classpolling__micro_python_1_1_d_a_c_ae6b8e40d821d24b3041065cb11d6bda9} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!digit\_v@{digit\_v}}
+\index{digit\_v@{digit\_v}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{digit\_v}{digit\_v}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+DAC.\+digit\+\_\+v}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00543}{543}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_aacd0a28953f4bc6ee98dc745e20415b8}\label{classpolling__micro_python_1_1_d_a_c_aacd0a28953f4bc6ee98dc745e20415b8} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!en@{en}}
+\index{en@{en}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{en}{en}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool polling\+\_\+micro\+Python.\+DAC.\+en\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00513}{513}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_a89b27ab58afadf3bf1343c06e0c7d7fc}\label{classpolling__micro_python_1_1_d_a_c_a89b27ab58afadf3bf1343c06e0c7d7fc} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!en@{en}}
+\index{en@{en}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{en}{en}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+DAC.\+en}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00527}{527}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_ade5c9b8753089dd58fbc2301969838ff}\label{classpolling__micro_python_1_1_d_a_c_ade5c9b8753089dd58fbc2301969838ff} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!gpioD@{gpioD}}
+\index{gpioD@{gpioD}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{gpioD}{gpioD}}
+{\footnotesize\ttfamily list polling\+\_\+micro\+Python.\+DAC.\+gpioD = \mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00514}{514}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_acf693e010cd332352693ea02086ff0ba}\label{classpolling__micro_python_1_1_d_a_c_acf693e010cd332352693ea02086ff0ba} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!lsb@{lsb}}
+\index{lsb@{lsb}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{lsb}{lsb}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int polling\+\_\+micro\+Python.\+DAC.\+lsb\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00515}{515}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_d_a_c_ad8e7e9a5c4e360fc3d27e8d26be32ee8}\label{classpolling__micro_python_1_1_d_a_c_ad8e7e9a5c4e360fc3d27e8d26be32ee8} 
+\index{polling\_microPython.DAC@{polling\_microPython.DAC}!lsb@{lsb}}
+\index{lsb@{lsb}!polling\_microPython.DAC@{polling\_microPython.DAC}}
+\doxysubsubsection{\texorpdfstring{lsb}{lsb}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+DAC.\+lsb}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00528}{528}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/johan/\+One\+Drive -\/ Universidad de Antioquia/\+Semestre VII/\+Elec. Digital III/\+Laboratorio/\+Practica\+\_\+3/digital\+\_\+signal\+\_\+generator/polling\+\_\+micro\+Python/\mbox{\hyperlink{polling__micro_python_8py}{polling\+\_\+micro\+Python.\+py}}\end{DoxyCompactItemize}

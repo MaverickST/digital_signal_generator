@@ -1,0 +1,215 @@
+\doxysection{polling\+\_\+micro\+Python.\+Time\+\_\+base Class Reference}
+\hypertarget{classpolling__micro_python_1_1_time__base}{}\label{classpolling__micro_python_1_1_time__base}\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_aaddbe6c2a913ebbb61b98f6032ea7674}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, int us, bool \mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a49726ca82c5852a09ca3202b30da8035}{en}})
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a22e55fd47bf902b871bf4644fd512827}{check}} (self)
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a83af150fd3d26d9610cfc54fd727488b}{update}} (self)
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a624706b1dd9f9509b9687d90f8acb739}{set\+\_\+next}} (self)
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_ab9ea2e2d384606b4dbdb913674e303ba}{enable}} (self)
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_ac3fa3dd7803e3f81d1717a11b3f505f9}{disable}} (self)
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a12c014f77f797142523fd27133a8b635}{set\+\_\+delta}} (self, int us)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a28a9d48cba4eed9344f148723e05f617}{next}}
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_ac1355aaa884cb283e97e6b24699f8654}{delta}}
+\item 
+\mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a02805e7ef8bfab6fe69e56d8b1ab34d9}{en}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a2c7cad53be69e45cd6b99b034f08e2b9}{next}}
+\item 
+int \mbox{\hyperlink{classpolling__micro_python_1_1_time__base_af6f59410c436e63e558ab36a63e4c86b}{delta}}
+\item 
+bool \mbox{\hyperlink{classpolling__micro_python_1_1_time__base_a49726ca82c5852a09ca3202b30da8035}{en}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Class for time_base.
+It is the key for the polling strategy.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00066}{66}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classpolling__micro_python_1_1_time__base_aaddbe6c2a913ebbb61b98f6032ea7674}\label{classpolling__micro_python_1_1_time__base_aaddbe6c2a913ebbb61b98f6032ea7674} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{int}]{us,  }\item[{bool}]{en }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Constructor for time_base.
+
+Parameters:
+- ``us`` Time in microseconds.
+- ``en`` Enable the timer.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00076}{76}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classpolling__micro_python_1_1_time__base_a22e55fd47bf902b871bf4644fd512827}\label{classpolling__micro_python_1_1_time__base_a22e55fd47bf902b871bf4644fd512827} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!check@{check}}
+\index{check@{check}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{check()}{check()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+check (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Check if the timer has expired.
+
+Returns:
+- ``bool`` True if the timer has expired.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00088}{88}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_ac3fa3dd7803e3f81d1717a11b3f505f9}\label{classpolling__micro_python_1_1_time__base_ac3fa3dd7803e3f81d1717a11b3f505f9} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!disable@{disable}}
+\index{disable@{disable}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{disable()}{disable()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+disable (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Disable the timer.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00115}{115}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_ab9ea2e2d384606b4dbdb913674e303ba}\label{classpolling__micro_python_1_1_time__base_ab9ea2e2d384606b4dbdb913674e303ba} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!enable@{enable}}
+\index{enable@{enable}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{enable()}{enable()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+enable (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Enable the timer.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00109}{109}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_a12c014f77f797142523fd27133a8b635}\label{classpolling__micro_python_1_1_time__base_a12c014f77f797142523fd27133a8b635} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!set\_delta@{set\_delta}}
+\index{set\_delta@{set\_delta}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{set\_delta()}{set\_delta()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+set\+\_\+delta (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{int}]{us }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Set the time in microseconds.
+
+Parameters:
+- ``us`` Time in microseconds.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00121}{121}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_a624706b1dd9f9509b9687d90f8acb739}\label{classpolling__micro_python_1_1_time__base_a624706b1dd9f9509b9687d90f8acb739} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!set\_next@{set\_next}}
+\index{set\_next@{set\_next}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{set\_next()}{set\_next()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+set\+\_\+next (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Set the next time in microseconds.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00103}{103}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_a83af150fd3d26d9610cfc54fd727488b}\label{classpolling__micro_python_1_1_time__base_a83af150fd3d26d9610cfc54fd727488b} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!update@{update}}
+\index{update@{update}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+update (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Update the next time in microseconds.
+\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00097}{97}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classpolling__micro_python_1_1_time__base_af6f59410c436e63e558ab36a63e4c86b}\label{classpolling__micro_python_1_1_time__base_af6f59410c436e63e558ab36a63e4c86b} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!delta@{delta}}
+\index{delta@{delta}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{delta}{delta}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int polling\+\_\+micro\+Python.\+Time\+\_\+base.\+delta\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00073}{73}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_ac1355aaa884cb283e97e6b24699f8654}\label{classpolling__micro_python_1_1_time__base_ac1355aaa884cb283e97e6b24699f8654} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!delta@{delta}}
+\index{delta@{delta}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{delta}{delta}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+delta}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00085}{85}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_a49726ca82c5852a09ca3202b30da8035}\label{classpolling__micro_python_1_1_time__base_a49726ca82c5852a09ca3202b30da8035} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!en@{en}}
+\index{en@{en}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{en}{en}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool polling\+\_\+micro\+Python.\+Time\+\_\+base.\+en\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00074}{74}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_a02805e7ef8bfab6fe69e56d8b1ab34d9}\label{classpolling__micro_python_1_1_time__base_a02805e7ef8bfab6fe69e56d8b1ab34d9} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!en@{en}}
+\index{en@{en}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{en}{en}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+en}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00086}{86}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_a2c7cad53be69e45cd6b99b034f08e2b9}\label{classpolling__micro_python_1_1_time__base_a2c7cad53be69e45cd6b99b034f08e2b9} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!next@{next}}
+\index{next@{next}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{next}{next}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily int polling\+\_\+micro\+Python.\+Time\+\_\+base.\+next\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00072}{72}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+\Hypertarget{classpolling__micro_python_1_1_time__base_a28a9d48cba4eed9344f148723e05f617}\label{classpolling__micro_python_1_1_time__base_a28a9d48cba4eed9344f148723e05f617} 
+\index{polling\_microPython.Time\_base@{polling\_microPython.Time\_base}!next@{next}}
+\index{next@{next}!polling\_microPython.Time\_base@{polling\_microPython.Time\_base}}
+\doxysubsubsection{\texorpdfstring{next}{next}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily polling\+\_\+micro\+Python.\+Time\+\_\+base.\+next}
+
+
+
+Definition at line \mbox{\hyperlink{polling__micro_python_8py_source_l00084}{84}} of file \mbox{\hyperlink{polling__micro_python_8py_source}{polling\+\_\+micro\+Python.\+py}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/johan/\+One\+Drive -\/ Universidad de Antioquia/\+Semestre VII/\+Elec. Digital III/\+Laboratorio/\+Practica\+\_\+3/digital\+\_\+signal\+\_\+generator/polling\+\_\+micro\+Python/\mbox{\hyperlink{polling__micro_python_8py}{polling\+\_\+micro\+Python.\+py}}\end{DoxyCompactItemize}

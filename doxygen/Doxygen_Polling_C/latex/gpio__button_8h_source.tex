@@ -1,0 +1,51 @@
+\doxysection{gpio\+\_\+button.\+h}
+\label{gpio__button_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/gpio\_button.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/gpio\_button.h}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifndef\ \_\_GPIO\_BUTTON\_}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ \_\_GPIO\_BUTTON\_}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}hardware/timer.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ uint8\_t\ gpio\_num\ \ \ \ \ :\ 6;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ uint8\_t\ en\ \ \ \ \ \ :\ 1;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ uint8\_t\ dzero\ \ \ :\ 1;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ uint8\_t\ nkey\ \ \ \ :\ 1;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ uint8\_t\ dbnc\ \ \ \ :\ 1;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00031\ \ \ \ \ \}KEY;}
+\DoxyCodeLine{00032\ \ \ \ \ time\_base\_t\ tb\_dbnce;\ \ \ \ \ \ \ }
+\DoxyCodeLine{00033\ \}gpio\_button\_t;}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ button\_init(gpio\_button\_t\ *button,\ uint8\_t\ gpio\_num,\ uint64\_t\ dbnc\_time,\ \textcolor{keywordtype}{bool}\ en)\{}
+\DoxyCodeLine{00044\ \ \ \ \ button-\/>KEY.en\ =\ en;}
+\DoxyCodeLine{00045\ \ \ \ \ button-\/>KEY.dzero\ =\ 0;}
+\DoxyCodeLine{00046\ \ \ \ \ button-\/>KEY.nkey\ =\ 0;}
+\DoxyCodeLine{00047\ \ \ \ \ button-\/>KEY.dbnc\ =\ 0;}
+\DoxyCodeLine{00048\ \ \ \ \ button-\/>KEY.gpio\_num\ =\ gpio\_num;}
+\DoxyCodeLine{00049\ \ \ \ \ tb\_init(\&button-\/>tb\_dbnce,\ dbnc\_time,\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \ \ \ \ gpio\_init(button-\/>KEY.gpio\_num);}
+\DoxyCodeLine{00052\ \ \ \ \ gpio\_set\_dir(button-\/>KEY.gpio\_num,\ GPIO\_IN);}
+\DoxyCodeLine{00053\ \ \ \ \ gpio\_pull\_down(button-\/>KEY.gpio\_num);}
+\DoxyCodeLine{00054\ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ button\_set\_zflag(gpio\_button\_t\ *button)\{}
+\DoxyCodeLine{00061\ \ \ \ \ button-\/>KEY.dzero\ =\ 1;}
+\DoxyCodeLine{00062\ \}}
+\DoxyCodeLine{00067\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ button\_clr\_zflag(gpio\_button\_t\ *button)\{}
+\DoxyCodeLine{00068\ \ \ \ \ button-\/>KEY.dzero\ =\ 0;}
+\DoxyCodeLine{00069\ \}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00075\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ button\_is\_2nd\_zero(gpio\_button\_t\ *button)\{}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordflow}{return}\ button-\/>KEY.dzero;}
+\DoxyCodeLine{00077\ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

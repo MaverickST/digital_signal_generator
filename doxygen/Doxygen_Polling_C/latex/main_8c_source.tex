@@ -1,0 +1,230 @@
+\doxysection{main.\+c}
+\label{main_8c_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/main.c@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/main.c}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ "{}pico/stdlib.h"{}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#include\ "{}hardware/timer.h"{}}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#include\ "{}pico/cyw43\_arch.h"{}}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#include\ "{}time\_base.h"{}}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ "{}keypad\_polling.h"{}}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ "{}gpio\_led.h"{}}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#include\ "{}gpio\_button.h"{}}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ "{}signal\_generator.h"{}}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#include\ "{}dac.h"{}}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkNumber(uint8\_t\ number)\{}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordflow}{return}\ (number\ >=\ 0\ \&\&\ number\ <=\ 9);}
+\DoxyCodeLine{00051\ \}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkLetter(uint8\_t\ letter)\{}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordflow}{return}\ (letter\ >=\ 0x0A\ \&\&\ letter\ <=\ 0x0C);}
+\DoxyCodeLine{00055\ \}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkFreq(uint32\_t\ freq)\{}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordflow}{return}\ (freq\ >=\ 1\ \&\&\ freq\ <=\ 12000000);}
+\DoxyCodeLine{00059\ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkAmp(uint32\_t\ amp)\{}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordflow}{return}\ (amp\ >=\ 100\ \&\&\ amp\ <=\ 2500);}
+\DoxyCodeLine{00063\ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ checkOffset(uint32\_t\ offset)\{}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordflow}{return}\ (offset\ >=\ 50\ \&\&\ offset\ <=\ 1250);}
+\DoxyCodeLine{00067\ \}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{int}\ main()\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ }
+\DoxyCodeLine{00072\ \ \ \ \ stdio\_init\_all();}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ sleep\_ms(5000);}}
+\DoxyCodeLine{00074\ \ \ \ \ printf(\textcolor{stringliteral}{"{}Hola!!!"{}});}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//\ Initialize\ signal\ generator}}
+\DoxyCodeLine{00077\ \ \ \ \ uint8\_t\ in\_param\_state\ =\ 0x00;\ \textcolor{comment}{//\ 0:\ Nothing,\ 1:\ Entering\ amp\ (A),\ 2:\ Entering\ offset\ (B),\ 3:\ Entering\ freq\ (C)}}
+\DoxyCodeLine{00078\ \ \ \ \ uint32\_t\ param\ =\ 0;\ \textcolor{comment}{//\ This\ variable\ will\ store\ the\ value\ of\ any\ parameter\ that\ is\ being\ entered}}
+\DoxyCodeLine{00079\ \ \ \ \ uint8\_t\ key\_cont\ =\ 0;}
+\DoxyCodeLine{00080\ \ \ \ \ signal\_t\ my\_signal;}
+\DoxyCodeLine{00081\ \ \ \ \ signal\_gen\_init(\&my\_signal,1,1000,500,\textcolor{keyword}{true});}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{comment}{//\ Initialize\ DAC}}
+\DoxyCodeLine{00084\ \ \ \ \ dac\_t\ my\_dac;}
+\DoxyCodeLine{00085\ \ \ \ \ dac\_init(\&my\_dac,\ 10,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00086\ \ \ \ \ signal\_calculate(\&my\_signal);}
+\DoxyCodeLine{00087\ \ \ \ \ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{comment}{//\ Initialize\ LED}}
+\DoxyCodeLine{00090\ \ \ \ \ uint8\_t\ my\_led\ =\ 18;}
+\DoxyCodeLine{00091\ \ \ \ \ led\_init(my\_led);}
+\DoxyCodeLine{00092\ \ \ \ \ cyw43\_arch\_init();}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{comment}{//\ Initialize\ keypad\ and\ button}}
+\DoxyCodeLine{00095\ \ \ \ \ key\_pad\_t\ my\_keypad;}
+\DoxyCodeLine{00096\ \ \ \ \ kp\_init(\&my\_keypad,2,6,100000,\textcolor{keyword}{true});}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ gpio\_button\_t\ my\_button;}
+\DoxyCodeLine{00099\ \ \ \ \ button\_init(\&my\_button,\ 0,\ 100000,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ Initialize\ Printing}}
+\DoxyCodeLine{00102\ \ \ \ \ time\_base\_t\ tb\_print;}
+\DoxyCodeLine{00103\ \ \ \ \ tb\_init(\&tb\_print,1000000,\textcolor{keyword}{true});}
+\DoxyCodeLine{00104\ \ \ \ \ }
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordflow}{while}(1)\{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ keypad}}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ uint32\_t\ cols\ =\ gpio\_get\_all()\ \&\ (0x0000003C0);\ \textcolor{comment}{//\ 0000\ 0100\ 0000}}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(cols\ \&\&\ !my\_keypad.KEY.dbnc)\{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_disable(\&my\_keypad.tb\_seq);}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ kp\_capture(\&my\_keypad,cols);}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_update(\&my\_keypad.tb\_dbnce);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_enable(\&my\_keypad.tb\_dbnce);}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ kp\_set\_zflag(\&my\_keypad);}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ my\_keypad.KEY.dbnc\ =\ 1;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tb\_check(\&my\_keypad.tb\_seq))\{}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_next(\&my\_keypad.tb\_seq);}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ kp\_gen\_seq(\&my\_keypad);}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tb\_check(\&my\_keypad.tb\_dbnce))\{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_next(\&my\_keypad.tb\_dbnce);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(kp\_is\_2nd\_zero(\&my\_keypad))\{}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!cols)\{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ This\ able\ to\ generate\ seq\ only\ when\ a\ button\ is\ not\ pressed}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tb\_update(\&my\_keypad.tb\_seq);\ \textcolor{comment}{//\ It\ could\ happens\ that\ a\ button\ was\ pressed\ for\ a\ long\ time}}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tb\_enable(\&my\_keypad.tb\_seq);}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tb\_disable(\&my\_keypad.tb\_dbnce);}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ my\_keypad.KEY.dbnc\ =\ 0;}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ kp\_clr\_zflag(\&my\_keypad);}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!cols)}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ kp\_set\_zflag(\&my\_keypad);}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ button}}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ button\ =\ gpio\_get(my\_button.KEY.gpio\_num);}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(button\ \&\&\ !my\_button.KEY.dbnc)\{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ my\_button.KEY.nkey\ =\ \textcolor{keyword}{true};\ \textcolor{comment}{//\ This\ is\ a\ flag\ that\ indicates\ that\ a\ key\ was\ pressed}}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_update(\&my\_button.tb\_dbnce);\ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_enable(\&my\_button.tb\_dbnce);}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ button\_set\_zflag(\&my\_button);}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ my\_button.KEY.dbnc\ =\ 1;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tb\_check(\&my\_button.tb\_dbnce))\{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_next(\&my\_button.tb\_dbnce);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(button\_is\_2nd\_zero(\&my\_button))\{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!button)\{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ printf("{}Button\ pressed\(\backslash\)n"{});}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_set\_state(\&my\_signal,\ (my\_signal.STATE.ss\ +\ 1)\%4);}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_calculate(\&my\_signal);}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tb\_disable(\&my\_button.tb\_dbnce);}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ my\_button.KEY.dbnc\ =\ 0;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ button\_clr\_zflag(\&my\_button);}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!button)}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ button\_set\_zflag(\&my\_button);}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ signal}}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tb\_check(\&my\_signal.tb\_gen))\{}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_next(\&my\_signal.tb\_gen);}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ dac\_calculate(\&my\_dac,my\_signal.arrayV[my\_signal.cnt]);}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ my\_signal.cnt\ =\ (my\_signal.cnt\ +\ 1)\ \%\ SAMPLE;}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ printing}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tb\_check(\&tb\_print))\{}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ tb\_next(\&tb\_print);}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (my\_signal.STATE.ss)\{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Sinusoidal:\ "{}});}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Triangular:\ "{}});}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Saw\ tooth:\ "{}});}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Square:\ "{}});}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Amp:\ \%d,\ Offset:\ \%d,\ Freq:\ \%d\(\backslash\)n"{}},\ my\_signal.amp,\ my\_signal.offset,\ my\_signal.freq);}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Process\ entering\ parameters}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(my\_keypad.KEY.nkey\ \&\&\ !my\_keypad.KEY.dbnc)\{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ To\ accept\ a\ number,\ in\_param\_state\ must\ be\ different\ of\ 0}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(checkNumber(my\_keypad.KEY.dkey)\ \&\&\ in\_param\_state)\{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ param\ =\ (!key\_cont)?\ my\_keypad.KEY.dkey\ :\ param*10\ +\ my\_keypad.KEY.dkey;}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ key\_cont++;}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ To\ accept\ a\ letter\ different\ of\ 0x0D,\ in\_param\_state\ must\ be\ 0}}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(checkLetter(my\_keypad.KEY.dkey)\ \&\&\ !in\_param\_state)\{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cyw43\_arch\_gpio\_put(CYW43\_WL\_GPIO\_LED\_PIN,\ 1);}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ led\_on(my\_led);}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (my\_keypad.KEY.dkey)}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x0A:}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\_param\_state\ =\ 1;}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x0B:}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\_param\_state\ =\ 2;}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x0C:}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\_param\_state\ =\ 3;}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Invalid\ letter\(\backslash\)n"{}});}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ To\ accept\ a\ 0x0D,\ in\_param\_state\ must\ be\ different\ of\ 0}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(my\_keypad.KEY.dkey\ ==\ 0x0D\ \&\&\ in\_param\_state)\{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cyw43\_arch\_gpio\_put(CYW43\_WL\_GPIO\_LED\_PIN,\ 0);}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ led\_off(my\_led);}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (in\_param\_state)}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(checkAmp(param))\{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_set\_amp(\&my\_signal,param);}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(checkOffset(param))\{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_set\_offset(\&my\_signal,param);}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(checkFreq(param))\{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_set\_freq(\&my\_signal,param);}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Invalid\ state\(\backslash\)n"{}});}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_calculate(\&my\_signal);}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\_param\_state\ =\ 0;}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ param\ =\ 0;}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ key\_cont\ =\ 0;}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ my\_keypad.KEY.nkey\ =\ 0;}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00253\ \ \ \ \ \}}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00256\ \}}
+
+\end{DoxyCode}
