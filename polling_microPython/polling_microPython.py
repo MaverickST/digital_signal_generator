@@ -600,6 +600,10 @@ class Led:
 # from dac import DAC
 # from gpio_led import Led
 
+# Print the memory information
+import micropython
+micropython.mem_info()
+
 # Initialize the objects
 my_signal = Signal(10, 1000, 500, True)
 my_signal.calculate()
