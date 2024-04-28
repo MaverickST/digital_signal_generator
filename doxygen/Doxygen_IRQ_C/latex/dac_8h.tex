@@ -1,0 +1,147 @@
+\doxysection{C\+:/\+Users/johan/\+One\+Drive -\/ Universidad de Antioquia/\+Semestre VII/\+Elec. Digital III/\+Laboratorio/\+Practica\+\_\+3/digital\+\_\+signal\+\_\+generator/irq\+\_\+c/dac.h File Reference}
+\hypertarget{dac_8h}{}\label{dac_8h}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/dac.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/dac.h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}hardware/timer.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structdac__t}{dac\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{dac_8h_a95d55ebfa2f2f1bd14867ad6a6cc9bfb}{RESOLUTION}}~255
+\item 
+\#define \mbox{\hyperlink{dac_8h_a81d386ce9054b5221f458ae7be8bd178}{DAC\+\_\+\+RANGE}}~10120
+\item 
+\#define \mbox{\hyperlink{dac_8h_ad8517f59474c002252b8f2d5896d4ad2}{DAC\+\_\+\+BIAS}}~-\/60
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{dac_8h_ac0c44732041f96979f2e33650eae8fac}{dac\+\_\+init}} (\mbox{\hyperlink{structdac__t}{dac\+\_\+t}} \texorpdfstring{$\ast$}{*}dac, uint8\+\_\+t gpio\+\_\+lsb, bool en)
+\begin{DoxyCompactList}\small\item\em Initialize a 8-\/bit DAC. A DAC0808 is used as reference. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{dac_8h_a2c3455bf08fef634c9b6999a5b2d44e7}{dac\+\_\+calculate}} (\mbox{\hyperlink{structdac__t}{dac\+\_\+t}} \texorpdfstring{$\ast$}{*}dac, int16\+\_\+t decim\+\_\+v)
+\begin{DoxyCompactList}\small\item\em Generate BITS(8-\/bits) from the input value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{dac_8h_a5fcbebf59884dae79d0974b4fdf16537}{dac\+\_\+output}} (\mbox{\hyperlink{structdac__t}{dac\+\_\+t}} \texorpdfstring{$\ast$}{*}dac)
+\begin{DoxyCompactList}\small\item\em With BITS, output the signal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+MST\+\_\+\+CDA 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+07/04/2024 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Unlicensed 
+\end{DoxyCopyright}
+
+
+Definition in file \mbox{\hyperlink{dac_8h_source}{dac.\+h}}.
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{dac_8h_ad8517f59474c002252b8f2d5896d4ad2}\label{dac_8h_ad8517f59474c002252b8f2d5896d4ad2} 
+\index{dac.h@{dac.h}!DAC\_BIAS@{DAC\_BIAS}}
+\index{DAC\_BIAS@{DAC\_BIAS}!dac.h@{dac.h}}
+\doxysubsubsection{\texorpdfstring{DAC\_BIAS}{DAC\_BIAS}}
+{\footnotesize\ttfamily \#define DAC\+\_\+\+BIAS~-\/60}
+
+
+
+Definition at line \mbox{\hyperlink{dac_8h_source_l00019}{19}} of file \mbox{\hyperlink{dac_8h_source}{dac.\+h}}.
+
+\Hypertarget{dac_8h_a81d386ce9054b5221f458ae7be8bd178}\label{dac_8h_a81d386ce9054b5221f458ae7be8bd178} 
+\index{dac.h@{dac.h}!DAC\_RANGE@{DAC\_RANGE}}
+\index{DAC\_RANGE@{DAC\_RANGE}!dac.h@{dac.h}}
+\doxysubsubsection{\texorpdfstring{DAC\_RANGE}{DAC\_RANGE}}
+{\footnotesize\ttfamily \#define DAC\+\_\+\+RANGE~10120}
+
+
+
+Definition at line \mbox{\hyperlink{dac_8h_source_l00018}{18}} of file \mbox{\hyperlink{dac_8h_source}{dac.\+h}}.
+
+\Hypertarget{dac_8h_a95d55ebfa2f2f1bd14867ad6a6cc9bfb}\label{dac_8h_a95d55ebfa2f2f1bd14867ad6a6cc9bfb} 
+\index{dac.h@{dac.h}!RESOLUTION@{RESOLUTION}}
+\index{RESOLUTION@{RESOLUTION}!dac.h@{dac.h}}
+\doxysubsubsection{\texorpdfstring{RESOLUTION}{RESOLUTION}}
+{\footnotesize\ttfamily \#define RESOLUTION~255}
+
+
+
+Definition at line \mbox{\hyperlink{dac_8h_source_l00017}{17}} of file \mbox{\hyperlink{dac_8h_source}{dac.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{dac_8h_a2c3455bf08fef634c9b6999a5b2d44e7}\label{dac_8h_a2c3455bf08fef634c9b6999a5b2d44e7} 
+\index{dac.h@{dac.h}!dac\_calculate@{dac\_calculate}}
+\index{dac\_calculate@{dac\_calculate}!dac.h@{dac.h}}
+\doxysubsubsection{\texorpdfstring{dac\_calculate()}{dac\_calculate()}}
+{\footnotesize\ttfamily void dac\+\_\+calculate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdac__t}{dac\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dac,  }\item[{int16\+\_\+t}]{decim\+\_\+v }\end{DoxyParamCaption})}
+
+
+
+Generate BITS(8-\/bits) from the input value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dac} & \\
+\hline
+{\em decim\+\_\+v} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{dac_8c_source_l00027}{27}} of file \mbox{\hyperlink{dac_8c_source}{dac.\+c}}.
+
+\Hypertarget{dac_8h_ac0c44732041f96979f2e33650eae8fac}\label{dac_8h_ac0c44732041f96979f2e33650eae8fac} 
+\index{dac.h@{dac.h}!dac\_init@{dac\_init}}
+\index{dac\_init@{dac\_init}!dac.h@{dac.h}}
+\doxysubsubsection{\texorpdfstring{dac\_init()}{dac\_init()}}
+{\footnotesize\ttfamily void dac\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdac__t}{dac\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dac,  }\item[{uint8\+\_\+t}]{gpio\+\_\+lsb,  }\item[{bool}]{en }\end{DoxyParamCaption})}
+
+
+
+Initialize a 8-\/bit DAC. A DAC0808 is used as reference. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dac} & \\
+\hline
+{\em pin\+\_\+lsb} & The LSB position of the GPIOs used to output the DAC signal \\
+\hline
+{\em period} & Period of the output signal \\
+\hline
+{\em en} & Enable DAC \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{dac_8c_source_l00017}{17}} of file \mbox{\hyperlink{dac_8c_source}{dac.\+c}}.
+
+\Hypertarget{dac_8h_a5fcbebf59884dae79d0974b4fdf16537}\label{dac_8h_a5fcbebf59884dae79d0974b4fdf16537} 
+\index{dac.h@{dac.h}!dac\_output@{dac\_output}}
+\index{dac\_output@{dac\_output}!dac.h@{dac.h}}
+\doxysubsubsection{\texorpdfstring{dac\_output()}{dac\_output()}}
+{\footnotesize\ttfamily void dac\+\_\+output (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdac__t}{dac\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{dac }\end{DoxyParamCaption})}
+
+
+
+With BITS, output the signal. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dac} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{dac_8c_source_l00042}{42}} of file \mbox{\hyperlink{dac_8c_source}{dac.\+c}}.
+

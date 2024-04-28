@@ -1,0 +1,57 @@
+\doxysection{signal\+\_\+generator.\+c}
+\label{signal__generator_8c_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/signal\_generator.c@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/signal\_generator.c}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}signal\_generator.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}time\_base.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{void}\ signal\_gen\_init(signal\_t\ *signal,\ uint32\_t\ freq,\ uint16\_t\ amp,\ uint16\_t\ offset,\ \textcolor{keywordtype}{bool}\ en)}
+\DoxyCodeLine{00019\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ signal-\/>freq\ =\ freq;}
+\DoxyCodeLine{00021\ \ \ \ \ signal-\/>amp\ =\ amp;}
+\DoxyCodeLine{00022\ \ \ \ \ signal-\/>offset\ =\ offset;}
+\DoxyCodeLine{00023\ \ \ \ \ signal-\/>value\ =\ 0;}
+\DoxyCodeLine{00024\ \ \ \ \ signal-\/>STATE.en\ =\ en;}
+\DoxyCodeLine{00025\ \ \ \ \ signal-\/>STATE.ss\ =\ 0;}
+\DoxyCodeLine{00026\ \ \ \ \ signal-\/>cnt\ =\ 0;}
+\DoxyCodeLine{00027\ \ \ \ \ tb\_init(\&signal-\/>tb\_gen,S\_TO\_US/(SAMPLE*freq),\textcolor{keyword}{true});}
+\DoxyCodeLine{00028\ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keywordtype}{void}\ signal\_calculate(signal\_t\ *signal)}
+\DoxyCodeLine{00031\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordflow}{if}(!signal-\/>STATE.en)\ \textcolor{keywordflow}{return};\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordflow}{switch}(signal-\/>STATE.ss)\{\ \textcolor{comment}{//\ Calculate\ next\ signal\ value}}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:\ \textcolor{comment}{//\ Sinusoidal}}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 1;\ i\ <=\ SAMPLE;\ i++)\{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_gen\_sin(signal,\ i);}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal-\/>arrayV[i\ -\/\ 1]\ =\ signal-\/>value;}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:\ \textcolor{comment}{//\ Triangular}}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 1;\ i\ <=\ SAMPLE;\ i++)\{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_gen\_tri(signal,\ i);}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal-\/>arrayV[i\ -\/\ 1]\ =\ signal-\/>value;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:\ \textcolor{comment}{//\ Saw\ tooth}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 1;\ i\ <=\ SAMPLE;\ i++)\{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_gen\_saw(signal,\ i);}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal-\/>arrayV[i\ -\/\ 1]\ =\ signal-\/>value;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:\ \textcolor{comment}{//\ Square}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 1;\ i\ <=\ SAMPLE;\ i++)\{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal\_gen\_sqr(signal,\ i);}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ signal-\/>arrayV[i\ -\/\ 1]\ =\ signal-\/>value;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ \}}
+
+\end{DoxyCode}

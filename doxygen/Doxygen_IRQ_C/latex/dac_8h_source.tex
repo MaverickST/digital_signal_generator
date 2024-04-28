@@ -1,0 +1,40 @@
+\doxysection{dac.\+h}
+\hypertarget{dac_8h_source}{}\label{dac_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/dac.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/dac.h}}
+\mbox{\hyperlink{dac_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00011}00011\ \textcolor{preprocessor}{\#ifndef\ \_\_DAC\_}}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00012}00012\ \textcolor{preprocessor}{\#define\ \_\_DAC\_}}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}hardware/timer.h"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00017}\mbox{\hyperlink{dac_8h_a95d55ebfa2f2f1bd14867ad6a6cc9bfb}{00017}}\ \textcolor{preprocessor}{\#define\ RESOLUTION\ \ 255\ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 8\ bits}}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00018}\mbox{\hyperlink{dac_8h_a81d386ce9054b5221f458ae7be8bd178}{00018}}\ \textcolor{preprocessor}{\#define\ DAC\_RANGE\ \ \ 10120\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 0\ to\ 9.3V}}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00019}\mbox{\hyperlink{dac_8h_ad8517f59474c002252b8f2d5896d4ad2}{00019}}\ \textcolor{preprocessor}{\#define\ DAC\_BIAS\ \ \ \ -\/60\ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ DAC\ bias}}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00027}\mbox{\hyperlink{structdac__t}{00027}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00028}00028\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00029}\mbox{\hyperlink{structdac__t_a39dd617b3cde2eb25327b6c0213a7f36}{00029}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_a39dd617b3cde2eb25327b6c0213a7f36}{bit0}}\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00030}\mbox{\hyperlink{structdac__t_a0b98e79f49804aab184fe554e2d10483}{00030}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_a0b98e79f49804aab184fe554e2d10483}{bit1}}\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00031}\mbox{\hyperlink{structdac__t_aa2484bf47c7c38a7eb8f2b22f09f6710}{00031}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_aa2484bf47c7c38a7eb8f2b22f09f6710}{bit2}}\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00032}\mbox{\hyperlink{structdac__t_ae1457b2475c549e53d084a2daa6475f5}{00032}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_ae1457b2475c549e53d084a2daa6475f5}{bit3}}\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00033}\mbox{\hyperlink{structdac__t_aec79d033d0709e9c4caf5b21f85848bc}{00033}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_aec79d033d0709e9c4caf5b21f85848bc}{bit4}}\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00034}\mbox{\hyperlink{structdac__t_a56012f9e5f78d285eb450866b270b86d}{00034}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_a56012f9e5f78d285eb450866b270b86d}{bit5}}\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00035}\mbox{\hyperlink{structdac__t_a39af6ce9105754718e17a87fb173b0fb}{00035}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_a39af6ce9105754718e17a87fb173b0fb}{bit6}}\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00036}\mbox{\hyperlink{structdac__t_a23364783b1302b0aab8b38fc7853cad3}{00036}}\ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_a23364783b1302b0aab8b38fc7853cad3}{bit7}}\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00037}\mbox{\hyperlink{structdac__t_ab674e8e9b22e8f41f88780faebce43bb}{00037}}\ \ \ \ \ \}BITS;}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00038}\mbox{\hyperlink{structdac__t_a6615bd80205b361bf6f3ffee9f537fd1}{00038}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structdac__t_a6615bd80205b361bf6f3ffee9f537fd1}{en}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00039}\mbox{\hyperlink{structdac__t_aab9186e5a37c92d00b117298aa78f455}{00039}}\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structdac__t_aab9186e5a37c92d00b117298aa78f455}{gpio\_lsb}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00040}\mbox{\hyperlink{structdac__t_af8f00468446d5b744b7e51d97ee36ed3}{00040}}\ \ \ \ \ uint16\_t\ \mbox{\hyperlink{structdac__t_af8f00468446d5b744b7e51d97ee36ed3}{digit\_v}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00041}00041\ \}\mbox{\hyperlink{structdac__t}{dac\_t}};}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00051}00051\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{dac_8h_ac0c44732041f96979f2e33650eae8fac}{dac\_init}}(\mbox{\hyperlink{structdac__t}{dac\_t}}\ *dac,\ uint8\_t\ gpio\_lsb,\ \textcolor{keywordtype}{bool}\ en);}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00059}00059\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{dac_8h_a2c3455bf08fef634c9b6999a5b2d44e7}{dac\_calculate}}(\mbox{\hyperlink{structdac__t}{dac\_t}}\ *dac,\ int16\_t\ decim\_v);}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00066}00066\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{dac_8h_a5fcbebf59884dae79d0974b4fdf16537}{dac\_output}}(\mbox{\hyperlink{structdac__t}{dac\_t}}\ *dac);}
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{dac_8h_source_l00068}00068\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_\_DAC\_}}
+
+\end{DoxyCode}

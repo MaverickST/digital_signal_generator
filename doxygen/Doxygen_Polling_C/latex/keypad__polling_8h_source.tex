@@ -1,0 +1,69 @@
+\doxysection{keypad\+\_\+polling.\+h}
+\label{keypad__polling_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/keypad\_polling.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/keypad\_polling.h}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifndef\ \_\_KEYPAD\_POLLING\_}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ \_\_KEYPAD\_POLLING\_}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}time\_base.h"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{struct\ }key\{}
+\DoxyCodeLine{00024\ \ \ \ \ uint8\_t\ cnt\ \ \ \ \ :\ 2;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00025\ \ \ \ \ uint8\_t\ seq\ \ \ \ \ :\ 4;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00026\ \ \ \ \ uint8\_t\ ckey\ \ \ \ :\ 8;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00027\ \ \ \ \ uint8\_t\ dkey\ \ \ \ :\ 5;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00028\ \ \ \ \ uint8\_t\ rlsb\ \ \ \ :\ 4;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00029\ \ \ \ \ uint8\_t\ clsb\ \ \ \ :\ 4;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00030\ \ \ \ \ uint8\_t\ en\ \ \ \ \ \ :\ 1;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00031\ \ \ \ \ uint8\_t\ dzero\ \ \ :\ 1;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00032\ \ \ \ \ uint8\_t\ nkey\ \ \ \ :\ 1;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00033\ \ \ \ \ uint8\_t\ dbnc\ \ \ \ :\ 1;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00034\ \ \ \ \ \}KEY;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00035\ \ \ \ \ time\_base\_t\ tb\_seq;\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00036\ \ \ \ \ time\_base\_t\ tb\_dbnce;\ \ \ \ \ \ \ }
+\DoxyCodeLine{00037\ \ \ \ \ uint8\_t\ history[10];\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00038\ \}key\_pad\_t;}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{void}\ kp\_init(key\_pad\_t\ *kpad,\ uint8\_t\ rlsb,\ uint8\_t\ clsb,\ uint64\_t\ dbnc\_time,\ \textcolor{keywordtype}{bool}\ en);}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{void}\ kp\_decode(key\_pad\_t\ *kpad);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00061\ \textcolor{keywordtype}{void}\ kp\_capture(key\_pad\_t\ *kpad,\ uint32\_t\ cols);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ kp\_gen\_seq(key\_pad\_t\ *kpad)\{}
+\DoxyCodeLine{00068\ \ \ \ \ kpad-\/>KEY.cnt\ +=\ 1;}
+\DoxyCodeLine{00069\ \ \ \ \ kpad-\/>KEY.seq\ =\ 1\ <<\ kpad-\/>KEY.cnt;}
+\DoxyCodeLine{00070\ \ \ \ \ gpio\_put\_masked(0x0000000F<<kpad-\/>KEY.rlsb,((uint32\_t)kpad-\/>KEY.seq)<<kpad-\/>KEY.rlsb);}
+\DoxyCodeLine{00071\ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00077\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ uint8\_t\ kp\_get\_key(key\_pad\_t\ *kpad)\{}
+\DoxyCodeLine{00078\ \ \ \ \ kpad-\/>KEY.nkey\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordflow}{return}\ kpad-\/>history[0];}
+\DoxyCodeLine{00080\ \}}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00086\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ uint8\_t\ kp\_get\_keyh(key\_pad\_t\ *kpad,\ uint8\_t\ n)\{}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordflow}{return}\ kpad-\/>history[n\%10];}
+\DoxyCodeLine{00088\ \}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ uint8\_t\ kp\_get\_keyc(key\_pad\_t\ *kpad)\{}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordflow}{return}\ kpad-\/>KEY.ckey;}
+\DoxyCodeLine{00096\ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00102\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ kp\_set\_zflag(key\_pad\_t\ *kpad)\{}
+\DoxyCodeLine{00103\ \ \ \ \ kpad-\/>KEY.dzero\ =\ 1;}
+\DoxyCodeLine{00104\ \}}
+\DoxyCodeLine{00109\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ kp\_clr\_zflag(key\_pad\_t\ *kpad)\{}
+\DoxyCodeLine{00110\ \ \ \ \ kpad-\/>KEY.dzero\ =\ 0;}
+\DoxyCodeLine{00111\ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00117\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ kp\_is\_2nd\_zero(key\_pad\_t\ *kpad)\{}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordflow}{return}\ kpad-\/>KEY.dzero;}
+\DoxyCodeLine{00119\ \}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

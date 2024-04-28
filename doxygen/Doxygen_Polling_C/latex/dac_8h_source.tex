@@ -1,0 +1,40 @@
+\doxysection{dac.\+h}
+\label{dac_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/dac.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/dac.h}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifndef\ \_\_DAC\_}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ \_\_DAC\_}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}hardware/timer.h"{}}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ RESOLUTION\ \ 255\ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 8\ bits}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ DAC\_RANGE\ \ \ 10000\ \ \ \ \ \ \ \ }\textcolor{comment}{//\ 0\ to\ 9.3V}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ DAC\_BIAS\ \ \ \ -\/60\ \ \ \ \ \ \ \ \ }\textcolor{comment}{//\ DAC\ bias}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ uint8\_t\ bit0\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ uint8\_t\ bit1\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ uint8\_t\ bit2\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ uint8\_t\ bit3\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ uint8\_t\ bit4\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ uint8\_t\ bit5\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ uint8\_t\ bit6\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ uint8\_t\ bit7\ \ \ \ \ :\ 1;}
+\DoxyCodeLine{00037\ \ \ \ \ \}BITS;}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ en;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ uint8\_t\ gpio\_lsb;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00040\ \ \ \ \ uint16\_t\ digit\_v;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00041\ \}dac\_t;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00050\ \textcolor{keywordtype}{void}\ dac\_init(dac\_t\ *dac,\ uint8\_t\ gpio\_lsb,\ \textcolor{keywordtype}{bool}\ en);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{void}\ dac\_calculate(dac\_t\ *dac,\ int16\_t\ decim\_v);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{void}\ dac\_output(dac\_t\ *dac);}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ \_\_DAC\_}}
+
+\end{DoxyCode}

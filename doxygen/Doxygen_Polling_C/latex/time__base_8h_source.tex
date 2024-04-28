@@ -1,0 +1,45 @@
+\doxysection{time\+\_\+base.\+h}
+\label{time__base_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/time\_base.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/time\_base.h}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifndef\ \_\_TIME\_BASE\_}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ \_\_TIME\_BASE\_}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}hardware/timer.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{00021\ \ \ \ \ uint64\_t\ next;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00022\ \ \ \ \ uint64\_t\ delta;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{bool}\ en;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00024\ \}\ time\_base\_t;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{void}\ tb\_init(time\_base\_t\ *t,\ uint64\_t\ us,\ \textcolor{keywordtype}{bool}\ en);}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ tb\_check(time\_base\_t\ *t)\{}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordflow}{return}\ (time\_us\_64()\ >=\ t-\/>next)\ \&\&\ t-\/>en;}
+\DoxyCodeLine{00037\ \}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ tb\_update(time\_base\_t\ *t)\{}
+\DoxyCodeLine{00042\ \ \ \ \ t-\/>next\ =\ time\_us\_64()\ +\ t-\/>delta;}
+\DoxyCodeLine{00043\ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ tb\_next(time\_base\_t\ *t)\{}
+\DoxyCodeLine{00048\ \ \ \ \ t-\/>next\ =\ t-\/>next\ +\ t-\/>delta;}
+\DoxyCodeLine{00049\ \}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ tb\_enable(time\_base\_t\ *t)\{}
+\DoxyCodeLine{00054\ \ \ \ \ t-\/>en\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00055\ \}}
+\DoxyCodeLine{00058\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ tb\_disable(time\_base\_t\ *t)\{}
+\DoxyCodeLine{00059\ \ \ \ \ t-\/>en\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00060\ \}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ tb\_set\_delta(time\_base\_t\ *t,\ uint64\_t\ delta)\{}
+\DoxyCodeLine{00063\ \ \ \ \ t-\/>delta\ =\ delta;}
+\DoxyCodeLine{00064\ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,56 @@
+\doxysection{dac.\+c}
+\label{dac_8c_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/dac.c@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/dac.c}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}time\_base.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}dac.h"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keywordtype}{void}\ dac\_init(dac\_t\ *dac,\ uint8\_t\ gpio\_lsb,\ \textcolor{keywordtype}{bool}\ en)}
+\DoxyCodeLine{00020\ \{}
+\DoxyCodeLine{00021\ \ \ \ \ dac-\/>gpio\_lsb\ =\ gpio\_lsb;}
+\DoxyCodeLine{00022\ \ \ \ \ dac-\/>digit\_v\ =\ 0;}
+\DoxyCodeLine{00023\ \ \ \ \ dac-\/>en\ =\ en;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ gpio\_init\_mask(0x000000FF\ <<\ dac-\/>gpio\_lsb);}
+\DoxyCodeLine{00026\ \ \ \ \ gpio\_set\_dir\_masked(0x000000FF\ <<\ dac-\/>gpio\_lsb,\ 0x000000FF\ <<\ dac-\/>gpio\_lsb);\ \textcolor{comment}{//\ Set\ all\ gpios\ as\ outputs}}
+\DoxyCodeLine{00027\ \}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keywordtype}{void}\ dac\_calculate(dac\_t\ *dac,\ int16\_t\ decim\_v)}
+\DoxyCodeLine{00030\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ }
+\DoxyCodeLine{00032\ \ \ \ \ dac-\/>digit\_v\ =\ (decim\_v\ +\ (int16\_t)DAC\_BIAS\ +\ 5000)*RESOLUTION/DAC\_RANGE\ ;\ \textcolor{comment}{//\ normalize\ to\ 8\ bits}}
+\DoxyCodeLine{00033\ \ \ \ \ dac-\/>BITS.bit0\ =\ (dac-\/>digit\_v\ \&\ 0x01)\ >>\ 0;}
+\DoxyCodeLine{00034\ \ \ \ \ dac-\/>BITS.bit1\ =\ (dac-\/>digit\_v\ \&\ 0x02)\ >>\ 1;}
+\DoxyCodeLine{00035\ \ \ \ \ dac-\/>BITS.bit2\ =\ (dac-\/>digit\_v\ \&\ 0x04)\ >>\ 2;}
+\DoxyCodeLine{00036\ \ \ \ \ dac-\/>BITS.bit3\ =\ (dac-\/>digit\_v\ \&\ 0x08)\ >>\ 3;}
+\DoxyCodeLine{00037\ \ \ \ \ dac-\/>BITS.bit4\ =\ (dac-\/>digit\_v\ \&\ 0x10)\ >>\ 4;}
+\DoxyCodeLine{00038\ \ \ \ \ dac-\/>BITS.bit5\ =\ (dac-\/>digit\_v\ \&\ 0x20)\ >>\ 5;}
+\DoxyCodeLine{00039\ \ \ \ \ dac-\/>BITS.bit6\ =\ (dac-\/>digit\_v\ \&\ 0x40)\ >>\ 6;}
+\DoxyCodeLine{00040\ \ \ \ \ dac-\/>BITS.bit7\ =\ (dac-\/>digit\_v\ \&\ 0x80)\ >>\ 7;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ dac\_output(dac);}
+\DoxyCodeLine{00043\ \}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keywordtype}{void}\ dac\_output(dac\_t\ *dac)}
+\DoxyCodeLine{00046\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordflow}{if}(!dac-\/>en)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \ \ gpio\_put(dac-\/>gpio\_lsb\ +\ 0,\ dac-\/>BITS.bit0);}
+\DoxyCodeLine{00050\ \ \ \ \ gpio\_put(dac-\/>gpio\_lsb\ +\ 1,\ dac-\/>BITS.bit1);}
+\DoxyCodeLine{00051\ \ \ \ \ gpio\_put(dac-\/>gpio\_lsb\ +\ 2,\ dac-\/>BITS.bit2);}
+\DoxyCodeLine{00052\ \ \ \ \ gpio\_put(dac-\/>gpio\_lsb\ +\ 3,\ dac-\/>BITS.bit3);}
+\DoxyCodeLine{00053\ \ \ \ \ gpio\_put(dac-\/>gpio\_lsb\ +\ 4,\ dac-\/>BITS.bit4);}
+\DoxyCodeLine{00054\ \ \ \ \ gpio\_put(dac-\/>gpio\_lsb\ +\ 5,\ dac-\/>BITS.bit5);}
+\DoxyCodeLine{00055\ \ \ \ \ gpio\_put(dac-\/>gpio\_lsb\ +\ 6,\ dac-\/>BITS.bit6);}
+\DoxyCodeLine{00056\ \ \ \ \ gpio\_put(dac-\/>gpio\_lsb\ +\ 7,\ dac-\/>BITS.bit7);}
+\DoxyCodeLine{00057\ \ \ \ \ }
+\DoxyCodeLine{00058\ \}}
+
+\end{DoxyCode}

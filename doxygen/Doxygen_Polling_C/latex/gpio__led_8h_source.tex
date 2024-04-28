@@ -1,0 +1,30 @@
+\doxysection{gpio\+\_\+led.\+h}
+\label{gpio__led_8h_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/gpio\_led.h@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_c/gpio\_led.h}}
+\textbf{ Go to the documentation of this file.}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifndef\ \_\_GPIO\_LED\_H\_\_}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ \_\_GPIO\_LED\_H\_\_}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ led\_init(uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{00019\ \ \ \ \ gpio\_init(\ gpio\_num);\ \textcolor{comment}{//\ gpios\ for\ key\ rows\ 2,3,4,5}}
+\DoxyCodeLine{00020\ \ \ \ \ gpio\_set\_dir(gpio\_num,\textcolor{keyword}{true});\ \textcolor{comment}{//\ rows\ as\ outputs\ and\ cols\ as\ inputs}}
+\DoxyCodeLine{00021\ \ \ \ \ gpio\_put(gpio\_num,\textcolor{keyword}{false});}
+\DoxyCodeLine{00022\ \}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ led\_on(uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{00027\ \ \ \ \ gpio\_put(gpio\_num,\textcolor{keyword}{true});}
+\DoxyCodeLine{00028\ \}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ led\_off(uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{00033\ \ \ \ \ gpio\_put(gpio\_num,\textcolor{keyword}{false});}
+\DoxyCodeLine{00034\ \}}
+\DoxyCodeLine{00037\ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ led\_toggle(uint8\_t\ gpio\_num)\{}
+\DoxyCodeLine{00038\ \ \ \ \ gpio\_xor\_mask(0x00000001\ <<\ gpio\_num);}
+\DoxyCodeLine{00039\ \}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

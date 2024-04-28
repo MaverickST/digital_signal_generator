@@ -1,0 +1,70 @@
+\doxysection{gpio\+\_\+button.\+py}
+\hypertarget{gpio__button_8py_source}{}\label{gpio__button_8py_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_microPython/gpio\_button.py@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_microPython/gpio\_button.py}}
+\mbox{\hyperlink{gpio__button_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00001}\mbox{\hyperlink{namespacegpio__button}{00001}}\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00002}00002\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}file\`{}\`{}:\ gpio\_button.py}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00003}00003\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Author\`{}\`{}:\ \ MST\_CDA}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00004}00004\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Version\`{}\`{}:\ \ 1.0}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00005}00005\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Date\`{}\`{}:\ \ 2024-\/04-\/14}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00006}00006\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Description\`{}\`{}:\ This\ module\ define\ a\ class\ to\ process\ the\ button.}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00007}00007\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00009}00009\ \textcolor{keyword}{from}\ machine\ \textcolor{keyword}{import}\ Pin}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00010}00010\ \textcolor{keyword}{from}\ time\_base\ \textcolor{keyword}{import}\ Time\_base}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00012}\mbox{\hyperlink{classgpio__button_1_1_button}{00012}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classgpio__button_1_1_button}{Button}}:}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00013}00013\ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00014}00014\ \textcolor{stringliteral}{\ \ \ \ Class\ to\ process\ the\ button.}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00015}00015\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00016}00016\ \textcolor{stringliteral}{\ \ \ \ It\ is\ used\ as\ a\ base\ class\ for\ the\ keypad\ -\/>\ Herency}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00017}00017\ \textcolor{stringliteral}{\ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00018}\mbox{\hyperlink{classgpio__button_1_1_button_a06b5a07559a53c5a1cf2bc25a96e7679}{00018}}\ \ \ \ \ gpioPin:\ Pin\ \ \ \ \ \ \ \ \textcolor{comment}{\#\ The\ gpio\ for\ the\ button}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00019}\mbox{\hyperlink{classgpio__button_1_1_button_a3d37703800a07df2545c217f6ab9a1ec}{00019}}\ \ \ \ \ en:\ bool\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Enable\ the\ button\ processing}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00021}\mbox{\hyperlink{classgpio__button_1_1_button_abb4355db76f6472fedb569767947e7e3}{00021}}\ \ \ \ \ dbnc:\ bool\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Flag\ that\ indicates\ that\ debouncer\ is\ active}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00022}\mbox{\hyperlink{classgpio__button_1_1_button_a5ec3b40a975fb8399846dcd9b2faf11b}{00022}}\ \ \ \ \ dzero:\ bool\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Flag\ for\ double\ zero}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00023}\mbox{\hyperlink{classgpio__button_1_1_button_ace5965792f50551f2e23830e83981a3d}{00023}}\ \ \ \ \ nkey:\ bool\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Flag\ that\ indicates\ that\ a\ key\ was\ pressed}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00024}\mbox{\hyperlink{classgpio__button_1_1_button_a1c8e8892cc9a764869ed5bc9ad7c672a}{00024}}\ \ \ \ \ tb\_dbnce:\ Time\_base\ \textcolor{comment}{\#\ Periocic\ time\ base\ used\ to\ implement\ the\ key\ debouncer}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00026}\mbox{\hyperlink{classgpio__button_1_1_button_a8d2cee5bf3cd5447a4044476d4b1f9c2}{00026}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classgpio__button_1_1_button_a8d2cee5bf3cd5447a4044476d4b1f9c2}{\_\_init\_\_}}(self,\ gpio:\ int,\ dbnc\_time:\ int,\ en:\ bool):}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00027}00027\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00028}00028\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Constructor\ for\ Button.}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00029}00029\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00030}00030\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Parameters:}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00031}00031\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}gpio\`{}\`{}\ The\ gpio\ number\ for\ the\ button.}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00032}00032\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}dbnc\_time\`{}\`{}\ Time\ in\ us\ for\ the\ debouncer.}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00033}00033\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}en\`{}\`{}\ Enable\ button\ processing.}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00034}00034\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Initialize\ the\ button\ variables}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00036}\mbox{\hyperlink{classgpio__button_1_1_button_a314cebcdc9ac2e8ad3a07bf457dbf28a}{00036}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__button_1_1_button_a3d37703800a07df2545c217f6ab9a1ec}{en}}\mbox{\hyperlink{classgpio__button_1_1_button_a314cebcdc9ac2e8ad3a07bf457dbf28a}{en}}\ =\ en}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00037}\mbox{\hyperlink{classgpio__button_1_1_button_a2b80be326c8936c95dbfab5943b66bd7}{00037}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__button_1_1_button_abb4355db76f6472fedb569767947e7e3}{dbnc}}\mbox{\hyperlink{classgpio__button_1_1_button_a2b80be326c8936c95dbfab5943b66bd7}{dbnc}}\ =\ \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00038}\mbox{\hyperlink{classgpio__button_1_1_button_a5b407db5d98a23bf2f0bfd9cee7d1f6b}{00038}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__button_1_1_button_a5ec3b40a975fb8399846dcd9b2faf11b}{dzero}}\mbox{\hyperlink{classgpio__button_1_1_button_a5b407db5d98a23bf2f0bfd9cee7d1f6b}{dzero}}\ =\ \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00039}\mbox{\hyperlink{classgpio__button_1_1_button_a021f6ec98182c40c2cfa5d8237139b31}{00039}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__button_1_1_button_ace5965792f50551f2e23830e83981a3d}{nkey}}\mbox{\hyperlink{classgpio__button_1_1_button_a021f6ec98182c40c2cfa5d8237139b31}{nkey}}\ =\ \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00041}\mbox{\hyperlink{classgpio__button_1_1_button_afcab3158d285a92a85d1b40568a035a4}{00041}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__button_1_1_button_a06b5a07559a53c5a1cf2bc25a96e7679}{gpioPin}}\mbox{\hyperlink{classgpio__button_1_1_button_afcab3158d285a92a85d1b40568a035a4}{gpioPin}}\ =\ Pin(gpio,\ Pin.IN,\ Pin.PULL\_UP)}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00042}\mbox{\hyperlink{classgpio__button_1_1_button_a9c3208f0857fd26822fb0936036d51c9}{00042}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__button_1_1_button_a1c8e8892cc9a764869ed5bc9ad7c672a}{tb\_dbnce}}\mbox{\hyperlink{classgpio__button_1_1_button_a9c3208f0857fd26822fb0936036d51c9}{tb\_dbnce}}\ =\ \mbox{\hyperlink{classtime__base_1_1_time__base}{Time\_base}}(dbnc\_time,\ \textcolor{keyword}{False})}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00044}\mbox{\hyperlink{classgpio__button_1_1_button_a47950e5bd8629d9a116a700eec19b3c0}{00044}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classgpio__button_1_1_button_a47950e5bd8629d9a116a700eec19b3c0}{set\_zflag}}(self):}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00045}00045\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00046}00046\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Set\ the\ double\ zero\ flag.}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00047}00047\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00048}00048\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__button_1_1_button_a5ec3b40a975fb8399846dcd9b2faf11b}{dzero}}\mbox{\hyperlink{classgpio__button_1_1_button_a5b407db5d98a23bf2f0bfd9cee7d1f6b}{dzero}}\ =\ \textcolor{keyword}{True}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00050}\mbox{\hyperlink{classgpio__button_1_1_button_a0f70a03ec2d638804b4be9880188b7b6}{00050}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classgpio__button_1_1_button_a0f70a03ec2d638804b4be9880188b7b6}{clear\_zflag}}(self):}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00051}00051\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00052}00052\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Clear\ the\ double\ zero\ flag.}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00053}00053\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00054}00054\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classgpio__button_1_1_button_a5ec3b40a975fb8399846dcd9b2faf11b}{dzero}}\mbox{\hyperlink{classgpio__button_1_1_button_a5b407db5d98a23bf2f0bfd9cee7d1f6b}{dzero}}\ =\ \textcolor{keyword}{False}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00056}\mbox{\hyperlink{classgpio__button_1_1_button_ae4effc2feddfe1ea9edc74ff2f1f2ca0}{00056}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classgpio__button_1_1_button_ae4effc2feddfe1ea9edc74ff2f1f2ca0}{is\_2nd\_zero}}(self)\ -\/>\ bool:}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00057}00057\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00058}00058\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ This\ method\ returns\ true\ if\ a\ first\ zero\ was\ detected\ on\ keypad\ columns}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00059}00059\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00060}00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ self.\mbox{\hyperlink{classgpio__button_1_1_button_a5ec3b40a975fb8399846dcd9b2faf11b}{dzero}}\mbox{\hyperlink{classgpio__button_1_1_button_a5b407db5d98a23bf2f0bfd9cee7d1f6b}{dzero}}}
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{gpio__button_8py_source_l00064}00064\ \ \ \ \ }
+
+\end{DoxyCode}

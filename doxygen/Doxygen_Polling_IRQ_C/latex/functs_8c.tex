@@ -1,0 +1,270 @@
+\doxysection{C\+:/\+Users/johan/\+One\+Drive -\/ Universidad de Antioquia/\+Semestre VII/\+Elec. Digital III/\+Laboratorio/\+Practica\+\_\+3/digital\+\_\+signal\+\_\+generator/polling\+\_\+irq\+\_\+c/functs.c File Reference}
+\hypertarget{functs_8c}{}\label{functs_8c}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_irq\_c/functs.c@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_irq\_c/functs.c}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include "{}pico/stdlib.\+h"{}}\newline
+{\ttfamily \#include "{}pico/time.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/timer.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/pwm.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/irq.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/gpio.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/sync.\+h"{}}\newline
+{\ttfamily \#include "{}functs.\+h"{}}\newline
+{\ttfamily \#include "{}keypad.\+h"{}}\newline
+{\ttfamily \#include "{}gpio\+\_\+led.\+h"{}}\newline
+{\ttfamily \#include "{}gpio\+\_\+button.\+h"{}}\newline
+{\ttfamily \#include "{}signal\+\_\+generator.\+h"{}}\newline
+{\ttfamily \#include "{}dac.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{functs_8c_a629036ec38541014989c9e7742abbd10}{init\+Global\+Variables}} (void)
+\begin{DoxyCompactList}\small\item\em This function initializes the global variables of the system\+: keypad, signal generator, button, and DAC. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{functs_8c_a93e6c5d836271a733b566dc411ba242c}{init\+PWMas\+PIT}} (uint8\+\_\+t slice, uint16\+\_\+t milis, bool enable)
+\begin{DoxyCompactList}\small\item\em This function initializes a PWM signal as a periodic interrupt timer (PIT). Each slice will generate interruptions at a period of milis miliseconds. Due to each slice share clock counter (period), events with diferents periods must not be generated in the same slice, i.\+e, they must not share channel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{functs_8c_a9b43f682608095f12809025dbf580cbc}{pwm\+IRQ}} (void)
+\begin{DoxyCompactList}\small\item\em This function is the handler for the PWM interruptions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{functs_8c_ac9f46f69dc14753f6829b24f0479dfe6}{gpio\+Callback}} (uint num, uint32\+\_\+t mask)
+\begin{DoxyCompactList}\small\item\em This function is the main callback function for the GPIO interruptions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{functs_8c_a33f848f09a4c7c0588e65f3f37f4a365}{timer\+Signal\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em This definition is the handler for the timer signal interruptions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{functs_8c_a30f824461cc3d717467aae0a2fdbecd5}{timer\+Print\+Handler}} (void)
+\begin{DoxyCompactList}\small\item\em This definition is the handler for the timer print interruptions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{functs_8c_a4e60091b55013a9208e1f53f8bc391c9}{program}} (void)
+\begin{DoxyCompactList}\small\item\em This function is the main, here the program is executed when a flag of interruption is pending. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{functs_8c_ae1ee541bb22588b6a71650c807efca90}{check}} ()
+\begin{DoxyCompactList}\small\item\em This function checks if there are a flag of interruption pending for execute the program. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structkey__pad__t}{key\+\_\+pad\+\_\+t}} \mbox{\hyperlink{functs_8c_a30a7b97c77c77a561147f99a7c00c91d}{g\+Key\+Pad}}
+\item 
+\mbox{\hyperlink{structsignal__t}{signal\+\_\+t}} \mbox{\hyperlink{functs_8c_afd0a1e5e5947d2cb8f7c35eb1b620071}{g\+Signal}}
+\item 
+\mbox{\hyperlink{structgpio__button__t}{gpio\+\_\+button\+\_\+t}} \mbox{\hyperlink{functs_8c_ad750dd56506c1034b3591547e274fe2d}{g\+Button}}
+\item 
+\mbox{\hyperlink{structdac__t}{dac\+\_\+t}} \mbox{\hyperlink{functs_8c_ae4f57f2530a2370fd13580aa839e9b46}{g\+Dac}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{functs_8c_a4ffebeb06011b887c58ecb2e7bcdeebf}{g\+Led}} = 18
+\item 
+volatile \mbox{\hyperlink{unionflags__t}{flags\+\_\+t}} \mbox{\hyperlink{functs_8c_a635b8533f3553192114e5c564a3d8524}{g\+Flags}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+MST\+\_\+\+CDA 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+10/04/2024 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Unlicensed 
+\end{DoxyCopyright}
+
+
+Definition in file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{functs_8c_ae1ee541bb22588b6a71650c807efca90}\label{functs_8c_ae1ee541bb22588b6a71650c807efca90} 
+\index{functs.c@{functs.c}!check@{check}}
+\index{check@{check}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{check()}{check()}}
+{\footnotesize\ttfamily bool check (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+This function checks if there are a flag of interruption pending for execute the program. 
+
+\begin{DoxyReturn}{Returns}
+true When there are a flag of interruption pending 
+
+false When there are not a flag of interruption pending 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00322}{322}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_ac9f46f69dc14753f6829b24f0479dfe6}\label{functs_8c_ac9f46f69dc14753f6829b24f0479dfe6} 
+\index{functs.c@{functs.c}!gpioCallback@{gpioCallback}}
+\index{gpioCallback@{gpioCallback}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{gpioCallback()}{gpioCallback()}}
+{\footnotesize\ttfamily void gpio\+Callback (\begin{DoxyParamCaption}\item[{uint}]{num,  }\item[{uint32\+\_\+t}]{mask }\end{DoxyParamCaption})}
+
+
+
+This function is the main callback function for the GPIO interruptions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em num} & \\
+\hline
+{\em mask} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00097}{97}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a629036ec38541014989c9e7742abbd10}\label{functs_8c_a629036ec38541014989c9e7742abbd10} 
+\index{functs.c@{functs.c}!initGlobalVariables@{initGlobalVariables}}
+\index{initGlobalVariables@{initGlobalVariables}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{initGlobalVariables()}{initGlobalVariables()}}
+{\footnotesize\ttfamily void init\+Global\+Variables (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This function initializes the global variables of the system\+: keypad, signal generator, button, and DAC. 
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00041}{41}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a93e6c5d836271a733b566dc411ba242c}\label{functs_8c_a93e6c5d836271a733b566dc411ba242c} 
+\index{functs.c@{functs.c}!initPWMasPIT@{initPWMasPIT}}
+\index{initPWMasPIT@{initPWMasPIT}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{initPWMasPIT()}{initPWMasPIT()}}
+{\footnotesize\ttfamily void init\+PWMas\+PIT (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{slice,  }\item[{uint16\+\_\+t}]{milis,  }\item[{bool}]{enable }\end{DoxyParamCaption})}
+
+
+
+This function initializes a PWM signal as a periodic interrupt timer (PIT). Each slice will generate interruptions at a period of milis miliseconds. Due to each slice share clock counter (period), events with diferents periods must not be generated in the same slice, i.\+e, they must not share channel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em slice} & \\
+\hline
+{\em milis} & Period of the PWM interruption in miliseconds \\
+\hline
+{\em enable} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00052}{52}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a4e60091b55013a9208e1f53f8bc391c9}\label{functs_8c_a4e60091b55013a9208e1f53f8bc391c9} 
+\index{functs.c@{functs.c}!program@{program}}
+\index{program@{program}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{program()}{program()}}
+{\footnotesize\ttfamily void program (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This function is the main, here the program is executed when a flag of interruption is pending. 
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00190}{190}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a9b43f682608095f12809025dbf580cbc}\label{functs_8c_a9b43f682608095f12809025dbf580cbc} 
+\index{functs.c@{functs.c}!pwmIRQ@{pwmIRQ}}
+\index{pwmIRQ@{pwmIRQ}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{pwmIRQ()}{pwmIRQ()}}
+{\footnotesize\ttfamily void pwm\+IRQ (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This function is the handler for the PWM interruptions. 
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00071}{71}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a30f824461cc3d717467aae0a2fdbecd5}\label{functs_8c_a30f824461cc3d717467aae0a2fdbecd5} 
+\index{functs.c@{functs.c}!timerPrintHandler@{timerPrintHandler}}
+\index{timerPrintHandler@{timerPrintHandler}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{timerPrintHandler()}{timerPrintHandler()}}
+{\footnotesize\ttfamily void timer\+Print\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This definition is the handler for the timer print interruptions. 
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00154}{154}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a33f848f09a4c7c0588e65f3f37f4a365}\label{functs_8c_a33f848f09a4c7c0588e65f3f37f4a365} 
+\index{functs.c@{functs.c}!timerSignalHandler@{timerSignalHandler}}
+\index{timerSignalHandler@{timerSignalHandler}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{timerSignalHandler()}{timerSignalHandler()}}
+{\footnotesize\ttfamily void timer\+Signal\+Handler (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+This definition is the handler for the timer signal interruptions. 
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00130}{130}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{functs_8c_ad750dd56506c1034b3591547e274fe2d}\label{functs_8c_ad750dd56506c1034b3591547e274fe2d} 
+\index{functs.c@{functs.c}!gButton@{gButton}}
+\index{gButton@{gButton}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{gButton}{gButton}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structgpio__button__t}{gpio\+\_\+button\+\_\+t}} g\+Button}
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00035}{35}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_ae4f57f2530a2370fd13580aa839e9b46}\label{functs_8c_ae4f57f2530a2370fd13580aa839e9b46} 
+\index{functs.c@{functs.c}!gDac@{gDac}}
+\index{gDac@{gDac}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{gDac}{gDac}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdac__t}{dac\+\_\+t}} g\+Dac}
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00036}{36}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a635b8533f3553192114e5c564a3d8524}\label{functs_8c_a635b8533f3553192114e5c564a3d8524} 
+\index{functs.c@{functs.c}!gFlags@{gFlags}}
+\index{gFlags@{gFlags}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{gFlags}{gFlags}}
+{\footnotesize\ttfamily volatile \mbox{\hyperlink{unionflags__t}{flags\+\_\+t}} g\+Flags}
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00039}{39}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a30a7b97c77c77a561147f99a7c00c91d}\label{functs_8c_a30a7b97c77c77a561147f99a7c00c91d} 
+\index{functs.c@{functs.c}!gKeyPad@{gKeyPad}}
+\index{gKeyPad@{gKeyPad}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{gKeyPad}{gKeyPad}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structkey__pad__t}{key\+\_\+pad\+\_\+t}} g\+Key\+Pad}
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00033}{33}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_a4ffebeb06011b887c58ecb2e7bcdeebf}\label{functs_8c_a4ffebeb06011b887c58ecb2e7bcdeebf} 
+\index{functs.c@{functs.c}!gLed@{gLed}}
+\index{gLed@{gLed}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{gLed}{gLed}}
+{\footnotesize\ttfamily uint8\+\_\+t g\+Led = 18}
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00037}{37}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+
+\Hypertarget{functs_8c_afd0a1e5e5947d2cb8f7c35eb1b620071}\label{functs_8c_afd0a1e5e5947d2cb8f7c35eb1b620071} 
+\index{functs.c@{functs.c}!gSignal@{gSignal}}
+\index{gSignal@{gSignal}!functs.c@{functs.c}}
+\doxysubsubsection{\texorpdfstring{gSignal}{gSignal}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structsignal__t}{signal\+\_\+t}} g\+Signal}
+
+
+
+Definition at line \mbox{\hyperlink{functs_8c_source_l00034}{34}} of file \mbox{\hyperlink{functs_8c_source}{functs.\+c}}.
+

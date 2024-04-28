@@ -1,0 +1,119 @@
+\doxysection{keypad\+\_\+irq.\+c}
+\hypertarget{keypad__irq_8c_source}{}\label{keypad__irq_8c_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/keypad\_irq.c@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/irq\_c/keypad\_irq.c}}
+\mbox{\hyperlink{keypad__irq_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{keypad__irq_8h}{keypad\_irq.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00014}00014\ \textcolor{preprocessor}{\#include\ "{}hardware/gpio.h"{}}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00015}00015\ \textcolor{preprocessor}{\#include\ "{}hardware/irq.h"{}}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00017}00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{functs_8h}{functs.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00019}\mbox{\hyperlink{keypad__irq_8c_ab1c4bfa3e440072a5d904bba6ef5a525}{00019}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{keypad__irq_8c_ab1c4bfa3e440072a5d904bba6ef5a525}{kp\_init}}(\mbox{\hyperlink{structkey__pad__t}{key\_pad\_t}}\ *kpad,\ uint8\_t\ rlsb,\ uint8\_t\ clsb,\ \textcolor{keywordtype}{bool}\ en)\{}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00020}00020\ \ \ \ \ \textcolor{comment}{//\ Initialize\ history\ buffer}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00021}00021\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i=0;\ i<10;i++)\{}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00022}00022\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a905807ff31e8cdf81b0a0d5f59ce6b67}{history}}[i]\ =\ 0xFF;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00023}00023\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00024}00024\ \ \ \ \ \textcolor{comment}{//\ Verify\ that\ the\ keypad's\ rows\ and\ colums\ gpios\ do\ not\ overlap}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00025}00025\ \ \ \ \ assert(abs(rlsb-\/clsb)>=4);}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00026}00026\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_af03d552610e66330f262014ab33405ce}{rlsb}}\ =\ rlsb;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00027}00027\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}}\ =\ clsb;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00028}00028\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_aa0d215f84522c2ae302acbe1965c0a56}{ckey}}\ =\ 0x00;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00029}00029\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x1F;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00030}00030\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a052c6d6c4fd9b6fe5b2c4330b1376e57}{cnt}}\ =\ 0x0;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00031}00031\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a3f47451edd2274525a52e40f4e26c399}{seq}}\ =\ 0x8;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00032}00032\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a2b8766d184b7e87a49d64a5893f6267d}{nkey}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00033}00033\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_afca375850a2ea82cc362237ad4ddfc46}{dbnc}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00034}00034\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a9cb039d6835ff19e94b33797f32e5e38}{dzero}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00035}00035\ \ \ \ \ \textcolor{keywordflow}{if}(en)}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00036}00036\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a61c22b7816e3e33167776091b58bbe43}{en}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00038}00038\ \ \ \ \ \textcolor{comment}{//\ Initialize\ keypad\ gpios}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00039}00039\ \ \ \ \ gpio\_init\_mask(0x0000000F\ <<\ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_af03d552610e66330f262014ab33405ce}{rlsb}});\ \textcolor{comment}{//\ gpios\ for\ key\ rows\ 2,3,4,5}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00040}00040\ \ \ \ \ gpio\_init\_mask(0x0000000F\ <<\ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}});\ \textcolor{comment}{//\ gpios\ for\ key\ cols\ 6,7,8,9}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00041}00041\ \ \ \ \ gpio\_set\_dir\_masked(0x0000000F\ <<\ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_af03d552610e66330f262014ab33405ce}{rlsb}},0x0000000F\ <<\ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_af03d552610e66330f262014ab33405ce}{rlsb}});\ \textcolor{comment}{//\ rows\ as\ outputs\ and\ cols\ as\ inputs}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00042}00042\ \ \ \ \ gpio\_set\_dir\_masked(0x0000000F\ <<\ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}},0x00000000);\ \textcolor{comment}{//\ rows\ as\ outputs\ and\ cols\ as\ inputs}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00043}00043\ \ \ \ \ gpio\_pull\_down(kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}});}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00044}00044\ \ \ \ \ gpio\_pull\_down(kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}}\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00045}00045\ \ \ \ \ gpio\_pull\_down(kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}}\ +\ 2);}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00046}00046\ \ \ \ \ gpio\_pull\_down(kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}}\ +\ 3);}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00048}00048\ \ \ \ \ \textcolor{comment}{//\ Initialize\ interrupts}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00049}00049\ \ \ \ \ gpio\_set\_irq\_enabled\_with\_callback(kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}}\ +\ 0,GPIO\_IRQ\_EDGE\_RISE,\textcolor{keyword}{true},\mbox{\hyperlink{functs_8c_ac9f46f69dc14753f6829b24f0479dfe6}{gpioCallback}});}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00050}00050\ \ \ \ \ gpio\_set\_irq\_enabled\_with\_callback(kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}}\ +\ 1,GPIO\_IRQ\_EDGE\_RISE,\textcolor{keyword}{true},\mbox{\hyperlink{functs_8c_ac9f46f69dc14753f6829b24f0479dfe6}{gpioCallback}});}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00051}00051\ \ \ \ \ gpio\_set\_irq\_enabled\_with\_callback(kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}}\ +\ 2,GPIO\_IRQ\_EDGE\_RISE,\textcolor{keyword}{true},\mbox{\hyperlink{functs_8c_ac9f46f69dc14753f6829b24f0479dfe6}{gpioCallback}});}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00052}00052\ \ \ \ \ gpio\_set\_irq\_enabled\_with\_callback(kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a4bd16d9dc8b55d04a11acb3afd8e1555}{clsb}}\ +\ 3,GPIO\_IRQ\_EDGE\_RISE,\textcolor{keyword}{true},\mbox{\hyperlink{functs_8c_ac9f46f69dc14753f6829b24f0479dfe6}{gpioCallback}});}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00053}00053\ \}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00055}\mbox{\hyperlink{keypad__irq_8c_a7af321d5637714ea2677e06a6c007d58}{00055}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{keypad__irq_8c_a7af321d5637714ea2677e06a6c007d58}{kp\_decode}}(\mbox{\hyperlink{structkey__pad__t}{key\_pad\_t}}\ *kpad)\{}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00056}00056\ \ \ \ \ \textcolor{keywordflow}{switch}\ (kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_aa0d215f84522c2ae302acbe1965c0a56}{ckey}})}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00057}00057\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00058}00058\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x88:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00059}00059\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x01;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00061}00061\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x48:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00062}00062\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x02;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00063}00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00064}00064\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x28:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00065}00065\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x03;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00066}00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00067}00067\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x18:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00068}00068\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x0A;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00069}00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00070}00070\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x84:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00071}00071\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x04;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00072}00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00073}00073\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x44:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00074}00074\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x05;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00075}00075\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00076}00076\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x24:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00077}00077\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x06;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00078}00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00079}00079\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x14:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00080}00080\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x0B;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00081}00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00082}00082\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x82:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00083}00083\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x07;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00084}00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00085}00085\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x42:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00086}00086\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x08;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00087}00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00088}00088\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x22:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00089}00089\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x09;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00090}00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00091}00091\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x12:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00092}00092\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x0C;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00093}00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00094}00094\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x81:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x0E;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00096}00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00097}00097\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x41:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00098}00098\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x00;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00099}00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00100}00100\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x21:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00101}00101\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x0F;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00102}00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{case}\ 0x11:}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00104}00104\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}}\ =\ 0x0D;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00106}00106\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00107}00107\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00108}00108\ \}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00110}\mbox{\hyperlink{keypad__irq_8c_aebcfe9f2a75b3d1d769bbf5b0a32662f}{00110}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{keypad__irq_8c_aebcfe9f2a75b3d1d769bbf5b0a32662f}{kp\_capture}}(\mbox{\hyperlink{structkey__pad__t}{key\_pad\_t}}\ *kpad,\ uint32\_t\ cols)\{}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{if}\ (!kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a61c22b7816e3e33167776091b58bbe43}{en}})\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00114}00114\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_aa0d215f84522c2ae302acbe1965c0a56}{ckey}}\ =\ (cols\ >>\ 2)\ |\ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a3f47451edd2274525a52e40f4e26c399}{seq}};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00115}00115\ \ \ \ \ \mbox{\hyperlink{keypad__irq_8c_a7af321d5637714ea2677e06a6c007d58}{kp\_decode}}(kpad);}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00116}00116\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i=0;i<9;i++)\{}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a905807ff31e8cdf81b0a0d5f59ce6b67}{history}}[9-\/i]\ =\ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a905807ff31e8cdf81b0a0d5f59ce6b67}{history}}[9-\/i-\/1];}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00118}00118\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00119}00119\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a905807ff31e8cdf81b0a0d5f59ce6b67}{history}}[0]\ =\ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a6495e9271bf46b51ad920851cbe348fa}{dkey}};}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00120}00120\ \ \ \ \ kpad-\/>\mbox{\hyperlink{structkey__pad__t_a77f98cb9e2fbbc939cdc6e1bbaf7564a}{KEY}}.\mbox{\hyperlink{structkey__pad__t_1_1key_a2b8766d184b7e87a49d64a5893f6267d}{nkey}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{keypad__irq_8c_source_l00121}00121\ \}}
+
+\end{DoxyCode}

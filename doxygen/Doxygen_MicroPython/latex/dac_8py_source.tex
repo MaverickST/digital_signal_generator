@@ -1,0 +1,57 @@
+\doxysection{dac.\+py}
+\hypertarget{dac_8py_source}{}\label{dac_8py_source}\index{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_microPython/dac.py@{C:/Users/johan/OneDrive -\/ Universidad de Antioquia/Semestre VII/Elec. Digital III/Laboratorio/Practica\_3/digital\_signal\_generator/polling\_microPython/dac.py}}
+\mbox{\hyperlink{dac_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00001}\mbox{\hyperlink{namespacedac}{00001}}\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00002}00002\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}file\`{}\`{}:\ dac.py}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00003}00003\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Author\`{}\`{}:\ \ MST\_CDA}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00004}00004\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Version\`{}\`{}:\ \ 1.0}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00005}00005\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Date\`{}\`{}:\ \ 2024-\/04-\/14}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00006}00006\ \textcolor{stringliteral}{\ -\/\ \`{}\`{}Description\`{}\`{}:\ This\ module\ define\ a\ class\ to\ impress\ the\ DAC\ (8bits)}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00007}00007\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00009}00009\ \textcolor{keyword}{from}\ machine\ \textcolor{keyword}{import}\ Pin}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00011}\mbox{\hyperlink{namespacedac_a5c56e06e96869df758eb9da4f105764f}{00011}}\ RESOLUTION\ =\ 255\ \ \ \ \ \ \ \ \textcolor{comment}{\#\ 8\ bits}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00012}\mbox{\hyperlink{namespacedac_a7b500da49669f0a6d6800f7236eac3f2}{00012}}\ DAC\_RANGE\ =\ 9400\ \ \ \ \ \ \ \ \textcolor{comment}{\#\ 0\ to\ 9.3V}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00014}\mbox{\hyperlink{classdac_1_1_d_a_c}{00014}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classdac_1_1_d_a_c}{DAC}}:}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00015}00015\ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00016}00016\ \textcolor{stringliteral}{\ \ \ \ Class\ to\ impress\ the\ DAC\ (8bits).}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00017}00017\ \textcolor{stringliteral}{\ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00018}\mbox{\hyperlink{classdac_1_1_d_a_c_a1157cf5afe73ad57c11c7baefb4a4dc2}{00018}}\ \ \ \ \ en:\ bool\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Enable\ the\ DAC\ processing}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00019}\mbox{\hyperlink{classdac_1_1_d_a_c_aa56f6722d9b54ff7a93508ad17ba61c4}{00019}}\ \ \ \ \ gpioD\ =\ []\ \ \ \textcolor{comment}{\#\ The\ eight\ gpios\ for\ the\ DAC}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00020}\mbox{\hyperlink{classdac_1_1_d_a_c_a1fc315c0300e5374788e97895f526f22}{00020}}\ \ \ \ \ lsb:\ int\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ The\ LSB\ position\ for\ the\ DAC,\ the\ eight\ gpios\ must\ be\ consecutives.}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00021}\mbox{\hyperlink{classdac_1_1_d_a_c_a76077788a6bced69379983454721b669}{00021}}\ \ \ \ \ digit\_v:\ int\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ The\ digit\ value\ for\ the\ DAC}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00023}\mbox{\hyperlink{classdac_1_1_d_a_c_a96c73f74f0ed08664763412ec1f1ed50}{00023}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classdac_1_1_d_a_c_a96c73f74f0ed08664763412ec1f1ed50}{\_\_init\_\_}}(self,\ lsb:\ int,\ en:\ bool):}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00024}00024\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00025}00025\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Constructor\ for\ DAC.}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00026}00026\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00027}00027\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Parameters:}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00028}00028\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}lsb\`{}\`{}\ The\ LSB\ position\ for\ the\ DAC,\ the\ eight\ gpios\ must\ be\ consecutives.}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00029}00029\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}en\`{}\`{}\ Enable\ DAC\ processing.}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00030}00030\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00031}00031\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Initialize\ the\ DAC\ variables}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00032}\mbox{\hyperlink{classdac_1_1_d_a_c_a9c6ea3534dff622c163f446fc476cfb6}{00032}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classdac_1_1_d_a_c_a1157cf5afe73ad57c11c7baefb4a4dc2}{en}}\mbox{\hyperlink{classdac_1_1_d_a_c_a9c6ea3534dff622c163f446fc476cfb6}{en}}\ =\ en}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00033}\mbox{\hyperlink{classdac_1_1_d_a_c_a07f5f385d133f58b11d3ae66c83ad879}{00033}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classdac_1_1_d_a_c_a1fc315c0300e5374788e97895f526f22}{lsb}}\mbox{\hyperlink{classdac_1_1_d_a_c_a07f5f385d133f58b11d3ae66c83ad879}{lsb}}\ =\ lsb}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00034}00034\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Initialize\ the\ DAC\ gpios}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ i\ \textcolor{keywordflow}{in}\ range(8):}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00036}00036\ \ \ \ \ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classdac_1_1_d_a_c_aa56f6722d9b54ff7a93508ad17ba61c4}{gpioD}}.append(Pin(lsb\ +\ i,\ Pin.OUT))\ }
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00038}\mbox{\hyperlink{classdac_1_1_d_a_c_a8d941854792380c98cbce0299ee605eb}{00038}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classdac_1_1_d_a_c_a8d941854792380c98cbce0299ee605eb}{set\_dac}}(self,\ value:\ int):}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00039}00039\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00040}00040\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Set\ the\ DAC\ value.}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00041}00041\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00042}00042\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ Parameters:}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00043}00043\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ -\/\ \`{}\`{}value\`{}\`{}\ The\ value\ to\ be\ set\ in\ the\ DAC.}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00044}00044\ \textcolor{stringliteral}{\ \ \ \ \ \ \ \ "{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00045}00045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keywordflow}{not}\ self.\mbox{\hyperlink{classdac_1_1_d_a_c_a1157cf5afe73ad57c11c7baefb4a4dc2}{en}}\mbox{\hyperlink{classdac_1_1_d_a_c_a9c6ea3534dff622c163f446fc476cfb6}{en}}:}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00048}\mbox{\hyperlink{classdac_1_1_d_a_c_a7aa32583ef337de4d16b867cebf4e729}{00048}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classdac_1_1_d_a_c_a76077788a6bced69379983454721b669}{digit\_v}}\mbox{\hyperlink{classdac_1_1_d_a_c_a7aa32583ef337de4d16b867cebf4e729}{digit\_v}}\ =\ (value\ +\ 5000)*RESOLUTION//DAC\_RANGE}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00049}00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ i\ \textcolor{keywordflow}{in}\ range(8):}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classdac_1_1_d_a_c_aa56f6722d9b54ff7a93508ad17ba61c4}{gpioD}}[i].value(self.\mbox{\hyperlink{classdac_1_1_d_a_c_a76077788a6bced69379983454721b669}{digit\_v}}\mbox{\hyperlink{classdac_1_1_d_a_c_a7aa32583ef337de4d16b867cebf4e729}{digit\_v}}\ \%\ 2)}
+\DoxyCodeLine{\Hypertarget{dac_8py_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classdac_1_1_d_a_c_a76077788a6bced69379983454721b669}{digit\_v}}\mbox{\hyperlink{classdac_1_1_d_a_c_a7aa32583ef337de4d16b867cebf4e729}{digit\_v}}\ =\ self.\mbox{\hyperlink{classdac_1_1_d_a_c_a76077788a6bced69379983454721b669}{digit\_v}}\mbox{\hyperlink{classdac_1_1_d_a_c_a7aa32583ef337de4d16b867cebf4e729}{digit\_v}}\ //\ 2}
+
+\end{DoxyCode}
